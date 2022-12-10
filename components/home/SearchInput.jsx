@@ -1,3 +1,4 @@
+import regExp from "@/constants/regExp";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -11,17 +12,29 @@ function SearchInput(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [userList, setUserList] = useState([]);
+  const [tier, setTier] = useState("");
 
   useClickOutside(ref, () => {
     setIsOpen(false);
   });
 
-  const getUserList = useDebounce((name) => {
-    Axios.get("/api/v1/user", {
+  const getUserList = useDebounce(async (name) => {
+    let tmpUserList = await Axios.get("/api/v1/user", {
       params: { name: name },
-    }).then((res) => {
-      setUserList(res.data);
+    }).then(async (res) => {
+      return res.data;
     });
+
+    await Promise.all(
+      tmpUserList.map((user) =>
+        Axios.get("/api/v1/tier", {
+          params: { id: user.id },
+        }).then((res) => {
+          user.tier = res.data;
+        })
+      )
+    );
+    setUserList(tmpUserList);
   }, 100);
 
   return (
@@ -93,7 +106,7 @@ const Input = styled.input`
   caret-color: var(--brandColor);
 `;
 const Title = styled.p`
-  font: var(--body16);
+  font: var(--body14);
 `;
 const GG = styled.div`
   color: var(--brandColor);

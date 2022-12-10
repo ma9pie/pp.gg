@@ -8,19 +8,20 @@ import useQuery from "@/hooks/useQuery";
 function Statistics() {
   const [list, setList] = useState([]);
 
-  const userListqueryKey = "/api/v1/user";
+  const userListQueryKey = "/api/v1/user";
   const userList = useQuery({
-    queryKey: userListqueryKey,
+    queryKey: userListQueryKey,
     queryFn: () =>
-      Axios.get(userListqueryKey, {
+      Axios.get(userListQueryKey, {
         params: {},
       }).then((res) => res.data),
   });
-  const historyqueryKey = "/api/v1/history";
+
+  const historyQueryKey = "/api/v1/history";
   const history = useQuery({
-    queryKey: historyqueryKey,
+    queryKey: historyQueryKey,
     queryFn: () =>
-      Axios.get(historyqueryKey, {
+      Axios.get(historyQueryKey, {
         params: {},
       }).then((res) => res.data),
   });

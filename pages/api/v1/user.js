@@ -1,3 +1,4 @@
+import regExp from "@/constants/regExp";
 import dbConnect from "@/db/dbConnect";
 import User from "@/db/schemas/User";
 
@@ -10,17 +11,12 @@ export default async function handler(req, res) {
     case "GET":
       try {
         const name = query.name.trim();
-
-        if (!name) {
+        if (!name || !regExp.nameRegExp.test(name)) {
           res.status(200).json([]);
           return;
         }
-
-        const regex = new RegExp(name, "i");
-        const user = await User.find({ name: { $regex: regex } }).lean();
-
-        console.log(user);
-
+        const queryRegex = new RegExp(name, "i");
+        const user = await User.find({ name: { $regex: queryRegex } }).lean();
         res.status(200).json(user);
       } catch (error) {
         res.status(400).json({ success: false });

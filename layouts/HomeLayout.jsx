@@ -38,7 +38,7 @@ function HomeLayout(props) {
 export default HomeLayout;
 
 const Container = styled.div`
-  min-width: 320px;
+  min-width: 1080px;
   height: 100vh;
 `;
 const BodyContent = styled.div`

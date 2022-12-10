@@ -9,7 +9,9 @@ function CommonLayout(props) {
     <Container>
       <Head></Head>
       <Header></Header>
-      <BodyContent>{props.children}</BodyContent>
+      <ContentWrapper>
+        <Content>{props.children}</Content>
+      </ContentWrapper>
       <Footer></Footer>
     </Container>
   );
@@ -18,12 +20,19 @@ function CommonLayout(props) {
 export default CommonLayout;
 
 const Container = styled.div`
-  min-width: 320px;
+  min-width: 1080px;
   height: 100vh;
   background-color: var(--sectionLine);
 `;
-const BodyContent = styled.div`
+const ContentWrapper = styled.div`
   margin: 0px auto;
+  width: 1080px;
   min-height: calc(100% - 108px);
   background-color: var(--sectionLine);
+`;
+const Content = styled.div`
+  height: calc(100vh - 108px);
+  background-color: var(--bg);
+  margin: 0px auto;
+  padding: 60px 0px;
 `;

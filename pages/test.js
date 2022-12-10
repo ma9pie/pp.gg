@@ -9,14 +9,14 @@ function Test() {
 
   const getDate = async () => {
     // user 조회 API 호출
-    const tmpUserList = await Axios.get("/api/user", {
-      params: { name: "" },
+    const tmpUserList = await Axios.get("/api/v1/user", {
+      params: {},
     }).then((res) => {
       return res.data;
     });
 
     // history 조회 API 호출
-    const tmpHistory = await Axios.get("/api/history").then((res) => {
+    const tmpHistory = await Axios.get("/api/v1/history").then((res) => {
       return res.data;
     });
 
@@ -27,10 +27,10 @@ function Test() {
       let losePoints = 0; // 패배 횟수
       tmpHistory.map((history) => {
         if (history.winnerId === user.id) {
-          totalDeal += history.winnerDamege;
+          totalDeal += history.winnerScore;
           winPoints++;
         } else if (history.loserId === user.id) {
-          totalDeal += history.loserDamege;
+          totalDeal += history.loserScore;
           losePoints++;
         }
       });
@@ -52,12 +52,12 @@ function Test() {
         let kill = 0;
         let death = 0;
         if (history.winnerId === user.id) {
-          kill = history.winnerDamege;
-          death = history.loserDamege;
+          kill = history.winnerScore;
+          death = history.loserScore;
           opponents = history.loserId;
         } else if (history.loserId === user.id) {
-          kill = history.loserDamege;
-          death = history.winnerDamege;
+          kill = history.loserScore;
+          death = history.winnerScore;
           opponents = history.winnerId;
         } else {
           return false;

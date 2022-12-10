@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
 import React from "react";
+import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
 
 function Header(props) {
@@ -44,7 +45,15 @@ function Header(props) {
           </a>
         </Link>
       </MenuContainer>
-      <Theme></Theme>
+
+      <ButtonWrapper>
+        <ExtraSmallButton>
+          <Link href="/login" passHref>
+            <a>로그인 </a>
+          </Link>
+        </ExtraSmallButton>
+        <Theme></Theme>
+      </ButtonWrapper>
     </Wrapper>
   );
 }
@@ -85,4 +94,9 @@ const LinkBox = styled.div`
 const LinkText = styled.p`
   font: var(--body16);
   color: white;
+`;
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
 `;

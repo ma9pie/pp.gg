@@ -6,33 +6,36 @@ import Ripple from "@/components/common/Ripple";
 const Buttons = (props) => {
   return (
     <Wrapper {...props}>
-      <Ripple type={props.type}>
-        {(() => {
-          if (props.disabled) {
-            return (
+      {(() => {
+        if (props.disabled) {
+          return (
+            <Button {...props} backgroundColor="var(--disabled)" cursor="auto">
+              <Children>{props.children}</Children>
+            </Button>
+          );
+        } else if (props.type === "sub") {
+          return (
+            <Ripple type={props.type}>
               <Button
                 {...props}
-                backgroundColor="var(--disabled)"
-                cursor="auto"
+                color="var(--main)"
+                backgroundColor="var(--textBox)"
+                border="1px solid var(--sectionLine)"
               >
                 <Children>{props.children}</Children>
               </Button>
-            );
-          } else if (props.type === "sub") {
-            return (
-              <Button {...props} backgroundColor="var(--textBox)">
-                <Children>{props.children}</Children>
-              </Button>
-            );
-          } else {
-            return (
+            </Ripple>
+          );
+        } else {
+          return (
+            <Ripple type={props.type}>
               <Button {...props}>
                 <Children>{props.children}</Children>
               </Button>
-            );
-          }
-        })()}
-      </Ripple>
+            </Ripple>
+          );
+        }
+      })()}
     </Wrapper>
   );
 };
@@ -48,7 +51,7 @@ Buttons.defaultProps = {
   border: "0px",
   borderRadius: "5px",
   color: "white",
-  backgroundColor: "var(--blue700)",
+  backgroundColor: "var(--blue600)",
   cursor: "pointer",
   disabled: false,
   onClick: () => {},
@@ -86,7 +89,7 @@ const Children = styled.div`
   z-index: 1;
   background-color: transparent;
   position: absolute;
-  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  color: inherit;
 `;

@@ -6,15 +6,10 @@ import { useRecoilState } from "recoil";
 import Banner from "@/components/home/Banner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
+import useQuery from "@/hooks/useQuery";
 
 function Home() {
   const [theme, setTheme] = useRecoilState(themeState);
-
-  useEffect(() => {
-    Axios.get("/api/test").then((res) => {
-      console.log(res.data);
-    });
-  }, []);
 
   const getBackgroundColor = () => {
     return theme === "Dark" ? "var(--bg)" : "var(--brandColor)";
@@ -25,7 +20,6 @@ function Home() {
       <BannerWrapper backgroundColor={getBackgroundColor()}>
         <Banner></Banner>
       </BannerWrapper>
-
       <SearchInput></SearchInput>
     </Wrapper>
   );

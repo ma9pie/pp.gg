@@ -15,8 +15,9 @@ function UseQuery(props) {
 
 export default UseQuery;
 
-` 
 // react-query 작성 폼
+` 
+import { useQuery } from "react-query";
 const [state, setstate] = useState(initialState);
 const queryKey = "apiUrl";
 const query = useQuery({

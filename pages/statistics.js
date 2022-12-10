@@ -1,56 +1,63 @@
 import styled from "@emotion/styled";
-import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import CommonLayout from "@/layouts/CommonLayout";
 import TierUtils from "@/utils/TierUtils";
+import Axios from "@/api/index";
+import useQuery from "@/hooks/useQuery";
 
 function Statistics() {
   const [list, setList] = useState([]);
 
+  const userListqueryKey = "/api/v1/user";
+  const userList = useQuery({
+    queryKey: userListqueryKey,
+    queryFn: () =>
+      Axios.get(userListqueryKey, {
+        params: {},
+      }).then((res) => res.data),
+  });
+  const historyqueryKey = "/api/v1/history";
+  const history = useQuery({
+    queryKey: historyqueryKey,
+    queryFn: () =>
+      Axios.get(historyqueryKey, {
+        params: {},
+      }).then((res) => res.data),
+  });
+
   useEffect(() => {
-    getDate();
-  }, []);
+    if (userList.data && history.data) {
+      let tmpList = [];
 
-  const getDate = async () => {
-    let tmpList = [];
-    // user 조회 API 호출
-    const tmpUserList = await Axios.get("/api/user", {
-      params: { name: "" },
-    }).then((res) => {
-      return res.data;
-    });
-
-    // history 조회 API 호출
-    const tmpHistory = await Axios.get("/api/history").then((res) => {
-      return res.data;
-    });
-
-    // 통계
-    tmpUserList.map((user) => {
-      let totalDeal = 0; // 적에게 가한 피해량
-      let winPoints = 0; // 승리 횟수
-      let losePoints = 0; // 패배 횟수
-      tmpHistory.map((history) => {
-        if (history.winnerId === user.id) {
-          totalDeal += history.winnerDamege;
-          winPoints++;
-        } else if (history.loserId === user.id) {
-          totalDeal += history.loserDamege;
-          losePoints++;
-        }
+      userList.data.map((user) => {
+        let totalDeal = 0; // 적에게 가한 피해량
+        let totalDamageReceived = 0; // 적에게 받은 피해량
+        let winPoints = 0; // 승리 횟수
+        let losePoints = 0; // 패배 횟수
+        history.data.map((history) => {
+          if (history.winnerId === user.id) {
+            totalDeal += history.winnerScore;
+            totalDamageReceived += history.loserScore;
+            winPoints++;
+          } else if (history.loserId === user.id) {
+            totalDeal += history.loserScore;
+            totalDamageReceived += history.winnerScore;
+            losePoints++;
+          }
+        });
+        tmpList.push({
+          id: user.id,
+          name: user.name,
+          totalDeal: totalDeal,
+          totalDamageReceived: totalDamageReceived,
+          winPoints: winPoints,
+          losePoints: losePoints,
+          winRate: (winPoints / (winPoints + losePoints)) * 100,
+        });
       });
-      tmpList.push({
-        id: user.id,
-        name: user.name,
-        totalDeal: totalDeal,
-        winPoints: winPoints,
-        losePoints: losePoints,
-        winRate: (winPoints / (winPoints + losePoints)) * 100,
-      });
-    });
-    console.log(tmpList);
-    setList(tmpList);
-  };
+      setList(tmpList);
+    }
+  }, [userList.data, history.data]);
 
   return (
     <Wrapper>
@@ -59,6 +66,7 @@ function Statistics() {
           <Row>
             <Column>소환사명</Column>
             <Column>적에게 가한 피해량</Column>
+            <Column>적에게 받은 피해량</Column>
             <Column>승리 횟수</Column>
             <Column>패배 횟수</Column>
             <Column>승률</Column>
@@ -70,6 +78,7 @@ function Statistics() {
             <Row key={key}>
               <Column>{item.name}</Column>
               <Column>{item.totalDeal}</Column>
+              <Column>{item.totalDamageReceived}</Column>
               <Column>{item.winPoints}</Column>
               <Column>{item.losePoints}</Column>
               <Column>{item.winRate.toFixed(2)}%</Column>
@@ -88,15 +97,10 @@ Statistics.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
 
-const Wrapper = styled.div`
-  width: 1080px;
-  min-height: calc(100vh - 108px);
-  margin: 0px auto;
-  padding: 50px 0px;
-`;
+const Wrapper = styled.div``;
 const TableContainer = styled.div`
   margin: auto;
-  width: 800px;
+  width: 1000px;
 `;
 const Field = styled.div``;
 const Table = styled.div``;
@@ -110,7 +114,7 @@ const Column = styled.div`
   flex-direction: column;
   flex: 1;
   font: var(--body16);
-  &:nth-of-type(n + 2):nth-of-type(-n + 5) {
+  &:nth-of-type(n + 2):nth-of-type(-n + 7) {
     text-align: center;
   }
 `;

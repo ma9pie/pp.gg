@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
+import DoughnutChart from "@/components/common/Chart/DoughnutChart";
 import CommonLayout from "@/layouts/CommonLayout";
 import TierUtils from "@/utils/TierUtils";
 import Axios from "@/api/index";
@@ -8,7 +9,7 @@ import useQuery from "@/hooks/useQuery";
 function Statistics() {
   const [list, setList] = useState([]);
 
-  const userListQueryKey = "/api/v1/user";
+  const userListQueryKey = "/api/v1/allUser";
   const userList = useQuery({
     queryKey: userListQueryKey,
     queryFn: () =>
@@ -96,6 +97,8 @@ function Statistics() {
           ))}
         </Table>
       </TableContainer>
+
+      <DoughnutChart width="200px"></DoughnutChart>
     </Wrapper>
   );
 }

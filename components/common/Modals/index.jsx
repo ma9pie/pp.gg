@@ -42,7 +42,7 @@ function Modal(props) {
       overflow: "hidden",
       border: "0px",
       borderRadius: "15px",
-      backgroundColor: "var(--bg)",
+      backgroundColor: "transparent",
       zIndex: 999,
     },
   };

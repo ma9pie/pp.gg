@@ -67,6 +67,7 @@ const Wrapper = styled.div`
     position: absolute;
     background-color: ${(props) => props.backgroundColor};
     animation: ripple 0.1s ease forwards;
+    pointer-events: none;
   }
   @keyframes ripple {
     from {
@@ -83,9 +84,4 @@ const Children = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1;
-  background-color: transparent;
-  & * {
-    background-color: inherit;
-  }
 `;

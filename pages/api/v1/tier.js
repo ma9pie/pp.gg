@@ -3,7 +3,7 @@ import History from "@/db/schemas/History";
 import TierUtils from "@/utils/TierUtils";
 
 export default async function handler(req, res) {
-  const { query, method } = req;
+  const { method, query, body } = req;
 
   await dbConnect();
 

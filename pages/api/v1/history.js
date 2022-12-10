@@ -2,7 +2,7 @@ import dbConnect from "@/db/dbConnect";
 import History from "@/db/schemas/History";
 
 export default async function handler(req, res) {
-  const { query, method } = req;
+  const { method, query, body } = req;
 
   await dbConnect();
 

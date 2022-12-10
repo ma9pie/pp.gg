@@ -8,6 +8,7 @@ function LargeButton(props) {
     height: "56px",
     borderRadius: "12px",
   };
+
   return <Button {...styles} {...props}></Button>;
 }
 

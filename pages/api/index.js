@@ -27,9 +27,6 @@ Rest.interceptors.request.use(
 
 Rest.interceptors.response.use(
   (res) => {
-    const code = res.data.code;
-    const message = res.data.message;
-
     console.log(
       "\n============================ REST LOG START ============================="
     );

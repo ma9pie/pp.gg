@@ -1,10 +1,23 @@
+import { memberState } from "@/recoil/atom";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
+import ModalUtils from "@/utils/ModalUtils";
+import ProfileSvg from "@/svg/ProfileSvg";
 
 function Header(props) {
+  const [isLogin, setIsLogin] = useState(false);
+  const [member, setMember] = useRecoilState(memberState);
+
+  useEffect(() => {
+    if (member.key) {
+      setIsLogin(true);
+    }
+  }, [member]);
+
   return (
     <Wrapper {...props}>
       <LogoWrapper>
@@ -47,11 +60,22 @@ function Header(props) {
       </MenuContainer>
 
       <ButtonWrapper>
-        <ExtraSmallButton>
-          <Link href="/login" passHref>
-            <a>로그인 </a>
-          </Link>
-        </ExtraSmallButton>
+        {isLogin ? (
+          <ProfileSvg
+            color="white"
+            onClick={() => {
+              ModalUtils.openAlert({
+                message: `마이페이지 개발 예정\n 아이디: ${member.id}\n 닉네임: ${member.name}`,
+              });
+            }}
+          ></ProfileSvg>
+        ) : (
+          <ExtraSmallButton>
+            <Link href="/login" passHref>
+              <a>로그인 </a>
+            </Link>
+          </ExtraSmallButton>
+        )}
         <Theme></Theme>
       </ButtonWrapper>
     </Wrapper>

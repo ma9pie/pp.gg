@@ -1,4 +1,3 @@
-import regExp from "@/constants/regExp";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -12,7 +11,6 @@ function SearchInput(props) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [userList, setUserList] = useState([]);
-  const [tier, setTier] = useState("");
 
   useClickOutside(ref, () => {
     setIsOpen(false);

@@ -8,15 +8,12 @@ export default async function handler(req, res) {
   await dbConnect();
 
   switch (method) {
-    case "GET":
+    case "POST":
       try {
-        const name = query.name.trim();
-        if (!name || !regExp.nameCheckRegExp.test(name)) {
-          res.status(200).json([]);
-          return;
-        }
-        const queryRegex = new RegExp(name, "i");
-        const user = await User.find({ name: { $regex: queryRegex } }).lean();
+        const user = await User.findOne({
+          id: body.id,
+          password: body.password,
+        }).lean();
         res.status(200).json(user);
       } catch (error) {
         res.status(400).json({ success: false });

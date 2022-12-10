@@ -5,37 +5,43 @@ import Ripple from "@/components/common/Ripple";
 
 const Buttons = (props) => {
   return (
-    <Wrapper {...props}>
-      {(() => {
-        if (props.disabled) {
-          return (
-            <Button {...props} backgroundColor="var(--disabled)" cursor="auto">
-              <Children>{props.children}</Children>
-            </Button>
-          );
-        } else if (props.type === "sub") {
-          return (
-            <Ripple type={props.type}>
+    <Wrapper width={props.width} borderRadius={props.borderRadius}>
+      <ButtonWrapper>
+        {(() => {
+          if (props.disabled) {
+            return (
               <Button
                 {...props}
-                color="var(--main)"
-                backgroundColor="var(--textBox)"
-                border="1px solid var(--sectionLine)"
+                backgroundColor="var(--disabled)"
+                cursor="auto"
               >
                 <Children>{props.children}</Children>
               </Button>
-            </Ripple>
-          );
-        } else {
-          return (
-            <Ripple type={props.type}>
-              <Button {...props}>
-                <Children>{props.children}</Children>
-              </Button>
-            </Ripple>
-          );
-        }
-      })()}
+            );
+          } else if (props.type === "sub") {
+            return (
+              <Ripple type={props.type}>
+                <Button
+                  {...props}
+                  color="var(--main)"
+                  backgroundColor="var(--textBox)"
+                  border="1px solid var(--sectionLine)"
+                >
+                  <Children>{props.children}</Children>
+                </Button>
+              </Ripple>
+            );
+          } else {
+            return (
+              <Ripple type={props.type}>
+                <Button {...props}>
+                  <Children>{props.children}</Children>
+                </Button>
+              </Ripple>
+            );
+          }
+        })()}
+      </ButtonWrapper>
     </Wrapper>
   );
 };
@@ -57,14 +63,14 @@ Buttons.defaultProps = {
   onClick: () => {},
 };
 
-const Wrapper = styled.span`
-  position: relative;
+const Wrapper = styled.div`
   overflow: hidden;
-  background-color: transparent;
   width: ${(props) => props.width};
   border-radius: ${(props) => props.borderRadius};
 `;
-
+const ButtonWrapper = styled.span`
+  position: relative;
+`;
 const Button = styled.button`
   font: ${(props) => props.font};
   font-weight: ${(props) => props.fontWeight};
@@ -86,8 +92,10 @@ const Button = styled.button`
   }
 `;
 const Children = styled.div`
-  z-index: 1;
   background-color: transparent;
+  & * {
+    background-color: inherit;
+  }
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);

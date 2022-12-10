@@ -38,7 +38,7 @@ function AlertModal(props) {
         </Content>
         <ButtonBox>
           <Button
-            backgroundColor="var(--brandColor)"
+            backgroundColor="var(--blue600)"
             onClick={() => {
               props.onRequestClose();
             }}
@@ -56,7 +56,6 @@ export default React.memo(AlertModal);
 AlertModal.defaultProps = {};
 
 const Wrapper = styled.div``;
-
 const Top = styled.div`
   display: flex;
   justify-content: center;
@@ -87,7 +86,7 @@ const Button = styled.div`
   height: 50px;
   line-height: 50px;
   text-align: center;
-  color: var(--yellowBtn);
+  color: white;
   background-color: ${(props) => props.backgroundColor};
   cursor: pointer;
 `;

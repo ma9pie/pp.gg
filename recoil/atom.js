@@ -1,8 +1,22 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-const timestamp = new Date().getTime();
+const { persistAtom } = recoilPersist();
 
 export const themeState = atom({
-  key: `themeState_${timestamp}`,
+  key: `themeState`,
   default: "Light",
+  effects_UNSTABLE: [persistAtom],
+});
+
+export const memberState = atom({
+  key: `memberState`,
+  default: {
+    id: "",
+    imgUrl: "",
+    key: "",
+    name: "",
+    password: "",
+  },
+  effects_UNSTABLE: [persistAtom],
 });

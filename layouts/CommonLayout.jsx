@@ -31,7 +31,7 @@ const ContentWrapper = styled.div`
   background-color: var(--sectionLine);
 `;
 const Content = styled.div`
-  height: calc(100vh - 108px);
+  min-height: calc(100vh - 108px);
   background-color: var(--bg);
   margin: 0px auto;
   padding: 60px 0px;

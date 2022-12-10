@@ -34,6 +34,7 @@ function Statistics() {
         let totalDamageReceived = 0; // 적에게 받은 피해량
         let winPoints = 0; // 승리 횟수
         let losePoints = 0; // 패배 횟수
+        let winRate = 0;
         history.data.map((history) => {
           if (history.winnerId === user.id) {
             totalDeal += history.winnerScore;
@@ -45,6 +46,13 @@ function Statistics() {
             losePoints++;
           }
         });
+
+        if (winPoints === 0) {
+          winRate = 0;
+        } else {
+          winRate = (winPoints / (winPoints + losePoints)) * 100;
+        }
+
         tmpList.push({
           id: user.id,
           name: user.name,
@@ -52,7 +60,7 @@ function Statistics() {
           totalDamageReceived: totalDamageReceived,
           winPoints: winPoints,
           losePoints: losePoints,
-          winRate: (winPoints / (winPoints + losePoints)) * 100,
+          winRate: winRate,
         });
       });
       setList(tmpList);

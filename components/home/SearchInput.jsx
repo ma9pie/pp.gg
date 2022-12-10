@@ -17,11 +17,11 @@ function SearchInput(props) {
   });
 
   const getUserList = useDebounce((name) => {
-    if (name) {
-      Axios.get("/api/user", { params: { name: name } }).then((res) => {
-        setUserList(res.data);
-      });
-    }
+    Axios.get("/api/v1/user", {
+      params: { name: name },
+    }).then((res) => {
+      setUserList(res.data);
+    });
   }, 100);
 
   return (

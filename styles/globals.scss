@@ -24,6 +24,22 @@ input:focus {
   outline: none;
 }
 
+div {
+  :-webkit-autofill,
+  :-webkit-autofill:hover,
+  :-webkit-autofill:focus,
+  :-webkit-autofill:active {
+    transition: background-color 5000s;
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--main);
+}
+
 /* 라이트모드(기본) */
 :root {
   --brandColor: #5383e8;

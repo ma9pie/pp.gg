@@ -83,11 +83,12 @@ const Button = styled.button`
   border: ${(props) => props.border};
   border-radius: ${(props) => props.borderRadius};
   color: ${(props) => props.color};
-  background-color: ${(props) => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor} !important;
   cursor: ${(props) => props.cursor};
   text-align: center;
   white-space: nowrap;
   transition: background-color 0.2s ease;
+
   &:hover {
   }
 `;

@@ -1,8 +1,9 @@
 import { memberState } from "@/recoil/atom";
+import { memberSelector } from "@/recoil/selector";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
 import ModalUtils from "@/utils/ModalUtils";
@@ -11,10 +12,13 @@ import ProfileSvg from "@/svg/ProfileSvg";
 function Header(props) {
   const [isLogin, setIsLogin] = useState(false);
   const [member, setMember] = useRecoilState(memberState);
+  const logout = useResetRecoilState(memberState);
 
   useEffect(() => {
     if (member.key) {
       setIsLogin(true);
+    } else {
+      setIsLogin(false);
     }
   }, [member]);
 
@@ -59,8 +63,20 @@ function Header(props) {
         </Link>
       </MenuContainer>
 
-      <ButtonWrapper>
-        {isLogin ? (
+      {isLogin ? (
+        <ButtonWrapper>
+          <ExtraSmallButton
+            onClick={() => {
+              ModalUtils.openConfirm({
+                message: "로그아웃 하시겠습니까?",
+                onRequestConfirm: () => {
+                  logout();
+                },
+              });
+            }}
+          >
+            로그아웃
+          </ExtraSmallButton>
           <ProfileSvg
             color="white"
             onClick={() => {
@@ -69,15 +85,18 @@ function Header(props) {
               });
             }}
           ></ProfileSvg>
-        ) : (
+          <Theme></Theme>
+        </ButtonWrapper>
+      ) : (
+        <ButtonWrapper>
           <ExtraSmallButton>
             <Link href="/login" passHref>
               <a>로그인 </a>
             </Link>
           </ExtraSmallButton>
-        )}
-        <Theme></Theme>
-      </ButtonWrapper>
+          <Theme></Theme>
+        </ButtonWrapper>
+      )}
     </Wrapper>
   );
 }
@@ -122,5 +141,7 @@ const LinkText = styled.p`
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 16px;
+  width: 200px;
 `;

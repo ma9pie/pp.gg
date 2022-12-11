@@ -50,6 +50,6 @@ const ReactQueryDevtoolsWrapper = styled.div`
   }
 `;
 
-// import { themeState } from "@/recoil/atom";
+// import { memberState } from "@/recoil/atom";
 // import { useRecoilState } from "recoil";
-// const [theme, setTheme] = useRecoilState(themeState);
+// const [member, setMember] = useRecoilState(memberState);

@@ -47,7 +47,7 @@ function ConfirmModal(props) {
             {props.cancleBtnText}
           </Button>
           <Button
-            color="var(--yellowBtn)"
+            color="white"
             backgroundColor="var(--brandColor)"
             onClick={() => {
               doubleClickPrevention(() => props.onRequestConfirm(), 200);

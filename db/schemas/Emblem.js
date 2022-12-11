@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const EmblemSchema = new mongoose.Schema(
   {
-    img: String,
+    imgUrl: String,
     name: String,
     rate: Number,
   },

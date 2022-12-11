@@ -42,7 +42,7 @@ function Tiers() {
           {emblemList.map((item, key) => (
             <ImageBox key={key}>
               <Image
-                src={item.img}
+                src={item.imgUrl}
                 width={emblemSize}
                 height={emblemSize}
                 alt="emblem"

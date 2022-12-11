@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import DoughnutChart from "@/components/common/Chart/DoughnutChart";
-import CommonLayout from "@/layouts/CommonLayout";
+import SessionLayout from "@/layouts/SessionLayout";
 import TierUtils from "@/utils/TierUtils";
 import Axios from "@/api/index";
 import useQuery from "@/hooks/useQuery";
@@ -106,7 +106,7 @@ function Statistics() {
 export default Statistics;
 
 Statistics.getLayout = function getLayout(page) {
-  return <CommonLayout>{page}</CommonLayout>;
+  return <SessionLayout>{page}</SessionLayout>;
 };
 
 const Wrapper = styled.div``;

@@ -74,6 +74,7 @@ function Login() {
         <InputBoxContainer>
           <InputBox>
             <LineInput
+              type="text"
               label="아이디"
               value={id}
               placeholder="아이디를 입력해주세요."
@@ -84,6 +85,7 @@ function Login() {
           </InputBox>
           <InputBox>
             <LineInput
+              type="password"
               label="비밀번호"
               value={password}
               placeholder="비밀번호를 입력해주세요."

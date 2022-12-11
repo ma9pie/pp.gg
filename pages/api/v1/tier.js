@@ -1,4 +1,5 @@
 import dbConnect from "@/db/dbConnect";
+import Emblem from "@/db/schemas/Emblem";
 import History from "@/db/schemas/History";
 import TierUtils from "@/utils/TierUtils";
 
@@ -18,7 +19,12 @@ export default async function handler(req, res) {
         let winRate =
           winPoints === 0 ? 0 : (winPoints / (winPoints + losePoints)) * 100;
 
-        res.status(200).json(TierUtils.getTier(winRate));
+        const emblem = await Emblem.find({}).where("rate").lte(winRate).lean();
+
+        res.status(200).json({
+          tier: TierUtils.getTier(winRate),
+          imgUrl: emblem.at(-1).imgUrl,
+        });
       } catch (error) {
         res.status(400).json({ success: false });
       }

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
 import Profile from "@/components/players/Profile";
-import CommonLayout from "@/layouts/CommonLayout";
+import PlayerLayout from "@/layouts/PlayerLayout";
 
 function Players() {
   const router = useRouter();
@@ -20,14 +20,14 @@ function Players() {
       <Profile id={id}></Profile>
       <Row>
         <Column width="30%">
-          <Content></Content>
-          <Content></Content>
-          <Content></Content>
+          <Content height="100px"></Content>
+          <Content height="150px"></Content>
+          <Content height="100px"></Content>
+          <Content height="100px"></Content>
         </Column>
         <Column width="70%">
-          <Content></Content>
-          <Content></Content>
-          <Content></Content>
+          <Content height="100px"></Content>
+          <Content height="400px"></Content>
         </Column>
       </Row>
     </Wrapper>
@@ -37,15 +37,10 @@ function Players() {
 export default Players;
 
 Players.getLayout = function getLayout(page) {
-  return <CommonLayout>{page}</CommonLayout>;
+  return <PlayerLayout>{page}</PlayerLayout>;
 };
 
-const Wrapper = styled.div`
-  background-color: var(--sectionLine);
-  & * {
-    background-color: inherit;
-  }
-`;
+const Wrapper = styled.div``;
 const Row = styled.div`
   display: flex;
   gap: 16px;
@@ -60,9 +55,10 @@ const Column = styled.div`
 `;
 const Content = styled.section`
   width: 100%;
-  height: 100px;
-  background-color: var(--bg);
+  height: ${(props) => props.height};
+  padding: 24px;
   border-radius: 5px;
+  background-color: var(--bg) !important;
   & * {
     background-color: inherit;
   }

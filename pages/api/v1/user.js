@@ -10,11 +10,25 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const name = query.name.trim();
+        const id = query?.id;
+
+        if (id) {
+          const user = await User.findOne(query).lean();
+          res.status(200).json(user);
+          return;
+        }
+
+        let name = null;
+
+        if (query.name) {
+          name = query.name.trim();
+        }
+
         if (!name || !regExp.nameCheckRegExp.test(name)) {
           res.status(200).json([]);
           return;
         }
+
         const queryRegex = new RegExp(name, "i");
         const user = await User.find({ name: { $regex: queryRegex } }).lean();
         res.status(200).json(user);

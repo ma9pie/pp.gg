@@ -1,4 +1,4 @@
-import { countState, filterState, todoListState } from "@/recoil/atom";
+import { filterState, memberState, todoListState } from "@/recoil/atom";
 import { selector } from "recoil";
 
 export const filteredTodoListState = selector({

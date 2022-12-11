@@ -28,7 +28,7 @@ function SearchInput(props) {
         Axios.get("/api/v1/tier", {
           params: { id: user.id },
         }).then((res) => {
-          user.tier = res.data;
+          user.tier = res.data.tier;
         })
       )
     );

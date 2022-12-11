@@ -141,7 +141,6 @@ const Box = styled.div`
     flex: 10;
   }
 `;
-const TextBox = styled.div``;
 const Text = styled.p`
   font: var(--headline18);
   color: ${(props) => props.color};

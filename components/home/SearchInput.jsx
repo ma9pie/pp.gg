@@ -35,6 +35,12 @@ function SearchInput(props) {
     setUserList(tmpUserList);
   }, 100);
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && userList.length > 0) {
+      router.push(`/players/${userList[0].id}`);
+    }
+  };
+
   return (
     <Wrapper ref={ref} width={props.width}>
       <InputContainer>
@@ -47,6 +53,7 @@ function SearchInput(props) {
             getUserList(value);
           }}
           onFocus={() => setIsOpen(true)}
+          onKeyUp={handleKeyPress}
         ></Input>
       </InputContainer>
       <GG>.GG</GG>

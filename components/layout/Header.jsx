@@ -40,13 +40,6 @@ function Header(props) {
             </LinkBox>
           </a>
         </Link>
-        <Link href="/statistics" passHref>
-          <a>
-            <LinkBox>
-              <LinkText>통계</LinkText>
-            </LinkBox>
-          </a>
-        </Link>
         <Link href="/ranking" passHref>
           <a>
             <LinkBox>

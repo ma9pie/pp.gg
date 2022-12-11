@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const history = await History.find(query).lean();
+        const history = await History.find(query).sort({ date: -1 }).lean();
         res.status(200).json(history);
       } catch (error) {
         res.status(400).json({ success: false });

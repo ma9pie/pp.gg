@@ -25,14 +25,6 @@ function Tiers() {
     }
   }, [query.data]);
 
-  // useEffect(() => {
-  //   Axios.get("/api/v1/emblem", {
-  //     params: {},
-  //   }).then((res) => {
-  //     setEmblemList(res.data);
-  //   });
-  // }, []);
-
   return (
     <Wrapper>
       {emblemList.length === 0 ? (

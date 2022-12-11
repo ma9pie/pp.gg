@@ -7,12 +7,11 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function DoughnutChart(props) {
   const data = {
-    labels: ["승리", "패배"],
+    labels: props.labels,
     datasets: [
       {
-        // label: "# of Votes",
-        data: [12, 19],
-        backgroundColor: ["#5383e8", "#e84057"],
+        data: props.data,
+        backgroundColor: props.backgroundColor,
         borderWidth: 1,
       },
     ],
@@ -28,10 +27,13 @@ function DoughnutChart(props) {
 export default DoughnutChart;
 
 DoughnutChart.defaultProps = {
-  width: "100%",
-  height: "100%",
+  width: "200px",
+  height: "200px",
   margin: "0px",
   padding: "0px",
+  labels: ["label1", "label2"],
+  data: [1, 1],
+  backgroundColor: ["#5383e8", "#e84057"],
 };
 
 const Wrapper = styled.div`

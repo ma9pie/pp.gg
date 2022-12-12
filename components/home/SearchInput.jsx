@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useRef, useState } from "react";
+import Loading from "@/components/common/Loading";
 import Axios from "@/api/index";
 import useClickOutside from "@/hooks/useClickOutside";
 import useDebounce from "@/hooks/useDebounce";
@@ -10,6 +11,7 @@ function SearchInput(props) {
   const router = useRouter();
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [userList, setUserList] = useState([]);
 
   useClickOutside(ref, () => {
@@ -17,6 +19,7 @@ function SearchInput(props) {
   });
 
   const getUserList = useDebounce(async (name) => {
+    setIsLoading(true);
     let tmpUserList = await Axios.get("/api/v1/user", {
       params: { name: name },
     }).then(async (res) => {
@@ -32,6 +35,7 @@ function SearchInput(props) {
         })
       )
     );
+    setIsLoading(false);
     setUserList(tmpUserList);
   }, 100);
 
@@ -57,31 +61,43 @@ function SearchInput(props) {
         ></Input>
       </InputContainer>
       <GG>.GG</GG>
-      {isOpen && userList.length > 0 && (
-        <ListContainer>
-          {userList.map((user, key) => (
-            <ListBox
-              key={key}
-              onClick={() => {
-                router.push(`/players/${user.id}`);
-              }}
-            >
-              <ImageBox>
-                <Image
-                  src={user.imgUrl}
-                  width={36}
-                  height={36}
-                  alt="profileImg"
-                ></Image>
-              </ImageBox>
-              <TextBox>
-                <Text>{user.name}</Text>
-                <SubText>{user.tier}</SubText>
-              </TextBox>
-            </ListBox>
-          ))}
-        </ListContainer>
-      )}
+      {(() => {
+        if (isOpen && userList.length > 0) {
+          if (isLoading) {
+            return (
+              <ListContainer>
+                <Loading margin="10px auto"></Loading>
+              </ListContainer>
+            );
+          } else {
+            return (
+              <ListContainer>
+                {userList.map((user, key) => (
+                  <ListBox
+                    key={key}
+                    onClick={() => {
+                      router.push(`/players/${user.id}`);
+                    }}
+                  >
+                    <ImageBox>
+                      <Image
+                        src={user.imgUrl}
+                        width={36}
+                        height={36}
+                        alt="profileImg"
+                      ></Image>
+                    </ImageBox>
+                    <TextBox>
+                      <Text>{user.name}</Text>
+                      <SubText>{user.tier}</SubText>
+                    </TextBox>
+                  </ListBox>
+                ))}
+              </ListContainer>
+            );
+          }
+        }
+      })()}
     </Wrapper>
   );
 }
@@ -92,9 +108,11 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 800px;
+  max-width: 800px;
+  width: 80%;
   height: 60px;
   padding: 0px 32px;
+  margin: 0px 32px;
   border-radius: 30px;
   background-color: var(--textBox);
   & * {
@@ -122,7 +140,8 @@ const ListContainer = styled.div`
   position: absolute;
   top: 60px;
   left: 32px;
-  width: 680px;
+  max-width: 800px;
+  width: calc(100% - 64px);
   background-color: var(--textBox);
 `;
 const ListBox = styled.div`

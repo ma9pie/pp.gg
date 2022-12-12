@@ -83,5 +83,6 @@ const Wrapper = styled.div`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   border-radius: ${(props) => props.borderRadius};
-  overflow: ${(props) => props.overflow}; ;
+  overflow: ${(props) => props.overflow};
+  min-width: 288px;
 `;

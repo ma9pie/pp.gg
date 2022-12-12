@@ -6,10 +6,11 @@ import heimerdingerBanner from "@/images/banners/heimerdingerBanner.jpg";
 import ornnBanner from "@/images/banners/ornnBanner.jpg";
 import shacoBanner from "@/images/banners/shacoBanner.jpg";
 
-function Banner() {
+function MobileBanner() {
   return (
     <Wrapper>
       <Carousel
+        width="80vw"
         loop={true}
         autoplay={{
           delay: 4000,
@@ -47,13 +48,13 @@ function Banner() {
         </BannerWrapper>
 
         <BannerWrapper>
-          <Comment top="12%" left="73%">
+          <Comment top="15%" left="3%">
             중요한건
           </Comment>
-          <Comment top="27%" left="75%">
+          <Comment top="27%" right="5%">
             꺾이지 않는 마음
           </Comment>
-          <ImageAdjustment top="-20%">
+          <ImageAdjustment top="-5%">
             <Image src={ornnBanner} alt="bannerImage"></Image>
           </ImageAdjustment>
         </BannerWrapper>
@@ -62,7 +63,7 @@ function Banner() {
           <Comment top="20%" left="2%">
             네트만 넘기면 이기던데?
           </Comment>
-          <ImageAdjustment top="-50%">
+          <ImageAdjustment top="-10%">
             <Image src={heimerdingerBanner} alt="bannerImage"></Image>
           </ImageAdjustment>
         </BannerWrapper>
@@ -71,11 +72,13 @@ function Banner() {
   );
 }
 
-export default Banner;
+export default MobileBanner;
 
 const Wrapper = styled.div`
-  width: 100%;
-  @media (max-width: 1080px) {
+  height: 150px;
+  border-radius: 10px;
+  overflow: hidden;
+  @media (min-width: 1080px) {
     display: none;
   }
 `;
@@ -85,7 +88,7 @@ const BannerWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 300px;
+  height: 150px;
   background-color: ${(props) => props.backgroundColor};
   cursor: pointer;
   & * {
@@ -96,16 +99,14 @@ const BannerContent = styled.div`
   background-color: inherit;
 `;
 const Title = styled.p`
+  font: var(--headline24);
   color: white;
-  font-size: 96px;
-  font-weight: 900;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 `;
 const Description = styled.p`
+  font: var(--caption12);
   color: white;
-  font-size: 32px;
-  font-weight: 900;
   text-align: center;
 `;
 const ImageAdjustment = styled.div`
@@ -114,12 +115,21 @@ const ImageAdjustment = styled.div`
   left: 0%;
 `;
 const Comment = styled.p`
+  font: var(--body14);
   position: absolute;
   top: ${(props) => props.top};
+  bottom: ${(props) => props.bottom};
   left: ${(props) => props.left};
+  right: ${(props) => props.right};
   color: white;
-  font-size: 32px;
-  font-weight: 700;
   z-index: 1;
   background-color: transparent;
+  &* {
+    background-color: inherit;
+  }
+`;
+const Test = styled.div`
+  width: 200px;
+  height: 60px;
+  background-color: ${(props) => props.backgroundColor};
 `;

@@ -1,16 +1,18 @@
 import { memberState } from "@/recoil/atom";
-import { memberSelector } from "@/recoil/selector";
 import styled from "@emotion/styled";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
+import Menu from "@/components/home/Menu";
 import ModalUtils from "@/utils/ModalUtils";
 import ProfileSvg from "@/svg/ProfileSvg";
+import ViewMoreSvg from "@/svg/ViewMoreSvg";
 
 function Header(props) {
   const [isLogin, setIsLogin] = useState(false);
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [member, setMember] = useRecoilState(memberState);
   const logout = useResetRecoilState(memberState);
 
@@ -55,41 +57,46 @@ function Header(props) {
           </a>
         </Link>
       </MenuContainer>
-
-      {isLogin ? (
-        <ButtonWrapper>
-          <ExtraSmallButton
-            onClick={() => {
-              ModalUtils.openConfirm({
-                message: "로그아웃 하시겠습니까?",
-                onRequestConfirm: () => {
-                  logout();
-                },
-              });
-            }}
-          >
-            로그아웃
-          </ExtraSmallButton>
-          <ProfileSvg
-            color="white"
-            onClick={() => {
-              ModalUtils.openAlert({
-                message: `마이페이지 개발 예정\n 아이디: ${member.id}\n 닉네임: ${member.name}`,
-              });
-            }}
-          ></ProfileSvg>
-          <Theme></Theme>
-        </ButtonWrapper>
-      ) : (
-        <ButtonWrapper>
+      <ButtonWrapper>
+        {isLogin ? (
+          <>
+            <ExtraSmallButton
+              onClick={() => {
+                ModalUtils.openConfirm({
+                  message: "로그아웃 하시겠습니까?",
+                  onRequestConfirm: () => {
+                    logout();
+                  },
+                });
+              }}
+            >
+              로그아웃
+            </ExtraSmallButton>
+            <ProfileSvg
+              color="white"
+              onClick={() => {
+                ModalUtils.openAlert({
+                  message: `마이페이지 개발 예정\n 아이디: ${member.id}\n 닉네임: ${member.name}`,
+                });
+              }}
+            ></ProfileSvg>
+          </>
+        ) : (
           <ExtraSmallButton>
             <Link href="/login" passHref>
               <a>로그인 </a>
             </Link>
           </ExtraSmallButton>
-          <Theme></Theme>
-        </ButtonWrapper>
-      )}
+        )}
+        <Theme></Theme>
+        <ViewMoreSvgWrapper>
+          <ViewMoreSvg
+            color="white"
+            onClick={() => setIsOpenMenu(!isOpenMenu)}
+          ></ViewMoreSvg>
+          {isOpenMenu && <Menu></Menu>}
+        </ViewMoreSvgWrapper>
+      </ButtonWrapper>
     </Wrapper>
   );
 }
@@ -113,6 +120,7 @@ const Wrapper = styled.header`
   }
 `;
 const LogoWrapper = styled.div`
+  margin-right: 24px;
   cursor: pointer;
 `;
 const LogoText = styled.p`
@@ -122,6 +130,9 @@ const LogoText = styled.p`
 `;
 const MenuContainer = styled.nav`
   display: flex;
+  @media (max-width: 1080px) {
+    display: none;
+  }
 `;
 const LinkBox = styled.div`
   padding: 8px 24px;
@@ -137,4 +148,10 @@ const ButtonWrapper = styled.div`
   justify-content: flex-end;
   gap: 16px;
   width: 200px;
+`;
+const ViewMoreSvgWrapper = styled.div`
+  position: relative;
+  @media (min-width: 1080px) {
+    display: none;
+  }
 `;

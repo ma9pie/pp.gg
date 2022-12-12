@@ -44,7 +44,6 @@ function SessionLayout(props) {
 export default SessionLayout;
 
 const Container = styled.div`
-  min-width: 1080px;
   height: 100vh;
   background-color: var(--sectionLine);
 `;

@@ -20,7 +20,6 @@ function PlayerLayout(props) {
 export default PlayerLayout;
 
 const Container = styled.div`
-  min-width: 1080px;
   background-color: var(--sectionLine);
 `;
 const ContentWrapper = styled.div`

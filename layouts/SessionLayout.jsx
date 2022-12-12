@@ -49,7 +49,7 @@ const Container = styled.div`
 `;
 const ContentWrapper = styled.div`
   margin: 0px auto;
-  width: 1080px;
+  max-width: 1080px;
   min-height: calc(100% - 108px);
   background-color: var(--sectionLine);
 `;
@@ -57,5 +57,4 @@ const Content = styled.div`
   min-height: calc(100vh - 108px);
   background-color: var(--bg);
   margin: 0px auto;
-  padding: 60px 0px;
 `;

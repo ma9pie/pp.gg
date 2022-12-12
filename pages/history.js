@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import SmallButton from "@/components/common/Buttons/SmallButton";
 import Loading from "@/components/common/Loading";
-import CommonLayout from "@/layouts/CommonLayout";
+import CommonLayout from "@/layouts/SessionLayout";
 import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 import MinusSvg from "@/svg/MinusSvg";

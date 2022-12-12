@@ -112,7 +112,7 @@ const Wrapper = styled.div`
   background-color: var(--sectionLine);
 `;
 const ContentWrapper = styled.div`
-  width: 450px;
+  max-width: 450px;
   margin: 0px auto;
   padding: 40px;
   background-color: var(--bg);

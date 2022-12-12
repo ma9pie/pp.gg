@@ -3,24 +3,22 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import SmallButton from "@/components/common/Buttons/SmallButton";
+import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/CommonLayout";
+import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
 function History() {
   const userList = ["maxosa72", "kjy1787", "jiseok2301"];
+  const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     player1: "",
     player2: "",
     score1: 0,
     score2: 0,
   });
-
-  useEffect(() => {
-    const now = moment().add(12, "h");
-    console.log(now.format("YYYY-MM-DD HH:mm"));
-  }, []);
 
   const onChangeInputs = (e) => {
     const { value, name } = e.target;
@@ -41,7 +39,57 @@ function History() {
   };
 
   const saveData = () => {
-    console.log("saveData");
+    const date = moment().format("YYYY-MM-DD HH:mm");
+    const { player1, player2, score1, score2 } = inputs;
+    let winnerId, loserId, winnerScore, loserScore;
+
+    // player 입력 오류
+    if (!player1 || !player2) {
+      ModalUtils.openAlert({ message: "player의 아이디를 입력해주세요." });
+      return;
+    }
+
+    // score 입력 오류
+    if (!score1 && !score2) {
+      ModalUtils.openAlert({ message: "score를 입력해주세요." });
+      return;
+    }
+
+    if (score1 >= score2) {
+      winnerId = player1;
+      winnerScore = score1;
+      loserId = player2;
+      loserScore = score2;
+    } else {
+      winnerId = player2;
+      winnerScore = score2;
+      loserId = player1;
+      loserScore = score1;
+    }
+
+    const req = {
+      date: date,
+      winnerId: winnerId,
+      loserId: loserId,
+      winnerScore: winnerScore,
+      loserScore: loserScore,
+    };
+
+    setIsLoading(true);
+    Axios.post("/api/v1/history", req).then((res) => {
+      setIsLoading(false);
+      if (res.data.message) {
+        ModalUtils.openAlert({ message: res.data.message });
+      } else {
+        ModalUtils.openAlert({ message: "데이터가 저장되었습니다." });
+        setInputs({
+          player1: "",
+          player2: "",
+          score1: 0,
+          score2: 0,
+        });
+      }
+    });
   };
 
   return (
@@ -52,7 +100,7 @@ function History() {
             {userList.map((user, key) => (
               <LargeButton
                 key={key}
-                type="sub"
+                type={user === inputs.player1 ? "" : "sub"}
                 onClick={() => setInputs({ ...inputs, player1: user })}
               >
                 {user}
@@ -64,7 +112,7 @@ function History() {
             {userList.map((user, key) => (
               <LargeButton
                 key={key}
-                type="sub"
+                type={user === inputs.player2 ? "" : "sub"}
                 onClick={() => setInputs({ ...inputs, player2: user })}
               >
                 {user}
@@ -97,11 +145,11 @@ function History() {
             </Row>
             <Row width="100%">
               <BoxContainer>
-                <SmallButton onClick={() => onChangeScore("score1", 1)}>
-                  <PlusSvg color="white"></PlusSvg>
-                </SmallButton>
                 <SmallButton onClick={() => onChangeScore("score1", -1)}>
                   <MinusSvg color="white"></MinusSvg>
+                </SmallButton>
+                <SmallButton onClick={() => onChangeScore("score1", 1)}>
+                  <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
               </BoxContainer>
             </Row>
@@ -129,18 +177,20 @@ function History() {
             </Row>
             <Row width="100%">
               <BoxContainer>
-                <SmallButton onClick={() => onChangeScore("score2", 1)}>
-                  <PlusSvg color="white"></PlusSvg>
-                </SmallButton>
                 <SmallButton onClick={() => onChangeScore("score2", -1)}>
                   <MinusSvg color="white"></MinusSvg>
+                </SmallButton>
+                <SmallButton onClick={() => onChangeScore("score2", 1)}>
+                  <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
               </BoxContainer>
             </Row>
           </Column>
         </Row>
       </Container>
-      <LargeButton onClick={saveData}>서버 전송</LargeButton>
+      <LargeButton onClick={saveData}>
+        {isLoading ? <Loading color="white"></Loading> : "서버 전송"}
+      </LargeButton>
     </Wrapper>
   );
 }
@@ -152,11 +202,18 @@ History.getLayout = function getLayout(page) {
 };
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 60px 24px 20px 24px;
   height: calc(100vh - 108px);
+`;
+const LoadingWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 const Container = styled.div`
   margin-bottom: 24px;

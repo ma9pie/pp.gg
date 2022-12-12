@@ -8,7 +8,7 @@ const HistorySchema = new mongoose.Schema(
     winnerScore: Number,
     loserScore: Number,
   },
-  { collection: "history" }
+  { collection: "history", versionKey: false }
 );
 
 export default mongoose.models.History ||

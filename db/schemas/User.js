@@ -8,7 +8,7 @@ const UserSchema = new mongoose.Schema(
     tier: String,
     imgUrl: String,
   },
-  { collection: "user" }
+  { collection: "user", versionKey: false }
 );
 
 export default mongoose.models.User || mongoose.model("User", UserSchema);

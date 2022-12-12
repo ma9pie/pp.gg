@@ -6,7 +6,7 @@ const EmblemSchema = new mongoose.Schema(
     name: String,
     rate: Number,
   },
-  { collection: "emblem" }
+  { collection: "emblem", versionKey: false }
 );
 
 export default mongoose.models.Emblem || mongoose.model("Emblem", EmblemSchema);

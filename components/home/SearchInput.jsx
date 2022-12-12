@@ -10,6 +10,7 @@ import useDebounce from "@/hooks/useDebounce";
 function SearchInput(props) {
   const router = useRouter();
   const ref = useRef(null);
+  const [searchWord, setSearchWord] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userList, setUserList] = useState([]);
@@ -51,9 +52,11 @@ function SearchInput(props) {
         <Title>Search</Title>
         <Input
           type="text"
+          value={searchWord}
           placeholder="소환사명"
           onChange={(e) => {
             const { value } = e.target;
+            setSearchWord(value);
             getUserList(value);
           }}
           onFocus={() => setIsOpen(true)}
@@ -62,39 +65,51 @@ function SearchInput(props) {
       </InputContainer>
       <GG>.GG</GG>
       {(() => {
-        if (isOpen && userList.length > 0) {
-          if (isLoading) {
-            return (
-              <ListContainer>
-                <Loading margin="10px auto"></Loading>
-              </ListContainer>
-            );
-          } else {
-            return (
-              <ListContainer>
-                {userList.map((user, key) => (
-                  <ListBox
-                    key={key}
-                    onClick={() => {
-                      router.push(`/players/${user.id}`);
-                    }}
-                  >
-                    <ImageBox>
-                      <Image
-                        src={user.imgUrl}
-                        width={36}
-                        height={36}
-                        alt="profileImg"
-                      ></Image>
-                    </ImageBox>
+        if (isLoading) {
+          return (
+            <ListContainer>
+              <Loading margin="10px auto"></Loading>
+            </ListContainer>
+          );
+        } else {
+          if (isOpen) {
+            if (searchWord && userList.length === 0) {
+              return (
+                <ListContainer>
+                  <ListBox>
                     <TextBox>
-                      <Text>{user.name}</Text>
-                      <SubText>{user.tier}</SubText>
+                      <SubText>유저가 존재하지 않습니다.</SubText>
                     </TextBox>
                   </ListBox>
-                ))}
-              </ListContainer>
-            );
+                </ListContainer>
+              );
+            } else {
+              return (
+                <ListContainer>
+                  {userList.map((user, key) => (
+                    <ListBox
+                      key={key}
+                      onClick={() => {
+                        router.push(`/players/${user.id}`);
+                      }}
+                    >
+                      <ImageBox>
+                        <Image
+                          src={user.imgUrl}
+                          width={36}
+                          height={36}
+                          alt="profileImg"
+                        ></Image>
+                      </ImageBox>
+                      <TextBox>
+                        <Text>{user.name}</Text>
+                        <SubText>{user.tier}</SubText>
+                      </TextBox>
+                    </ListBox>
+                  ))}
+                </ListContainer>
+              );
+            }
           }
         }
       })()}
@@ -166,7 +181,7 @@ const ImageBox = styled.div`
 const TextBox = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
 `;
 const Text = styled.p`
   font: var(--body14);

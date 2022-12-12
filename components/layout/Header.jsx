@@ -56,6 +56,13 @@ function Header(props) {
             </LinkBox>
           </a>
         </Link>
+        <Link href="/history" passHref>
+          <a>
+            <LinkBox>
+              <LinkText>전적 기록</LinkText>
+            </LinkBox>
+          </a>
+        </Link>
       </MenuContainer>
       <ButtonWrapper>
         {isLogin ? (

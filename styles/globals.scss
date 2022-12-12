@@ -24,6 +24,7 @@ input:focus {
   outline: none;
 }
 
+// input 자동완성 색채우기 제거
 div {
   :-webkit-autofill,
   :-webkit-autofill:hover,
@@ -32,12 +33,18 @@ div {
     transition: background-color 5000s;
   }
 }
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--main);
+}
+
+// input 숫자입력 화살표 비활성화
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* 라이트모드(기본) */

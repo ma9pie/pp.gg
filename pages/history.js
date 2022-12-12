@@ -1,0 +1,192 @@
+import styled from "@emotion/styled";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import LargeButton from "@/components/common/Buttons/LargeButton";
+import SmallButton from "@/components/common/Buttons/SmallButton";
+import CommonLayout from "@/layouts/CommonLayout";
+import Axios from "@/api/index";
+import MinusSvg from "@/svg/MinusSvg";
+import PlusSvg from "@/svg/PlusSvg";
+
+function History() {
+  const userList = ["maxosa72", "kjy1787", "jiseok2301"];
+  const [inputs, setInputs] = useState({
+    player1: "",
+    player2: "",
+    score1: 0,
+    score2: 0,
+  });
+
+  useEffect(() => {
+    const now = moment().add(12, "h");
+    console.log(now.format("YYYY-MM-DD HH:mm"));
+  }, []);
+
+  const onChangeInputs = (e) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  const onChangeScore = (name, value) => {
+    let tmpInputs = { ...inputs };
+    tmpInputs[name] += value;
+
+    if (tmpInputs[name] < 0) {
+      tmpInputs[name] = 0;
+    }
+    setInputs(tmpInputs);
+  };
+
+  const saveData = () => {
+    console.log("saveData");
+  };
+
+  return (
+    <Wrapper>
+      <Container>
+        <Row>
+          <Column width="40%">
+            {userList.map((user, key) => (
+              <LargeButton
+                key={key}
+                type="sub"
+                onClick={() => setInputs({ ...inputs, player1: user })}
+              >
+                {user}
+              </LargeButton>
+            ))}
+          </Column>
+          <Column width="10%"></Column>
+          <Column width="40%">
+            {userList.map((user, key) => (
+              <LargeButton
+                key={key}
+                type="sub"
+                onClick={() => setInputs({ ...inputs, player2: user })}
+              >
+                {user}
+              </LargeButton>
+            ))}
+          </Column>
+        </Row>
+      </Container>
+      <Container>
+        <Row>
+          <Column width="40%">
+            <Row>player1</Row>
+            <Row>
+              <InputBox
+                height="40px"
+                type="text"
+                name="player1"
+                value={inputs.player1}
+                onChange={onChangeInputs}
+              ></InputBox>
+            </Row>
+            <Row>
+              <InputBox
+                height="60px"
+                type="number"
+                name="score1"
+                value={inputs.score1}
+                onChange={onChangeInputs}
+              ></InputBox>
+            </Row>
+            <Row width="100%">
+              <BoxContainer>
+                <SmallButton onClick={() => onChangeScore("score1", 1)}>
+                  <PlusSvg color="white"></PlusSvg>
+                </SmallButton>
+                <SmallButton onClick={() => onChangeScore("score1", -1)}>
+                  <MinusSvg color="white"></MinusSvg>
+                </SmallButton>
+              </BoxContainer>
+            </Row>
+          </Column>
+          <Column width="10%">vs</Column>
+          <Column width="40%">
+            <Row>player2</Row>
+            <Row>
+              <InputBox
+                height="40px"
+                type="text"
+                name="player2"
+                value={inputs.player2}
+                onChange={onChangeInputs}
+              ></InputBox>
+            </Row>
+            <Row>
+              <InputBox
+                height="60px"
+                type="number"
+                name="score2"
+                value={inputs.score2}
+                onChange={onChangeInputs}
+              ></InputBox>
+            </Row>
+            <Row width="100%">
+              <BoxContainer>
+                <SmallButton onClick={() => onChangeScore("score2", 1)}>
+                  <PlusSvg color="white"></PlusSvg>
+                </SmallButton>
+                <SmallButton onClick={() => onChangeScore("score2", -1)}>
+                  <MinusSvg color="white"></MinusSvg>
+                </SmallButton>
+              </BoxContainer>
+            </Row>
+          </Column>
+        </Row>
+      </Container>
+      <LargeButton onClick={saveData}>서버 전송</LargeButton>
+    </Wrapper>
+  );
+}
+
+export default History;
+
+History.getLayout = function getLayout(page) {
+  return <CommonLayout>{page}</CommonLayout>;
+};
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 24px 20px 24px;
+  height: calc(100vh - 108px);
+`;
+const Container = styled.div`
+  margin-bottom: 24px;
+`;
+const Row = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 20px;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  gap: 8px;
+`;
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  gap: 8px;
+`;
+const InputBox = styled.input`
+  width: 100%;
+  height: ${(props) => props.height};
+  padding: 0px 10px;
+  border-radius: 15px;
+  background-color: var(--textBox);
+  text-align: center;
+`;
+const BoxContainer = styled.div`
+  display: flex;
+  gap: 16px;
+`;

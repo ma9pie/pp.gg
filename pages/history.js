@@ -11,7 +11,7 @@ import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
 function History() {
-  const userList = ["maxosa72", "kjy1787", "jiseok2301"];
+  const [userList, setUserList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     player1: "",
@@ -19,6 +19,13 @@ function History() {
     score1: 0,
     score2: 0,
   });
+
+  useEffect(() => {
+    Axios.get("/api/v1/allUser").then((res) => {
+      console.log(res.data);
+      setUserList(res.data);
+    });
+  }, []);
 
   const onChangeInputs = (e) => {
     const { value, name } = e.target;
@@ -99,11 +106,12 @@ function History() {
           <Column width="40%">
             {userList.map((user, key) => (
               <LargeButton
+                height="40px"
                 key={key}
-                type={user === inputs.player1 ? "" : "sub"}
-                onClick={() => setInputs({ ...inputs, player1: user })}
+                type={user.id === inputs.player1 ? "" : "sub"}
+                onClick={() => setInputs({ ...inputs, player1: user.id })}
               >
-                {user}
+                {user.id}
               </LargeButton>
             ))}
           </Column>
@@ -111,11 +119,12 @@ function History() {
           <Column width="40%">
             {userList.map((user, key) => (
               <LargeButton
+                height="40px"
                 key={key}
-                type={user === inputs.player2 ? "" : "sub"}
-                onClick={() => setInputs({ ...inputs, player2: user })}
+                type={user.id === inputs.player2 ? "" : "sub"}
+                onClick={() => setInputs({ ...inputs, player2: user.id })}
               >
-                {user}
+                {user.id}
               </LargeButton>
             ))}
           </Column>
@@ -206,14 +215,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 60px 24px 20px 24px;
+  padding: 20px 24px;
   height: calc(100vh - 108px);
-`;
-const LoadingWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 `;
 const Container = styled.div`
   margin-bottom: 24px;

@@ -38,7 +38,7 @@ function SearchInput(props) {
     );
     setIsLoading(false);
     setUserList(tmpUserList);
-  }, 100);
+  }, 300);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter" && userList.length > 0) {

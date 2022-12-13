@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import LineInput from "@/components/common/Inputs/LineInput";
+import Loading from "@/components/common/Loading";
 import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 
@@ -17,6 +18,7 @@ function Login() {
   const [id, setId] = useState("");
   const [idErrMsg, setIdErrMsg] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleId = (e) => {
     const { value } = e.target;
@@ -38,7 +40,9 @@ function Login() {
       id: id,
       password: password,
     };
+    setIsLoading(true);
     Axios.post("/api/v1/login", req).then((res) => {
+      setIsLoading(false);
       if (res.data) {
         setMember(res.data);
         router.push("/");
@@ -95,8 +99,8 @@ function Login() {
           </InputBox>
         </InputBoxContainer>
 
-        <LargeButton disabled={disableButton()} onClick={login}>
-          로그인
+        <LargeButton disabled={isLoading || disableButton()} onClick={login}>
+          {isLoading ? <Loading color="white"></Loading> : "로그인"}
         </LargeButton>
       </ContentWrapper>
     </Wrapper>

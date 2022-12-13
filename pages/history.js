@@ -146,16 +146,10 @@ function History() {
             </Row>
             <Row width="100%">
               <BoxContainer>
-                <SmallButton
-                  onClick={() => onChangeScore("score1", -1)}
-                  onTouchEnd={() => onChangeScore("score1", -1)}
-                >
+                <SmallButton onTouchStart={() => onChangeScore("score1", -1)}>
                   <MinusSvg color="white"></MinusSvg>
                 </SmallButton>
-                <SmallButton
-                  onClick={() => onChangeScore("score1", 1)}
-                  onTouchEnd={() => onChangeScore("score1", 1)}
-                >
+                <SmallButton onTouchStart={() => onChangeScore("score1", 1)}>
                   <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
               </BoxContainer>
@@ -184,16 +178,10 @@ function History() {
             </Row>
             <Row width="100%">
               <BoxContainer>
-                <SmallButton
-                  onClick={() => onChangeScore("score2", -1)}
-                  onTouchEnd={() => onChangeScore("score2", -1)}
-                >
+                <SmallButton onTouchStart={() => onChangeScore("score2", -1)}>
                   <MinusSvg color="white"></MinusSvg>
                 </SmallButton>
-                <SmallButton
-                  onClick={() => onChangeScore("score2", 1)}
-                  onTouchEnd={() => onChangeScore("score2", 1)}
-                >
+                <SmallButton onTouchStart={() => onChangeScore("score2", 1)}>
                   <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
               </BoxContainer>

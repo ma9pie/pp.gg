@@ -12,8 +12,8 @@ export default function Document() {
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="PP.GG" />
         <meta name="application-name" content="PP.GG" />
-        <meta name="theme-color" content="#ffffff" />
-        <meta name="msapplication-TileColor" content="#ffffff" />
+        <meta name="theme-color" content="#1d1d21" />
+        <meta name="msapplication-TileColor" content="#1d1d21" />
         <meta
           name="msapplication-TileImage"
           content="icons/mstile-144x144.png"

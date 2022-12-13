@@ -4,6 +4,7 @@ import _includes from "lodash/includes";
 import ModalUtils from "@/utils/ModalUtils";
 
 let isOpenModal = false;
+let set = new Set();
 
 const headers = {
   "Content-Type": "application/json",
@@ -17,6 +18,13 @@ const Rest = Axios.create({
 
 Rest.interceptors.request.use(
   (req) => {
+    let { url } = req;
+
+    if (set.has(url)) {
+      throw new Axios.Cancel(`이미 요청중인 API 호출(${url}) 입니다.`);
+    }
+    set.add(url);
+
     return req;
   },
   (error) => {
@@ -27,6 +35,8 @@ Rest.interceptors.request.use(
 
 Rest.interceptors.response.use(
   (res) => {
+    set.delete(res.config.url);
+
     console.log(
       "\n============================ REST LOG START ============================="
     );

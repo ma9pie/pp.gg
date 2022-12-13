@@ -39,7 +39,6 @@ function History() {
   };
 
   const saveData = () => {
-    if (isLoading) return;
     const date = moment().format("YYYY-MM-DD HH:mm");
     const { player1, player2, score1, score2 } = inputs;
     let winnerId, loserId, winnerScore, loserScore;

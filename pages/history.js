@@ -7,22 +7,23 @@ import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/SessionLayout";
 import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
+import useDebounce from "@/hooks/useDebounce";
 import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
 function History() {
   const [userList, setUserList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [inputs, setInputs] = useState({
     player1: "",
     player2: "",
-    score1: 0,
-    score2: 0,
+    score1: 11,
+    score2: 11,
   });
 
   useEffect(() => {
     Axios.get("/api/v1/allUser").then((res) => {
-      console.log(res.data);
       setUserList(res.data);
     });
   }, []);
@@ -45,7 +46,8 @@ function History() {
     setInputs(tmpInputs);
   };
 
-  const saveData = () => {
+  // 기록 저장
+  const saveData = useDebounce(() => {
     const date = moment().format("YYYY-MM-DD HH:mm");
     const { player1, player2, score1, score2 } = inputs;
     let winnerId, loserId, winnerScore, loserScore;
@@ -82,22 +84,35 @@ function History() {
       loserScore: loserScore,
     };
 
-    setIsLoading(true);
+    setIsLoadingSave(true);
     Axios.post("/api/v1/history", req).then((res) => {
-      setIsLoading(false);
+      setIsLoadingSave(false);
       if (res.data.message) {
         ModalUtils.openAlert({ message: res.data.message });
       } else {
         ModalUtils.openAlert({ message: "데이터가 저장되었습니다." });
         setInputs({
-          player1: "",
+          player1: res.data.winnerId,
           player2: "",
-          score1: 0,
-          score2: 0,
+          score1: 11,
+          score2: 11,
         });
       }
     });
-  };
+  }, 100);
+
+  // 기록 삭제
+  const deleteLastData = useDebounce(() => {
+    setIsLoadingDelete(true);
+    Axios.delete("/api/v1/lastHistory").then((res) => {
+      setIsLoadingDelete(false);
+      ModalUtils.openAlert({ message: JSON.stringify(res.data) });
+      ModalUtils.openAlert({
+        message: "기록이 삭제되었습니다.",
+        component: () => <HistoryContent {...res.data}></HistoryContent>,
+      });
+    });
+  }, 100);
 
   return (
     <Wrapper>
@@ -197,14 +212,62 @@ function History() {
           </Column>
         </Row>
       </Container>
-      <LargeButton onClick={saveData} disabled={isLoading}>
-        {isLoading ? <Loading color="white"></Loading> : "서버 전송"}
-      </LargeButton>
+      <ButtonContainer>
+        <ButtonBox flex={4}>
+          <LargeButton onClick={saveData} disabled={isLoadingSave}>
+            {isLoadingSave ? <Loading color="white"></Loading> : "저장"}
+          </LargeButton>
+        </ButtonBox>
+        <ButtonBox flex={1}>
+          <LargeButton
+            onClick={() => {
+              ModalUtils.openConfirm({
+                message: "가장 최신 기록을 삭제하시겠습니까?",
+                onRequestConfirm: () => {
+                  deleteLastData();
+                },
+              });
+            }}
+            disabled={isLoadingDelete}
+          >
+            {isLoadingDelete ? <Loading color="white"></Loading> : "삭제"}
+          </LargeButton>
+        </ButtonBox>
+      </ButtonContainer>
     </Wrapper>
   );
 }
 
 export default History;
+
+const HistoryContent = (props) => {
+  const ContentWrapper = styled.div`
+    margin-bottom: 16px;
+  `;
+  const TextBox = styled.div`
+    width: 100%;
+    border-radius: 15px;
+    padding: 16px;
+    background-color: var(--textBox);
+    & * {
+      background-color: inherit;
+    }
+  `;
+  const Text = styled.div`
+    font: var(--body14);
+    text-align: left;
+  `;
+
+  return (
+    <ContentWrapper>
+      <TextBox>
+        <Text>{`일시 : ${props.date}`}</Text>
+        <Text>{`승자 : ${props.winnerId} (${props.winnerScore})`}</Text>
+        <Text>{`패자 : ${props.loserId} (${props.loserScore})`}</Text>
+      </TextBox>
+    </ContentWrapper>
+  );
+};
 
 History.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
@@ -249,4 +312,12 @@ const InputBox = styled.input`
 const BoxContainer = styled.div`
   display: flex;
   gap: 16px;
+`;
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+const ButtonBox = styled.div`
+  width: 100%;
+  flex: ${(props) => props.flex};
 `;

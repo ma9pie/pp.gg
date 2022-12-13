@@ -188,7 +188,7 @@ function History() {
           </Column>
         </Row>
       </Container>
-      <LargeButton onClick={saveData}>
+      <LargeButton onClick={saveData} disabled={isLoading}>
         {isLoading ? <Loading color="white"></Loading> : "서버 전송"}
       </LargeButton>
     </Wrapper>

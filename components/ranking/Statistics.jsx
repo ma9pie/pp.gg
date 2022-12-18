@@ -27,6 +27,8 @@ function Statistics(props) {
             <Row>
               <Column>
                 <ProfileImage
+                  width="36px"
+                  height="36px"
                   src={user.imgUrl}
                   border="3px solid #af8830"
                 ></ProfileImage>
@@ -64,25 +66,26 @@ function Statistics(props) {
 export default Statistics;
 
 const Wrapper = styled.div`
-  width: 960px;
+  width: 95%;
   margin: 0px auto;
+  padding-top: 40px;
 `;
 const Row = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 `;
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   &:nth-of-type(1) {
-    width: 48px;
+    width: 36px;
   }
   &:nth-of-type(2) {
-    width: 48px;
+    width: 42px;
   }
   &:nth-of-type(3) {
-    width: 100px;
+    width: 92px;
   }
   &:nth-of-type(4) {
     flex: 1;

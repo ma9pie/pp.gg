@@ -5,12 +5,14 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
-import Menu from "@/components/home/Menu";
+import Menu from "@/components/layout/Menu";
 import ModalUtils from "@/utils/ModalUtils";
 import ProfileSvg from "@/svg/ProfileSvg";
 import ViewMoreSvg from "@/svg/ViewMoreSvg";
+import {useRouter} from 'next/router'
 
 function Header(props) {
+  const router = useRouter()
   const [isLogin, setIsLogin] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [member, setMember] = useRecoilState(memberState);
@@ -23,6 +25,10 @@ function Header(props) {
       setIsLogin(false);
     }
   }, [member]);
+
+  useEffect(() => {
+    setIsOpenMenu(false)
+  }, [router]);
 
   return (
     <Wrapper {...props}>

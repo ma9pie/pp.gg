@@ -126,7 +126,7 @@ function History() {
                 type={user.id === inputs.player1 ? "" : "sub"}
                 onClick={() => setInputs({ ...inputs, player1: user.id })}
               >
-                {user.id}
+                {user.name}
               </LargeButton>
             ))}
           </Column>
@@ -139,7 +139,7 @@ function History() {
                 type={user.id === inputs.player2 ? "" : "sub"}
                 onClick={() => setInputs({ ...inputs, player2: user.id })}
               >
-                {user.id}
+                {user.name}
               </LargeButton>
             ))}
           </Column>

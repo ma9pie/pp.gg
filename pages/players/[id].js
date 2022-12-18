@@ -121,7 +121,7 @@ function Players() {
     <Wrapper>
       <Profile id={id}></Profile>
       <Row>
-        <Column width="30%">
+        <ChartContainer>
           <Content height="auto">
             <Box>
               <Title>총 전적</Title>
@@ -154,15 +154,15 @@ function Players() {
               ></DoughnutChart>
             </Box>
           </Content>
-        </Column>
+        </ChartContainer>
 
-        <Column width="70%">
+        <HistoryContainer>
           {gameList.map((data, key) => (
             <Content key={key} height="auto">
               <HistoryList {...data} userList={userList.data}></HistoryList>
             </Content>
           ))}
-        </Column>
+        </HistoryContainer>
       </Row>
     </Wrapper>
   );
@@ -176,16 +176,42 @@ Players.getLayout = function getLayout(page) {
 
 const Wrapper = styled.div``;
 const Row = styled.div`
-  display: flex;
   gap: 16px;
-  width: 1080px;
+  max-width: 1080px;
   margin: 16px auto;
+  @media (min-width: 1080px) {
+    display: flex;
+  }
 `;
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
   width: ${(props) => props.width};
+`;
+const ChartContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: ${(props) => props.width};
+  @media (min-width: 1080px) {
+    width: 30%;
+  }
+  @media (max-width: 1080px) {
+    width: 100%;
+  }
+`;
+const HistoryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: ${(props) => props.width};
+  @media (min-width: 1080px) {
+    width: 70%;
+  }
+  @media (max-width: 1080px) {
+    width: 100%;
+  }
 `;
 const Content = styled.section`
   display: flex;

@@ -65,7 +65,7 @@ function Profile(props) {
 export default Profile;
 
 const Wrapper = styled.div`
-  padding: 40px 60px;
+  padding: 40px 16px;
   background-color: var(--bg) !important;
   & * {
     background-color: inherit;
@@ -74,10 +74,10 @@ const Wrapper = styled.div`
 const Content = styled.div`
   display: flex;
   align-items: center;
-  width: 1080px;
+  max-width: 1080px;
   height: 100%;
   margin: 0px auto;
-  gap: 24px;
+  gap: 16px;
 `;
 const ImageWrapper = styled.div`
   width: 100px;

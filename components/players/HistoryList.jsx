@@ -67,6 +67,8 @@ function HistoryList(props) {
                 ></Image>
               )}
             </ImageWrapper>
+          </Row>
+          <Row>
             <Column>
               <SubText>{getName(props.id)}</SubText>
               <SubText>{getTier(props.id)}</SubText>
@@ -91,6 +93,8 @@ function HistoryList(props) {
                 ></Image>
               )}
             </ImageWrapper>
+          </Row>
+          <Row>
             <Column>
               <SubText>{getName(props.opponents)}</SubText>
               <SubText>{getTier(props.opponents)}</SubText>
@@ -127,7 +131,7 @@ const Box = styled.div`
   justify-content: center;
   height: 100%;
   padding: auto 0px;
-  gap: 8px;
+  gap: 4px;
   &:nth-of-type(1) {
     flex: 5;
   }
@@ -142,11 +146,11 @@ const Box = styled.div`
   }
 `;
 const Text = styled.p`
-  font: var(--headline18);
+  font: var(--headline16);
   color: ${(props) => props.color};
 `;
 const SubText = styled.p`
-  font: var(--body14);
+  font: var(--caption12);
   color: var(--sub);
 `;
 const ImageWrapper = styled.div`
@@ -162,12 +166,12 @@ const BigText = styled.p`
 `;
 const Row = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
-  margin-left: 24px;
+  gap: 8px;
 `;
 const Column = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
 `;

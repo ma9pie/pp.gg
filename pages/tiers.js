@@ -58,8 +58,8 @@ Tiers.getLayout = function getLayout(page) {
 const Wrapper = styled.div``;
 const Grid = styled.div`
   display: grid;
-  justify-content: space-between;
-  grid-template-columns: repeat(3, 200px);
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, 250px);
   padding: 0px 100px;
 `;
 const ImageBox = styled.div`
@@ -67,7 +67,7 @@ const ImageBox = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin-bottom: 100px;
+  margin-bottom: 40px;
 `;
 const Text = styled.div`
   font: var(--headline18);

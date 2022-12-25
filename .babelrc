@@ -10,7 +10,7 @@
         [
           "transform-remove-console",
           {
-            "exclude": ["error", "warn"]
+            "exclude": ["error", "warn", "console"]
           }
         ]
       ]

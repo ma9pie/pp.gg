@@ -28,7 +28,9 @@ function Tiers() {
   return (
     <Wrapper>
       {emblemList.length === 0 ? (
-        <Loading margin="450px auto"></Loading>
+        <LoadingWrapper>
+          <Loading></Loading>
+        </LoadingWrapper>
       ) : (
         <Grid>
           {emblemList.map((item, key) => (
@@ -75,4 +77,10 @@ const Text = styled.div`
 const SubText = styled.div`
   font: var(--body14);
   color: var(--sub);
+`;
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 108px);
 `;

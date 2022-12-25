@@ -41,7 +41,7 @@ function SearchInput(props) {
   });
 
   useEffect(() => {
-    if (!searchWord) return setRsultList([]);
+    if (!searchWord.trim()) return setRsultList([]);
     const tmpUserList = [];
     userList.data?.map((user) => {
       if (user.name.includes(searchWord)) {

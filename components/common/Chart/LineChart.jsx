@@ -9,7 +9,7 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Line } from "react-chartjs-2";
 
 ChartJS.register(
@@ -23,6 +23,8 @@ ChartJS.register(
 );
 
 function LineChart(props) {
+  const ref = useRef();
+  const [height, setHeight] = useState(0);
   const data = {
     labels: props.labels,
     datasets: [
@@ -36,8 +38,13 @@ function LineChart(props) {
     ],
   };
 
+  useEffect(() => {
+    const { offsetWidth } = ref.current;
+    setHeight(offsetWidth / 2);
+  }, []);
+
   return (
-    <Wrapper {...props}>
+    <Wrapper ref={ref} {...props} height={`${height}px`}>
       <Line data={data}></Line>
     </Wrapper>
   );
@@ -46,8 +53,6 @@ function LineChart(props) {
 export default LineChart;
 
 LineChart.defaultProps = {
-  width: "auto",
-  height: "auto",
   margin: "0px",
   padding: "0px",
   labels: ["label1", "label2"],
@@ -56,7 +61,6 @@ LineChart.defaultProps = {
 };
 
 const Wrapper = styled.div`
-  width: ${(props) => props.width};
   height: ${(props) => props.height};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};

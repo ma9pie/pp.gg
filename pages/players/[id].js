@@ -181,7 +181,6 @@ function Players() {
             <Box>
               <Title>승률 추이</Title>
               <LineChart
-                margin="20px auto"
                 labels={rateHistory.date}
                 data={rateHistory.rate}
               ></LineChart>
@@ -318,6 +317,7 @@ const Title = styled.p`
 const TextBoxWrapper = styled.div`
   display: flex;
   gap: 16px;
+  margin-top: 40px;
   & > div {
     flex: 1;
   }
@@ -326,8 +326,10 @@ const TextBox = styled.div``;
 const Text = styled.p`
   font: var(--body14);
   text-align: ${(props) => props.textAlign};
+  line-height: 24px;
 `;
 const SubText = styled.p`
   font: var(--body14);
   color: var(--sub);
+  line-height: 24px;
 `;

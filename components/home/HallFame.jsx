@@ -85,6 +85,7 @@ function HallFame() {
     if (num === 1) return "🥇";
     if (num === 2) return "🥈";
     if (num === 3) return "🥉";
+    return num;
   };
 
   return (
@@ -103,10 +104,7 @@ function HallFame() {
             <Link key={item.key} href={`/players/${item.id}`}>
               <a>
                 <Row bg="var(--textBox)">
-                  <Column>
-                    {idx + 1}
-                    {getMedal(idx + 1)}
-                  </Column>
+                  <Column>{getMedal(idx + 1)}</Column>
                   <Column>
                     <FlexBox>
                       <ImageWrapper>
@@ -175,7 +173,7 @@ const Column = styled.div`
     flex: 15;
   }
   &:nth-of-type(2) {
-    flex: 80;
+    flex: 100;
   }
   &:nth-of-type(3) {
     flex: 40;

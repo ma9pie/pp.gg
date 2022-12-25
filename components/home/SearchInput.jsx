@@ -19,6 +19,7 @@ function SearchInput(props) {
   const userList = useQuery({
     queryKey: userListQueryKey,
     queryFn: async () => {
+      setIsLoading(true);
       let tmpUserList = await Axios.get(userListQueryKey, {
         params: {},
       }).then((res) => res.data);
@@ -32,6 +33,7 @@ function SearchInput(props) {
           })
         )
       );
+      setIsLoading(false);
       return tmpUserList;
     },
   });
@@ -72,7 +74,7 @@ function SearchInput(props) {
       </InputContainer>
       <GG>.GG</GG>
       {(() => {
-        if (isLoading) {
+        if (searchWord && isLoading) {
           return (
             <ListContainer>
               <Loading margin="10px auto"></Loading>

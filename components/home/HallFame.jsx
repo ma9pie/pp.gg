@@ -99,7 +99,11 @@ function HallFame() {
           <Column>티어</Column>
           <Column>승률</Column>
         </Row>
-        {statisticsList ? (
+        {statisticsList.length === 0 ? (
+          <LoadingWrapper>
+            <Loading></Loading>
+          </LoadingWrapper>
+        ) : (
           statisticsList.map((item, idx) => (
             <Link key={item.key} href={`/players/${item.id}`}>
               <a>
@@ -124,10 +128,6 @@ function HallFame() {
               </a>
             </Link>
           ))
-        ) : (
-          <LoadingWrapper>
-            <Loading></Loading>
-          </LoadingWrapper>
         )}
       </Table>
     </Wrapper>

@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
 import Axios from "axios";
+import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import DoughnutChart from "@/components/common/Chart/DoughnutChart";
-import Loading from "@/components/common/Loading";
+import LineChart from "@/components/common/Chart/LineChart";
 import HistoryList from "@/components/players/HistoryList";
 import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
+import TierUtils from "@/utils/TierUtils";
 import useQuery from "@/hooks/useQuery";
 
 function Players() {
@@ -18,6 +20,11 @@ function Players() {
   const [losePoints, setLosePoints] = useState(0);
   const [winRate, setWinRate] = useState(0);
   const [gameList, setGameList] = useState([]);
+  const [rateHistory, setRateHistory] = useState({
+    rate: [],
+    date: [],
+    tier: [],
+  });
 
   useEffect(() => {
     setId(router.query.id);
@@ -117,11 +124,81 @@ function Players() {
     }
   }, [id, userList.data, history.data]);
 
+  useEffect(() => {
+    if (id && userList.data && history.data) {
+      // 전적 히스토리
+      let winPoints = 0; // 승리 횟수
+      let losePoints = 0; // 패배 횟수
+      let winRate = 0; // 승률
+      let date = "";
+      let tier = "";
+      const tmpRate = [];
+      const tmpDate = [];
+      const tmpTier = [];
+
+      []
+        .concat(history.data)
+        .reverse()
+        .map((history) => {
+          if (history.winnerId !== id && history.loserId !== id) {
+            return;
+          }
+
+          if (history.winnerId === id) {
+            winPoints++;
+          } else if (history.loserId === id) {
+            losePoints++;
+          }
+
+          winRate = (winPoints / (winPoints + losePoints)) * 100;
+          date = moment(history.date).format("YYYY-MM-DD");
+          tier = TierUtils.getTier(winRate);
+
+          if (date === tmpDate[tmpDate.length - 1]) {
+            tmpRate[tmpRate.length - 1] = winRate;
+            tmpTier[tmpTier.length - 1] = tier;
+          } else {
+            tmpRate.push(winRate);
+            tmpDate.push(date);
+            tmpTier.push(tier);
+          }
+        });
+      setRateHistory({
+        rate: tmpRate,
+        date: tmpDate,
+        tier: tmpTier,
+      });
+    }
+  }, [id, userList.data, history.data]);
+
   return (
     <Wrapper>
       <Profile id={id}></Profile>
+
       <Row>
         <ChartContainer>
+          <Content height="auto">
+            <Box>
+              <Title>승률 추이</Title>
+              <LineChart
+                margin="20px auto"
+                labels={rateHistory.date}
+                data={rateHistory.rate}
+              ></LineChart>
+              <TextBoxWrapper>
+                <TextBox>
+                  {rateHistory.date.map((item, key) => (
+                    <SubText key={key}>{item}</SubText>
+                  ))}
+                </TextBox>
+                <TextBox>
+                  {rateHistory.tier.map((item, key) => (
+                    <Text key={key}>{item}</Text>
+                  ))}
+                </TextBox>
+              </TextBoxWrapper>
+            </Box>
+          </Content>
           <Content height="auto">
             <Box>
               <Title>총 전적</Title>
@@ -193,6 +270,7 @@ const ChartContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
+  margin-bottom: 16px;
   width: ${(props) => props.width};
   @media (min-width: 1080px) {
     width: 30%;
@@ -229,7 +307,16 @@ const Box = styled.div`
 const Title = styled.p`
   font: var(--headline18);
 `;
+const TextBoxWrapper = styled.div`
+  display: flex;
+  gap: 16px;
+`;
+const TextBox = styled.div``;
 const Text = styled.p`
   font: var(--body14);
   text-align: ${(props) => props.textAlign};
+`;
+const SubText = styled.p`
+  font: var(--body14);
+  color: var(--sub);
 `;

@@ -33,7 +33,6 @@ function Header(props) {
   }, [router]);
 
   useClickOutside(menuRef, () => {
-    console.log(isOpenMenu);
     if (isOpenMenu) {
       setIsOpenMenu(false);
     }

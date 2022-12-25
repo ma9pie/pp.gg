@@ -163,11 +163,11 @@ function Players() {
             tmpTier.push(tier);
           }
         });
-      setRateHistory({
-        rate: tmpRate,
-        date: tmpDate,
-        tier: tmpTier,
-      });
+      // setRateHistory({
+      //   rate: tmpRate,
+      //   date: tmpDate,
+      //   tier: tmpTier,
+      // });
     }
   }, [id, userList.data, history.data]);
 

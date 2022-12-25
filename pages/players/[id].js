@@ -126,7 +126,7 @@ function Players() {
 
   useEffect(() => {
     if (id && userList.data && history.data) {
-      // 전적 히스토리
+      // 승률 추이
       let winPoints = 0; // 승리 횟수
       let losePoints = 0; // 패배 횟수
       let winRate = 0; // 승률
@@ -150,7 +150,12 @@ function Players() {
             losePoints++;
           }
 
-          winRate = (winPoints / (winPoints + losePoints)) * 100;
+          if (winPoints === 0) {
+            winRate = 0;
+          } else {
+            winRate = (winPoints / (winPoints + losePoints)) * 100;
+          }
+
           date = moment(history.date).format("YYYY-MM-DD");
           tier = TierUtils.getTier(winRate);
 
@@ -163,11 +168,11 @@ function Players() {
             tmpTier.push(tier);
           }
         });
-      // setRateHistory({
-      //   rate: tmpRate,
-      //   date: tmpDate,
-      //   tier: tmpTier,
-      // });
+      setRateHistory({
+        rate: tmpRate,
+        date: tmpDate,
+        tier: tmpTier,
+      });
     }
   }, [id, userList.data, history.data]);
 

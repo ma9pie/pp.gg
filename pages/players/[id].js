@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useState } from "react";
 import DoughnutChart from "@/components/common/Chart/DoughnutChart";
 import LineChart from "@/components/common/Chart/LineChart";
+import Loading from "@/components/common/Loading";
 import HistoryList from "@/components/players/HistoryList";
 import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
@@ -185,62 +186,85 @@ function Players() {
           <Content height="auto">
             <Box>
               <Title>승률 추이</Title>
-              <LineChart
-                labels={rateHistory.date}
-                data={rateHistory.rate}
-              ></LineChart>
-              <TextBoxWrapper>
-                <TextBox>
-                  <SubText>일자</SubText>
-                  {rateHistory.date.map((item, key) => (
-                    <SubText key={key}>{item}</SubText>
-                  ))}
-                </TextBox>
-                <TextBox>
-                  <Text>티어</Text>
-                  {rateHistory.tier.map((item, key) => (
-                    <Text key={key}>{item}</Text>
-                  ))}
-                </TextBox>
-                <TextBox>
-                  <Text>승률</Text>
-                  {rateHistory.rate.map((item, key) => (
-                    <Text key={key}>{item.toFixed(2)}%</Text>
-                  ))}
-                </TextBox>
-              </TextBoxWrapper>
+              {rateHistory.date.length === 0 ? (
+                <LoadingWrapper>
+                  <Loading></Loading>
+                </LoadingWrapper>
+              ) : (
+                <>
+                  <LineChart
+                    labels={rateHistory.date}
+                    data={rateHistory.rate}
+                  ></LineChart>
+
+                  <TextBoxWrapper>
+                    <TextBox>
+                      <SubText>일자</SubText>
+                      {rateHistory.date.map((item, key) => (
+                        <SubText key={key}>{item}</SubText>
+                      ))}
+                    </TextBox>
+                    <TextBox>
+                      <Text>티어</Text>
+                      {rateHistory.tier.map((item, key) => (
+                        <Text key={key}>{item}</Text>
+                      ))}
+                    </TextBox>
+                    <TextBox>
+                      <Text>승률</Text>
+                      {rateHistory.rate.map((item, key) => (
+                        <Text key={key}>{item.toFixed(2)}%</Text>
+                      ))}
+                    </TextBox>
+                  </TextBoxWrapper>
+                </>
+              )}
             </Box>
           </Content>
           <Content height="auto">
             <Box>
               <Title>총 전적</Title>
-              <DoughnutChart
-                width="200px"
-                height="200px"
-                margin="20px auto"
-                labels={["승리", "패배"]}
-                data={[winPoints, losePoints]}
-              ></DoughnutChart>
-              <Text textAlign="center">{`${
-                winPoints + losePoints
-              }전 ${winPoints}승 ${losePoints}패 (승률: ${winRate.toFixed(
-                2
-              )}%)`}</Text>
+              {rateHistory.date.length === 0 ? (
+                <LoadingWrapper>
+                  <Loading></Loading>
+                </LoadingWrapper>
+              ) : (
+                <>
+                  <DoughnutChart
+                    width="200px"
+                    height="200px"
+                    margin="20px auto"
+                    labels={["승리", "패배"]}
+                    data={[winPoints, losePoints]}
+                  ></DoughnutChart>
+                  <Text textAlign="center">{`${
+                    winPoints + losePoints
+                  }전 ${winPoints}승 ${losePoints}패 (승률: ${winRate.toFixed(
+                    2
+                  )}%)`}</Text>
+                </>
+              )}
             </Box>
           </Content>
           <Content height="auto">
             <Box>
               <Title>딜량</Title>
-              <DoughnutChart
-                width="200px"
-                height="200px"
-                margin="20px auto"
-                labels={[
-                  `적에게 가한 피해량 (${totalDeal})`,
-                  `적에게 받은 피해량 (${totalDamageReceived})`,
-                ]}
-                data={[totalDeal, totalDamageReceived]}
-              ></DoughnutChart>
+              {rateHistory.date.length === 0 ? (
+                <LoadingWrapper>
+                  <Loading></Loading>
+                </LoadingWrapper>
+              ) : (
+                <DoughnutChart
+                  width="200px"
+                  height="200px"
+                  margin="20px auto"
+                  labels={[
+                    `적에게 가한 피해량 (${totalDeal})`,
+                    `적에게 받은 피해량 (${totalDamageReceived})`,
+                  ]}
+                  data={[totalDeal, totalDamageReceived]}
+                ></DoughnutChart>
+              )}
             </Box>
           </Content>
         </ChartContainer>
@@ -337,4 +361,7 @@ const SubText = styled.p`
   font: var(--body14);
   color: var(--sub);
   line-height: 24px;
+`;
+const LoadingWrapper = styled.div`
+  padding: 80px 0px;
 `;

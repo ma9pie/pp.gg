@@ -1,18 +1,20 @@
 import { memberState } from "@/recoil/atom";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Theme from "@/components/common/Theme";
 import Menu from "@/components/layout/Menu";
 import ModalUtils from "@/utils/ModalUtils";
+import useClickOutside from "@/hooks/useClickOutside";
 import ProfileSvg from "@/svg/ProfileSvg";
 import ViewMoreSvg from "@/svg/ViewMoreSvg";
-import {useRouter} from 'next/router'
 
 function Header(props) {
-  const router = useRouter()
+  const menuRef = useRef(null);
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [member, setMember] = useRecoilState(memberState);
@@ -27,8 +29,15 @@ function Header(props) {
   }, [member]);
 
   useEffect(() => {
-    setIsOpenMenu(false)
+    setIsOpenMenu(false);
   }, [router]);
+
+  useClickOutside(menuRef, () => {
+    console.log(isOpenMenu);
+    if (isOpenMenu) {
+      setIsOpenMenu(false);
+    }
+  });
 
   return (
     <Wrapper {...props}>
@@ -102,7 +111,7 @@ function Header(props) {
           </ExtraSmallButton>
         )}
         <Theme></Theme>
-        <ViewMoreSvgWrapper>
+        <ViewMoreSvgWrapper ref={menuRef}>
           <ViewMoreSvg
             color="white"
             onClick={() => setIsOpenMenu(!isOpenMenu)}

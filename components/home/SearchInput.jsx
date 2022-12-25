@@ -43,7 +43,7 @@ function SearchInput(props) {
   useEffect(() => {
     if (!searchWord) return setRsultList([]);
     const tmpUserList = [];
-    userList.data.map((user) => {
+    userList.data?.map((user) => {
       if (user.name.includes(searchWord)) {
         tmpUserList.push(user);
       }

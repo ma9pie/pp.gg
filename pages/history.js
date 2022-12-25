@@ -8,11 +8,11 @@ import CommonLayout from "@/layouts/SessionLayout";
 import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 import useDebounce from "@/hooks/useDebounce";
+import useQuery from "@/hooks/useQuery";
 import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
 function History() {
-  const [userList, setUserList] = useState([]);
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [inputs, setInputs] = useState({
@@ -22,11 +22,26 @@ function History() {
     score2: 11,
   });
 
-  useEffect(() => {
-    Axios.get("/api/v1/allUser").then((res) => {
-      setUserList(res.data);
-    });
-  }, []);
+  const userListQueryKey = "/api/v1/allUser";
+  const userList = useQuery({
+    queryKey: userListQueryKey,
+    queryFn: async () => {
+      let tmpUserList = await Axios.get(userListQueryKey, {
+        params: {},
+      }).then((res) => res.data);
+
+      await Promise.all(
+        tmpUserList.map((user) =>
+          Axios.get("/api/v1/tier", {
+            params: { id: user.id },
+          }).then((res) => {
+            user.tier = res.data.tier;
+          })
+        )
+      );
+      return tmpUserList;
+    },
+  });
 
   const onChangeInputs = (e) => {
     const { value, name } = e.target;
@@ -117,34 +132,41 @@ function History() {
   return (
     <Wrapper>
       <Container>
-        <Row>
-          <Column width="40%">
-            {userList.map((user, key) => (
-              <LargeButton
-                height="40px"
-                key={key}
-                type={user.id === inputs.player1 ? "" : "sub"}
-                onClick={() => setInputs({ ...inputs, player1: user.id })}
-              >
-                {user.name}
-              </LargeButton>
-            ))}
-          </Column>
-          <Column width="10%"></Column>
-          <Column width="40%">
-            {userList.map((user, key) => (
-              <LargeButton
-                height="40px"
-                key={key}
-                type={user.id === inputs.player2 ? "" : "sub"}
-                onClick={() => setInputs({ ...inputs, player2: user.id })}
-              >
-                {user.name}
-              </LargeButton>
-            ))}
-          </Column>
-        </Row>
+        {userList.data ? (
+          <Row>
+            <Column width="40%">
+              {userList.data.map((user, key) => (
+                <LargeButton
+                  height="40px"
+                  key={key}
+                  type={user.id === inputs.player1 ? "" : "sub"}
+                  onClick={() => setInputs({ ...inputs, player1: user.id })}
+                >
+                  {user.name}
+                </LargeButton>
+              ))}
+            </Column>
+            <Column width="10%"></Column>
+            <Column width="40%">
+              {userList.data.map((user, key) => (
+                <LargeButton
+                  height="40px"
+                  key={key}
+                  type={user.id === inputs.player2 ? "" : "sub"}
+                  onClick={() => setInputs({ ...inputs, player2: user.id })}
+                >
+                  {user.name}
+                </LargeButton>
+              ))}
+            </Column>
+          </Row>
+        ) : (
+          <Row>
+            <Loading margin="100px 0px"></Loading>
+          </Row>
+        )}
       </Container>
+
       <Container>
         <Row>
           <Column width="40%">

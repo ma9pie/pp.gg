@@ -10,11 +10,11 @@ const emblemSize = 200;
 function Tiers() {
   const [emblemList, setEmblemList] = useState([]);
 
-  const queryKey = "/api/v1/emblem";
+  const emblemQueryKey = "/api/v1/emblem";
   const query = useQuery({
-    queryKey: queryKey,
+    queryKey: emblemQueryKey,
     queryFn: () =>
-      Axios.get(queryKey, {
+      Axios.get(emblemQueryKey, {
         params: {},
       }).then((res) => res.data),
   });

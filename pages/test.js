@@ -16,15 +16,9 @@ function Test() {
   const test = async () => {
     Axios.get("/api/v1/allUser");
     await delay(1000);
-    Axios.get("/api/v2/user");
-    await delay(1000);
     Axios.get("/api/v1/history");
     await delay(1000);
-    Axios.get("/api/v2/history");
-    await delay(1000);
     Axios.get("/api/v1/emblem");
-    await delay(1000);
-    Axios.get("/api/v2/emblem");
   };
 
   useEffect(() => {

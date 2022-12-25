@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Loading from "@/components/common/Loading";
 import Axios from "@/api/index";
 import useClickOutside from "@/hooks/useClickOutside";
-import useDebounce from "@/hooks/useDebounce";
+import useQuery from "@/hooks/useQuery";
 
 function SearchInput(props) {
   const router = useRouter();
@@ -13,36 +13,47 @@ function SearchInput(props) {
   const [searchWord, setSearchWord] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [userList, setUserList] = useState([]);
+  const [resultList, setRsultList] = useState([]);
+
+  const userListQueryKey = "/api/v1/allUser";
+  const userList = useQuery({
+    queryKey: userListQueryKey,
+    queryFn: async () => {
+      let tmpUserList = await Axios.get(userListQueryKey, {
+        params: {},
+      }).then((res) => res.data);
+
+      await Promise.all(
+        tmpUserList.map((user) =>
+          Axios.get("/api/v1/tier", {
+            params: { id: user.id },
+          }).then((res) => {
+            user.tier = res.data.tier;
+          })
+        )
+      );
+      return tmpUserList;
+    },
+  });
 
   useClickOutside(ref, () => {
     setIsOpen(false);
   });
 
-  const getUserList = useDebounce(async (name) => {
-    setIsLoading(true);
-    let tmpUserList = await Axios.get("/api/v1/user", {
-      params: { name: name },
-    }).then(async (res) => {
-      return res.data;
+  useEffect(() => {
+    if (!searchWord) return setRsultList([]);
+    const tmpUserList = [];
+    userList.data.map((user) => {
+      if (user.name.includes(searchWord)) {
+        tmpUserList.push(user);
+      }
     });
-
-    await Promise.all(
-      tmpUserList.map((user) =>
-        Axios.get("/api/v1/tier", {
-          params: { id: user.id },
-        }).then((res) => {
-          user.tier = res.data.tier;
-        })
-      )
-    );
-    setIsLoading(false);
-    setUserList(tmpUserList);
-  }, 300);
+    setRsultList(tmpUserList);
+  }, [searchWord]);
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && userList.length > 0) {
-      router.push(`/players/${userList[0].id}`);
+    if (e.key === "Enter" && resultList.length > 0) {
+      router.push(`/players/${resultList[0].id}`);
     }
   };
 
@@ -54,11 +65,7 @@ function SearchInput(props) {
           type="text"
           value={searchWord}
           placeholder="소환사명"
-          onChange={(e) => {
-            const { value } = e.target;
-            setSearchWord(value);
-            getUserList(value);
-          }}
+          onChange={(e) => setSearchWord(e.target.value)}
           onFocus={() => setIsOpen(true)}
           onKeyUp={handleKeyPress}
         ></Input>
@@ -73,7 +80,7 @@ function SearchInput(props) {
           );
         } else {
           if (isOpen) {
-            if (searchWord && userList.length === 0) {
+            if (searchWord && resultList.length === 0) {
               return (
                 <ListContainer>
                   <ListBox>
@@ -86,7 +93,7 @@ function SearchInput(props) {
             } else {
               return (
                 <ListContainer>
-                  {userList.map((user, key) => (
+                  {resultList.map((user, key) => (
                     <ListBox
                       key={key}
                       onClick={() => {

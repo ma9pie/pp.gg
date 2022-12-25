@@ -6,8 +6,27 @@ import Banner from "@/components/home/Banner";
 import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
+import useQuery from "@/hooks/useQuery";
 
 function Home() {
+  const historyQueryKey = "/api/v1/history";
+  const emblemQueryKey = "/api/v1/emblem";
+
+  useQuery({
+    queryKey: historyQueryKey,
+    queryFn: () =>
+      Axios.get(historyQueryKey, {
+        params: {},
+      }).then((res) => res.data),
+  });
+  useQuery({
+    queryKey: emblemQueryKey,
+    queryFn: () =>
+      Axios.get(emblemQueryKey, {
+        params: {},
+      }).then((res) => res.data),
+  });
+
   return (
     <Wrapper>
       <BannerWrapper>

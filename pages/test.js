@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import champions from "lol-champions";
 import React, { useEffect, useState } from "react";
 import Axios from "@/api/index";
 
@@ -23,6 +24,7 @@ function Test() {
 
   useEffect(() => {
     // getDate();
+    console.log(champions);
   }, []);
 
   const getDate = async () => {

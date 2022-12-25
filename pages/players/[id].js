@@ -187,13 +187,21 @@ function Players() {
               ></LineChart>
               <TextBoxWrapper>
                 <TextBox>
+                  <SubText>일자</SubText>
                   {rateHistory.date.map((item, key) => (
                     <SubText key={key}>{item}</SubText>
                   ))}
                 </TextBox>
                 <TextBox>
+                  <Text>티어</Text>
                   {rateHistory.tier.map((item, key) => (
                     <Text key={key}>{item}</Text>
+                  ))}
+                </TextBox>
+                <TextBox>
+                  <Text>승률</Text>
+                  {rateHistory.rate.map((item, key) => (
+                    <Text key={key}>{item.toFixed(2)}%</Text>
                   ))}
                 </TextBox>
               </TextBoxWrapper>
@@ -310,6 +318,9 @@ const Title = styled.p`
 const TextBoxWrapper = styled.div`
   display: flex;
   gap: 16px;
+  & > div {
+    flex: 1;
+  }
 `;
 const TextBox = styled.div``;
 const Text = styled.p`

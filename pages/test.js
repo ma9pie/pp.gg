@@ -2,9 +2,33 @@ import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import Axios from "@/api/index";
 
+function delay(n) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, n);
+  });
+}
+
 function Test() {
   useEffect(() => {
-    getDate();
+    test();
+  }, []);
+
+  const test = async () => {
+    Axios.get("/api/v1/allUser");
+    await delay(1000);
+    Axios.get("/api/v2/user");
+    await delay(1000);
+    Axios.get("/api/v1/history");
+    await delay(1000);
+    Axios.get("/api/v2/history");
+    await delay(1000);
+    Axios.get("/api/v1/emblem");
+    await delay(1000);
+    Axios.get("/api/v2/emblem");
+  };
+
+  useEffect(() => {
+    // getDate();
   }, []);
 
   const getDate = async () => {

@@ -15,7 +15,7 @@ function SessionLayout(props) {
   const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
-    if (!member._id) {
+    if (!member.id) {
       ModalUtils.openAlert({
         message: "로그인 후 이용 가능합니다.",
         onAfterClose: () => router.push("/login"),

@@ -65,6 +65,7 @@ export default Banner;
 
 const Wrapper = styled.div`
   width: 100%;
+  margin: 56px 0px;
   @media (max-width: 1080px) {
     display: none;
   }

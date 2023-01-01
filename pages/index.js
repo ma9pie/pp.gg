@@ -57,7 +57,6 @@ const Wrapper = styled.div`
 
 const BannerWrapper = styled.div`
   max-width: 1080px;
-  padding: 56px 0px;
   background-color: var(--homeBg);
 `;
 const HallFameWrapper = styled.div`

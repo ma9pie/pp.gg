@@ -65,6 +65,7 @@ export default MobileBanner;
 const Wrapper = styled.div`
   height: 150px;
   border-radius: 10px;
+  margin: 32px 0px;
   overflow: hidden;
   @media (min-width: 1080px) {
     display: none;

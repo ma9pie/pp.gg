@@ -102,6 +102,15 @@ function Login() {
         <LargeButton disabled={isLoading || disableButton()} onClick={login}>
           {isLoading ? <Loading color="white"></Loading> : "로그인"}
         </LargeButton>
+
+        <TextLine>
+          <Text>PP.GG에 처음이세요?</Text>
+          <Link href="/signup">
+            <a>
+              <LinkText>회원가입하기</LinkText>
+            </a>
+          </Link>
+        </TextLine>
       </ContentWrapper>
     </Wrapper>
   );
@@ -136,4 +145,19 @@ const InputBoxContainer = styled.div`
 `;
 const InputBox = styled.div`
   margin-bottom: 24px;
+`;
+const TextLine = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+`;
+const Text = styled.p`
+  font: var(--body14);
+`;
+const LinkText = styled.p`
+  font: var(--body14);
+  color: var(--brandColor);
+  text-decoration: underline;
+  text-underline-position: under;
 `;

@@ -6,13 +6,12 @@ import champions from "lol-champions";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import LineInput from "@/components/common/Inputs/LineInput";
 import Loading from "@/components/common/Loading";
 import Completion from "@/components/signup/Completion";
-import InputId from "@/components/signup/InputId";
-import InputPw from "@/components/signup/InputPw";
+import InputInfo from "@/components/signup/InputInfo";
 import ProcessDot from "@/components/signup/ProcessDot";
 import ProfileImg from "@/components/signup/ProfileImg";
 import Terms from "@/components/signup/Terms";
@@ -20,9 +19,14 @@ import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 
 function Signup() {
+  const resetSignupState = useResetRecoilState(signupState);
   const [signup, setSignup] = useRecoilState(signupState);
 
-  const [process, setProcess] = useState(0);
+  const [process, setProcess] = useState(2);
+
+  useEffect(() => {
+    resetSignupState();
+  }, []);
 
   useEffect(() => {
     console.log(signup);
@@ -42,10 +46,9 @@ function Signup() {
         <ProcessDot process={process}></ProcessDot>
 
         {process === 0 && <Terms setProcess={setProcess}></Terms>}
-        {process === 1 && <InputId setProcess={setProcess}></InputId>}
-        {process === 2 && <InputPw setProcess={setProcess}></InputPw>}
-        {process === 3 && <ProfileImg setProcess={setProcess}></ProfileImg>}
-        {process === 4 && <Completion></Completion>}
+        {process === 1 && <InputInfo setProcess={setProcess}></InputInfo>}
+        {process === 2 && <ProfileImg setProcess={setProcess}></ProfileImg>}
+        {process === 3 && <Completion></Completion>}
       </ContentWrapper>
     </Wrapper>
   );

@@ -23,7 +23,7 @@ function Login() {
   const handleId = (e) => {
     const { value } = e.target;
     if (!regExp.idCheckRegExp.test(value)) {
-      setIdErrMsg("영문, 숫자 조합 6~2a0자리를 입력해주세요.");
+      setIdErrMsg("영문, 숫자 조합 6~20자리를 입력해주세요.");
     } else {
       setIdErrMsg("");
     }

@@ -1,11 +1,11 @@
 import styled from "@emotion/styled";
 import React from "react";
 
-function ProcessDot({ process }) {
+function ProcessDot({ process, length }) {
   return (
     <Wrapper>
       <CircleContainer>
-        {[...new Array(5)].map((item, key) => (
+        {[...new Array(length)].map((item, key) => (
           <Circle
             key={key}
             bg={process === key ? "var(--brandColor)" : "var(--textBox)"}
@@ -17,12 +17,18 @@ function ProcessDot({ process }) {
 }
 
 export default ProcessDot;
+
+ProcessDot.defaultProps = {
+  process: 0,
+  length: 4,
+};
+
 const Wrapper = styled.div``;
 const CircleContainer = styled.div`
   display: flex;
   justify-content: center;
   gap: 16px;
-  margin: 32px 0px 64px 0px;
+  margin: 32px 0px;
 `;
 const Circle = styled.div`
   width: 8px;

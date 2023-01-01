@@ -174,13 +174,14 @@ const Column = styled.div`
     flex: 15;
   }
   &:nth-of-type(2) {
-    flex: 100;
+    flex: 80;
   }
   &:nth-of-type(3) {
     flex: 40;
   }
   &:nth-of-type(4) {
     flex: 30;
+    text-align: right;
   }
 `;
 const LoadingWrapper = styled.div`

@@ -21,7 +21,7 @@ function Header(props) {
   const logout = useResetRecoilState(memberState);
 
   useEffect(() => {
-    if (member.key) {
+    if (member.id) {
       setIsLogin(true);
     } else {
       setIsLogin(false);

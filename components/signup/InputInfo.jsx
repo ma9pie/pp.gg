@@ -2,13 +2,11 @@ import regExp from "@/constants/regExp";
 import { signupState } from "@/recoil/atom";
 import styled from "@emotion/styled";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import LineInput from "@/components/common/Inputs/LineInput";
 import Loading from "@/components/common/Loading";
-import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
 import useQuery from "@/hooks/useQuery";
 
@@ -153,6 +151,15 @@ function InputInfo(props) {
       <LargeButton disabled={disableButton()} onClick={next}>
         다음
       </LargeButton>
+
+      <TextLine>
+        <Text>이미 회원이신가요?</Text>
+        <Link href="/login">
+          <a>
+            <LinkText>로그인하기</LinkText>
+          </a>
+        </Link>
+      </TextLine>
     </Wrapper>
   );
 }
@@ -176,6 +183,12 @@ const TextBox = styled.div`
   & * {
     background-color: inherit;
   }
+`;
+const TextLine = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
 `;
 const Text = styled.p`
   font: var(--body14);

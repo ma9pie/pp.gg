@@ -105,7 +105,7 @@ function HallFame() {
           </LoadingWrapper>
         ) : (
           statisticsList.map((item, idx) => (
-            <Link key={item.key} href={`/players/${item.id}`}>
+            <Link key={item.id} href={`/players/${item.id}`}>
               <a>
                 <Row bg="var(--textBox)">
                   <Column>{getMedal(idx + 1)}</Column>

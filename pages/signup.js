@@ -1,36 +1,22 @@
-import regExp from "@/constants/regExp";
-import { memberState } from "@/recoil/atom";
 import { signupState } from "@/recoil/atom";
 import styled from "@emotion/styled";
-import champions from "lol-champions";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import LargeButton from "@/components/common/Buttons/LargeButton";
-import LineInput from "@/components/common/Inputs/LineInput";
-import Loading from "@/components/common/Loading";
+import { useResetRecoilState } from "recoil";
 import Completion from "@/components/signup/Completion";
 import InputInfo from "@/components/signup/InputInfo";
 import ProcessDot from "@/components/signup/ProcessDot";
 import ProfileImg from "@/components/signup/ProfileImg";
 import Terms from "@/components/signup/Terms";
-import ModalUtils from "@/utils/ModalUtils";
-import Axios from "@/api/index";
 
 function Signup() {
   const resetSignupState = useResetRecoilState(signupState);
-  const [signup, setSignup] = useRecoilState(signupState);
 
-  const [process, setProcess] = useState(2);
+  const [process, setProcess] = useState(0);
 
   useEffect(() => {
     resetSignupState();
   }, []);
-
-  useEffect(() => {
-    console.log(signup);
-  }, [process]);
 
   return (
     <Wrapper>
@@ -58,6 +44,7 @@ export default Signup;
 
 const Wrapper = styled.div`
   width: 100vw;
+  min-width: 360px;
   min-height: 100vh;
   background-color: var(--sectionLine);
 `;

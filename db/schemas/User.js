@@ -2,11 +2,12 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema(
   {
-    key: Number,
     id: String,
+    password: String,
     name: String,
-    tier: String,
     imgUrl: String,
+    termsCheck: Array,
+    createdAt: String,
   },
   { collection: "user", versionKey: false }
 );

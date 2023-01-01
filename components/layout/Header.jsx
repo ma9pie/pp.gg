@@ -103,11 +103,11 @@ function Header(props) {
             ></ProfileSvg>
           </>
         ) : (
-          <ExtraSmallButton>
-            <Link href="/login" passHref>
-              <a>로그인 </a>
-            </Link>
-          </ExtraSmallButton>
+          <Link href="/login" passHref>
+            <a>
+              <ExtraSmallButton>로그인</ExtraSmallButton>
+            </a>
+          </Link>
         )}
         <Theme></Theme>
         <ViewMoreSvgWrapper ref={menuRef}>

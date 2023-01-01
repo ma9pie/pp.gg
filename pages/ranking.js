@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Statistics from "@/components/ranking/Statistics";
 import CommonLayout from "@/layouts/CommonLayout";
@@ -75,7 +76,20 @@ function Ranking() {
           winRate: winRate,
         });
       });
-      tmpList.sort((a, b) => b.winRate - a.winRate);
+      tmpList.sort((a, b) => {
+        if (a.winRate === b.winRate) {
+          if (a.totalDeal === b.totalDeal) {
+            // 2. 생성일 오름차순
+            return moment(a.createdAt).unix() - moment(b.createdAt).unix();
+          } else {
+            // 2. 딜량 내림차순
+            return b.totalDeal - a.totalDeal;
+          }
+        } else {
+          // 1. 승률 내림차순
+          return b.winRate - a.winRate;
+        }
+      });
       setStatisticsList(tmpList);
     }
   }, [userList.data, history.data]);

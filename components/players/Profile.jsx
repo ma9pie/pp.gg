@@ -2,11 +2,11 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import ModalUtils from "@/utils/ModalUtils";
 import Axios from "@/api/index";
-import useClickOutside from "@/hooks/useClickOutside";
-import useDebounce from "@/hooks/useDebounce";
 
 function Profile(props) {
+  const router = useRouter();
   const [user, setUser] = useState({});
   const [tierData, setTierData] = useState({});
 
@@ -15,7 +15,14 @@ function Profile(props) {
       Axios.get("/api/v1/user", {
         params: { id: props.id },
       }).then((res) => {
-        setUser(res.data);
+        if (res.data) {
+          setUser(res.data);
+        } else {
+          ModalUtils.openAlert({
+            message: "존재하지 않는 사용자입니다.",
+            onAfterClose: () => router.push("/"),
+          });
+        }
       });
       Axios.get("/api/v1/tier", {
         params: { id: props.id },

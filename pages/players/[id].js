@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import Axios from "axios";
 import moment from "moment";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DoughnutChart from "@/components/common/Chart/DoughnutChart";
 import LineChart from "@/components/common/Chart/LineChart";
 import Loading from "@/components/common/Loading";
@@ -14,6 +14,8 @@ import useQuery from "@/hooks/useQuery";
 
 function Players() {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState("");
   const [totalDeal, setTotalDeal] = useState(0);
   const [totalDamageReceived, setTotalDamageReceived] = useState(0);
@@ -174,6 +176,7 @@ function Players() {
         date: tmpDate,
         tier: tmpTier,
       });
+      setIsLoading(false);
     }
   }, [id, userList.data, history.data]);
 
@@ -186,7 +189,7 @@ function Players() {
           <Content height="auto">
             <Box>
               <Title>승률 추이</Title>
-              {rateHistory.date.length === 0 ? (
+              {isLoading ? (
                 <LoadingWrapper>
                   <Loading></Loading>
                 </LoadingWrapper>
@@ -224,7 +227,7 @@ function Players() {
           <Content height="auto">
             <Box>
               <Title>총 전적</Title>
-              {rateHistory.date.length === 0 ? (
+              {isLoading ? (
                 <LoadingWrapper>
                   <Loading></Loading>
                 </LoadingWrapper>
@@ -249,7 +252,7 @@ function Players() {
           <Content height="auto">
             <Box>
               <Title>딜량</Title>
-              {rateHistory.date.length === 0 ? (
+              {isLoading ? (
                 <LoadingWrapper>
                   <Loading></Loading>
                 </LoadingWrapper>
@@ -270,11 +273,15 @@ function Players() {
         </ChartContainer>
 
         <HistoryContainer>
-          {gameList.map((data, key) => (
-            <Content key={key} height="auto">
-              <HistoryList {...data} userList={userList.data}></HistoryList>
-            </Content>
-          ))}
+          {gameList.length === 0 ? (
+            <EmptyResult>전적이 존재하지 않습니다.</EmptyResult>
+          ) : (
+            gameList.map((data, key) => (
+              <Content key={key} height="auto">
+                <HistoryList {...data} userList={userList.data}></HistoryList>
+              </Content>
+            ))
+          )}
         </HistoryContainer>
       </Row>
     </Wrapper>
@@ -364,4 +371,11 @@ const SubText = styled.p`
 `;
 const LoadingWrapper = styled.div`
   padding: 80px 0px;
+`;
+const EmptyResult = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--sub);
 `;

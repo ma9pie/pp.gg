@@ -18,6 +18,7 @@ function SessionLayout(props) {
     if (!member._id) {
       ModalUtils.openAlert({
         message: "로그인 후 이용 가능합니다.",
+        onAfterClose: () => router.push("/login"),
       });
       router.push("/");
       setIsLogin(false);

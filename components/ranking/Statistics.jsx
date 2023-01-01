@@ -4,7 +4,6 @@ import ProfileImage from "@/components/common/ProfileImage";
 
 function Statistics(props) {
   const [maxDamage, setMaxDamage] = useState(0);
-  console.log(props.statisticsList);
 
   useEffect(() => {
     let tmpMax = 0;

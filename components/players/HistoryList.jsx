@@ -56,7 +56,6 @@ function HistoryList(props) {
 
         <Box>
           <Row>
-            <Text color="var(--winColor)">{props.kill}</Text>{" "}
             <ImageWrapper>
               {getImageUrl(props.id) && (
                 <Image
@@ -67,6 +66,7 @@ function HistoryList(props) {
                 ></Image>
               )}
             </ImageWrapper>
+            <ScoreText color="var(--winColor)">{props.kill}</ScoreText>
           </Row>
           <Row>
             <Column>
@@ -82,7 +82,6 @@ function HistoryList(props) {
 
         <Box>
           <Row>
-            <Text color="var(--loseColor)">{props.death}</Text>
             <ImageWrapper>
               {getImageUrl(props.opponents) && (
                 <Image
@@ -93,6 +92,7 @@ function HistoryList(props) {
                 ></Image>
               )}
             </ImageWrapper>
+            <ScoreText color="var(--loseColor)">{props.death}</ScoreText>
           </Row>
           <Row>
             <Column>
@@ -152,6 +152,11 @@ const Text = styled.p`
 const SubText = styled.p`
   font: var(--caption12);
   color: var(--sub);
+`;
+const ScoreText = styled.div`
+  font: var(--headline16);
+  color: ${(props) => props.color};
+  width: 20px;
 `;
 const ImageWrapper = styled.div`
   width: 48px;

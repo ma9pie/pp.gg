@@ -143,6 +143,7 @@ const Wrapper = styled.div`
 `;
 const Title = styled.div`
   font: var(--headline18);
+  color: white;
   text-align: center;
   margin-bottom: 16px;
   background-color: inherit;

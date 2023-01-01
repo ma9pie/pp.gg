@@ -18,8 +18,8 @@ function Banner() {
       >
         <BannerWrapper backgroundColor="var(--blue600)">
           <BannerContent>
-            <Title>PP.GG 오픈</Title>
-            <Description>최고의 플레이어가 되보세요.</Description>
+            <Title>🎉2023 PPGG🎉</Title>
+            <Description>HAPPY NEW YEAR!🐰</Description>
           </BannerContent>
         </BannerWrapper>
 
@@ -40,30 +40,18 @@ function Banner() {
         </BannerWrapper>
 
         <BannerWrapper>
-          <Comment top="70%" left="10%">
-            보여줄게 MAGIC
-          </Comment>
           <ImageAdjustment top="-10%">
             <Image src={shacoBanner} alt="bannerImage"></Image>
           </ImageAdjustment>
         </BannerWrapper>
 
         <BannerWrapper>
-          <Comment top="12%" left="73%">
-            중요한건
-          </Comment>
-          <Comment top="27%" left="75%">
-            꺾이지 않는 마음
-          </Comment>
           <ImageAdjustment top="-20%">
             <Image src={ornnBanner} alt="bannerImage"></Image>
           </ImageAdjustment>
         </BannerWrapper>
 
         <BannerWrapper>
-          <Comment top="20%" left="2%">
-            네트만 넘기면 이기던데?
-          </Comment>
           <ImageAdjustment top="-50%">
             <Image src={heimerdingerBanner} alt="bannerImage"></Image>
           </ImageAdjustment>

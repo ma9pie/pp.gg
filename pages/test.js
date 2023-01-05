@@ -14,28 +14,36 @@ function Test(props) {
   console.log(props);
 
   useEffect(() => {
-    test();
-    // axios
-    //   .get("https://ppgg.vercel.app/api/test", {
-    //     params: {},
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
+    axios
+      .get("https://ppgg.vercel.app/api/v1/history", {
+        params: {},
+      })
+      .then((res) => {
+        console.log("ppgg", res.data);
+      });
+    axios
+      .get("http://localhost:3000/api/v1/history", {
+        params: {},
+      })
+      .then((res) => {
+        console.log("localhost", res.data);
+      });
+    axios
+      .get("/api/v1/history", {
+        params: {},
+      })
+      .then((res) => {
+        console.log("none", res.data);
+      });
   }, []);
 
-  const test = async () => {
-    Axios.get("/api/v1/allUser");
-    await delay(1000);
-    Axios.get("/api/v1/history");
-    await delay(1000);
-    Axios.get("/api/v1/emblem");
-  };
-
-  useEffect(() => {
-    // getDate();
-    console.log(champions);
-  }, []);
+  // const test = async () => {
+  //   Axios.get("/api/v1/allUser");
+  //   await delay(1000);
+  //   Axios.get("/api/v1/history");
+  //   await delay(1000);
+  //   Axios.get("/api/v1/emblem");
+  // };
 
   const getDate = async () => {
     // user 조회 API 호출
@@ -132,10 +140,10 @@ export async function getServerSideProps(context) {
         props.history = res.data;
         return res.data;
       });
-    await axios.get("https://ppgg.vercel.app/api/test").then((res) => {
-      props.test = res.data;
-      return res.data;
-    });
+    // await axios.get("https://ppgg.vercel.app/api/test").then((res) => {
+    //   props.test = res.data;
+    //   return res.data;
+    // });
 
     return { props: props };
   } catch (error) {

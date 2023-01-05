@@ -140,14 +140,11 @@ export async function getServerSideProps(context) {
     //     props.history = res.data;
     //     return res.data;
     //   });
-    await axios.get("http://localhost:3000/api/v1/test").then((res) => {
+
+    await axios.get("https://ppgg.vercel.app/api/v1/test").then((res) => {
       props.test = res.data;
       return res.data;
     });
-    // await axios.get("https://ppgg.vercel.app/api/v1/test").then((res) => {
-    //   props.test = res.data;
-    //   return res.data;
-    // });
 
     return { props: props };
   } catch (error) {

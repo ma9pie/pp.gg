@@ -15,13 +15,13 @@ function Test(props) {
 
   useEffect(() => {
     test();
-    axios
-      .get("/api/test", {
-        params: {},
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    // axios
+    //   .get("https://ppgg.vercel.app/api/test", {
+    //     params: {},
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
   }, []);
 
   const test = async () => {

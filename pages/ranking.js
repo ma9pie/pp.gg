@@ -90,28 +90,34 @@ Ranking.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context) {
   try {
-    let userList = await AxiosUtils.get("/api/v1/allUser", {
-      params: {},
-    }).then((res) => res.data);
+    let userList = await axios
+      .get("https://ppgg.vercel.app/api/v1/allUser", {
+        params: {},
+      })
+      .then((res) => res.data);
 
     await Promise.all(
       userList.map((user) =>
-        AxiosUtils.get("/api/v1/tier", {
-          params: { id: user.id },
-        }).then((res) => {
-          user.tier = res.data.tier;
-        })
+        axios
+          .get("https://ppgg.vercel.app/api/v1/tier", {
+            params: { id: user.id },
+          })
+          .then((res) => {
+            user.tier = res.data.tier;
+          })
       )
     );
 
-    const history = await AxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => res.data);
+    const history = await axios
+      .get("https://ppgg.vercel.app/api/v1/history", {
+        params: {},
+      })
+      .then((res) => res.data);
 
     return { props: { userList: userList, history: history } };
   } catch (error) {
     console.log(error);
-    return { props: { history: [] } };
+    return { props: { message: "server error" } };
   }
   // try {
   //   let userList = await AxiosUtils.get("/api/v1/allUser", {

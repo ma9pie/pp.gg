@@ -1,6 +1,4 @@
 import Axios from "axios";
-import Cookies from "js-cookie";
-import _includes from "lodash/includes";
 import ModalUtils from "@/utils/ModalUtils";
 
 let isOpenModal = false;

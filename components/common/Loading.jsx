@@ -25,6 +25,7 @@ const Wrapper = styled.div`
   border-radius: 50%;
   border-top-color: transparent;
   animation: spin 1s linear infinite;
+  background-color: transparent;
 
   @keyframes spin {
     0% {

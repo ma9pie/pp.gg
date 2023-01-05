@@ -32,13 +32,11 @@ function Ranking(props) {
             losePoints++;
           }
         });
-
         if (winPoints === 0) {
           winRate = 0;
         } else {
           winRate = (winPoints / (winPoints + losePoints)) * 100;
         }
-
         tmpList.push({
           ...user,
           totalDeal: totalDeal,

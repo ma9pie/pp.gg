@@ -133,7 +133,7 @@ export async function getServerSideProps(context) {
     //   });
 
     await axios
-      .get("https://ppgg.vercel.app/api/v1/history", {
+      .get("https://ppgg.vercel.app/api/history", {
         params: {},
       })
       .then((res) => {

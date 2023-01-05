@@ -106,7 +106,6 @@ export default function Document() {
           href="icons/favicon-128.png"
           sizes="128x128"
         />
-
         {/* 다크모드 시 화면 깜빡임 제거 */}
         <script
           dangerouslySetInnerHTML={{
@@ -135,6 +134,12 @@ export default function Document() {
           `,
           }}
         />
+        {/* 구글 애드센스 */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3049167650878577"
+          crossorigin="anonymous"
+        ></script>
       </Head>
       <body>
         <div id="modal"></div>

@@ -161,7 +161,7 @@ const Title = styled.h1`
   color: white;
 `;
 const Content = styled.div`
-  min-width: 360px;
+  min-width: 280px;
   padding: 16px;
   margin-bottom: 200px;
   border-top: 1px solid var(--sectionLine);

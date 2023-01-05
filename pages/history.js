@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import moment from "moment";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import SmallButton from "@/components/common/Buttons/SmallButton";
@@ -124,7 +125,15 @@ function History() {
       ModalUtils.openAlert({ message: JSON.stringify(res.data) });
       ModalUtils.openAlert({
         message: "기록이 삭제되었습니다.",
-        component: () => <HistoryContent {...res.data}></HistoryContent>,
+        component: () => (
+          <ContentWrapper>
+            <TextBox>
+              <Text>{`일시 : ${res.data.date}`}</Text>
+              <Text>{`승자 : ${res.data.winnerId} (${res.data.winnerScore} points)`}</Text>
+              <Text>{`패자 : ${res.data.loserId} (${res.data.loserScore} points)`}</Text>
+            </TextBox>
+          </ContentWrapper>
+        ),
       });
     });
   }, 100);
@@ -134,29 +143,40 @@ function History() {
       <Container>
         {userList.data ? (
           <Row>
-            <Column width="40%">
-              {userList.data.map((user, key) => (
-                <LargeButton
-                  height="40px"
-                  key={key}
-                  type={user.id === inputs.player1 ? "" : "sub"}
+            <Column width="50%">
+              {userList.data.map((user) => (
+                <UserBox
+                  key={user.id}
                   onClick={() => setInputs({ ...inputs, player1: user.id })}
                 >
-                  {user.name}
-                </LargeButton>
+                  <ProfileImgWrapper>
+                    <Image
+                      src={user.imgUrl}
+                      alt="profileImg"
+                      width={28}
+                      height={28}
+                    ></Image>
+                  </ProfileImgWrapper>
+                  <UserName>{user.name}</UserName>
+                </UserBox>
               ))}
             </Column>
-            <Column width="10%"></Column>
-            <Column width="40%">
-              {userList.data.map((user, key) => (
-                <LargeButton
-                  height="40px"
-                  key={key}
-                  type={user.id === inputs.player2 ? "" : "sub"}
+            <Column width="50%">
+              {userList.data.map((user) => (
+                <UserBox
+                  key={user.id}
                   onClick={() => setInputs({ ...inputs, player2: user.id })}
                 >
-                  {user.name}
-                </LargeButton>
+                  <ProfileImgWrapper>
+                    <Image
+                      src={user.imgUrl}
+                      alt="profileImg"
+                      width={28}
+                      height={28}
+                    ></Image>
+                  </ProfileImgWrapper>
+                  <UserName>{user.name}</UserName>
+                </UserBox>
               ))}
             </Column>
           </Row>
@@ -190,14 +210,14 @@ function History() {
               ></InputBox>
             </Row>
             <Row width="100%">
-              <BoxContainer>
+              <ButtonContainer>
                 <SmallButton onTouchStart={() => onChangeScore("score1", -1)}>
                   <MinusSvg color="white"></MinusSvg>
                 </SmallButton>
                 <SmallButton onTouchStart={() => onChangeScore("score1", 1)}>
                   <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
-              </BoxContainer>
+              </ButtonContainer>
             </Row>
           </Column>
           <Column width="10%">vs</Column>
@@ -222,14 +242,14 @@ function History() {
               ></InputBox>
             </Row>
             <Row width="100%">
-              <BoxContainer>
+              <ButtonContainer>
                 <SmallButton onTouchStart={() => onChangeScore("score2", -1)}>
                   <MinusSvg color="white"></MinusSvg>
                 </SmallButton>
                 <SmallButton onTouchStart={() => onChangeScore("score2", 1)}>
                   <PlusSvg color="white"></PlusSvg>
                 </SmallButton>
-              </BoxContainer>
+              </ButtonContainer>
             </Row>
           </Column>
         </Row>
@@ -262,35 +282,6 @@ function History() {
 
 export default History;
 
-const HistoryContent = (props) => {
-  const ContentWrapper = styled.div`
-    margin-bottom: 16px;
-  `;
-  const TextBox = styled.div`
-    width: 100%;
-    border-radius: 15px;
-    padding: 16px;
-    background-color: var(--textBox);
-    & * {
-      background-color: inherit;
-    }
-  `;
-  const Text = styled.div`
-    font: var(--body14);
-    text-align: left;
-  `;
-
-  return (
-    <ContentWrapper>
-      <TextBox>
-        <Text>{`일시 : ${props.date}`}</Text>
-        <Text>{`승자 : ${props.winnerId} (${props.winnerScore})`}</Text>
-        <Text>{`패자 : ${props.loserId} (${props.loserScore})`}</Text>
-      </TextBox>
-    </ContentWrapper>
-  );
-};
-
 History.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
@@ -300,8 +291,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 20px 24px;
-  height: calc(100vh - 108px);
+  padding: 20px 16px;
 `;
 const Container = styled.div`
   margin-bottom: 24px;
@@ -327,13 +317,10 @@ const InputBox = styled.input`
   width: 100%;
   height: ${(props) => props.height};
   padding: 0px 10px;
-  border-radius: 15px;
+  border-radius: 10px;
   background-color: var(--textBox);
   text-align: center;
-`;
-const BoxContainer = styled.div`
-  display: flex;
-  gap: 16px;
+  border: 1px solid var(--sectionLine);
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -342,4 +329,51 @@ const ButtonContainer = styled.div`
 const ButtonBox = styled.div`
   width: 100%;
   flex: ${(props) => props.flex};
+`;
+const ContentWrapper = styled.div`
+  margin-bottom: 16px;
+`;
+const TextBox = styled.div`
+  width: 100%;
+  border-radius: 10px;
+  padding: 16px;
+  background-color: var(--textBox);
+  border: 1px solid var(--sectionLine);
+  & * {
+    background-color: inherit;
+  }
+`;
+const Text = styled.p`
+  font: var(--body14);
+  text-align: left;
+`;
+const UserBox = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0px 8px;
+  border-radius: 5px;
+  background-color: var(--textBox);
+  border: 1px solid var(--sectionLine);
+  user-select: none;
+  cursor: pointer;
+  &:active {
+    background-color: var(--icon1);
+  }
+  & * {
+    background-color: inherit;
+  }
+  transition: background-color 0.2s ease;
+`;
+const ProfileImgWrapper = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+`;
+const UserName = styled.p`
+  font: var(--caption12);
 `;

@@ -44,7 +44,7 @@ export default Menu;
 const Wrapper = styled.div`
   position: absolute;
   top: 42px;
-  right: -24px;
+  right: -16px;
   width: 150px;
   z-index: 2;
   background-color: var(--bg);

@@ -136,7 +136,7 @@ function HallFame() {
 export default HallFame;
 const Wrapper = styled.div`
   width: 100vw;
-  min-width: 360px;
+  min-width: 280px;
   max-width: 1080px;
   padding: 0px 32px;
   background-color: var(--homeBg);

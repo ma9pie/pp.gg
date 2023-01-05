@@ -133,7 +133,7 @@ const Wrapper = styled.header`
   justify-content: space-between;
   align-items: center;
   height: 60px;
-  padding: 0px 24px;
+  padding: 0px 16px;
   border-bottom: ${(props) => props.borderBottom};
   background-color: var(--brandColor);
   & * {
@@ -141,12 +141,12 @@ const Wrapper = styled.header`
   }
 `;
 const LogoWrapper = styled.div`
-  margin-right: 24px;
+  /* margin-right: 24px; */
   cursor: pointer;
 `;
 const LogoText = styled.p`
   color: white;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 900;
 `;
 const MenuContainer = styled.nav`
@@ -167,7 +167,7 @@ const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 16px;
+  gap: 8px;
   width: 200px;
 `;
 const ViewMoreSvgWrapper = styled.div`

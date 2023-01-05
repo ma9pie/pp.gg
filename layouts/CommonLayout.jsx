@@ -20,7 +20,7 @@ function CommonLayout(props) {
 export default CommonLayout;
 
 const Container = styled.div`
-  min-width: 360px;
+  min-width: 280px;
   height: 100vh;
   background-color: var(--sectionLine);
 `;

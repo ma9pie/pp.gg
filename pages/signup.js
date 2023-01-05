@@ -44,7 +44,7 @@ export default Signup;
 
 const Wrapper = styled.div`
   width: 100vw;
-  min-width: 360px;
+  min-width: 280px;
   min-height: 100vh;
   background-color: var(--sectionLine);
 `;

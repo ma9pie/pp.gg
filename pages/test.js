@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import axios from "axios";
 import champions from "lol-champions";
 import React, { useEffect, useState } from "react";
 import Axios from "@/api/index";
@@ -9,7 +10,9 @@ function delay(n) {
   });
 }
 
-function Test() {
+function Test(props) {
+  console.log(props);
+
   useEffect(() => {
     test();
   }, []);
@@ -101,5 +104,20 @@ function Test() {
 }
 
 export default Test;
+
+export async function getServerSideProps(context) {
+  try {
+    const history = await axios
+      .get("http://localhost:3000/api/v1/history", {
+        params: {},
+      })
+      .then((res) => res.data);
+
+    return { props: { history: history } };
+  } catch (error) {
+    console.log(error);
+    return { props: { history: [] } };
+  }
+}
 
 const Wrapper = styled.div``;

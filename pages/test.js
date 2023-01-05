@@ -141,7 +141,7 @@ export async function getServerSideProps(context) {
     //     return res.data;
     //   });
 
-    await axios.get("http://localhost:3000/api/v1/test").then((res) => {
+    await axios.get("https://ppgg.vercel.app/api/v1/test").then((res) => {
       props.test = res.data;
       return res.data;
     });

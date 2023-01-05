@@ -114,16 +114,30 @@ export default Test;
 
 export async function getServerSideProps(context) {
   try {
-    const result = await axios
-      .get("https://ppgg.vercel.app/api/test", {
+    const props = {};
+    // await axios
+    //   .get("https://ppgg.vercel.app/api/v1/allUser", {
+    //     params: {},
+    //   })
+    //   .then((res) => {
+    //     props.userList = res.data;
+    //     return res.data;
+    //   });
+
+    await axios
+      .get("https://ppgg.vercel.app/api/v1/history", {
         params: {},
       })
       .then((res) => {
-        console.log(res);
+        props.history = res.data;
         return res.data;
       });
+    await axios.get("https://ppgg.vercel.app/api/test").then((res) => {
+      props.test = res.data;
+      return res.data;
+    });
 
-    return { props: { result: result } };
+    return { props: props };
   } catch (error) {
     console.log(error);
     return { props: { message: "server error" } };

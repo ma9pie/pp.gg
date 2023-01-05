@@ -15,6 +15,13 @@ function Test(props) {
 
   useEffect(() => {
     test();
+    axios
+      .get("/api/test", {
+        params: {},
+      })
+      .then((res) => {
+        console.log(res);
+      });
   }, []);
 
   const test = async () => {
@@ -107,16 +114,19 @@ export default Test;
 
 export async function getServerSideProps(context) {
   try {
-    const history = await axios
-      .get("http://localhost:3000/api/v1/history", {
+    const result = await axios
+      .get("https://ppgg.vercel.app/api/test", {
         params: {},
       })
-      .then((res) => res.data);
+      .then((res) => {
+        console.log(res);
+        return res.data;
+      });
 
-    return { props: { history: history } };
+    return { props: { result: result } };
   } catch (error) {
     console.log(error);
-    return { props: { history: [] } };
+    return { props: { message: "server error" } };
   }
 }
 

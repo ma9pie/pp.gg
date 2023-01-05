@@ -19,22 +19,22 @@ function MobileBanner() {
       >
         <BannerWrapper backgroundColor="var(--blue600)">
           <BannerContent>
-            <Title>🎉2023 PPGG🎉</Title>
-            <Description>HAPPY NEW YEAR!🐰</Description>
+            <Title>📢업데이트 v1.0.1</Title>
+            <Description>전적기록 페이지 레이아웃 이슈 수정</Description>
           </BannerContent>
         </BannerWrapper>
 
         <BannerWrapper backgroundColor="var(--blue300)">
           <BannerContent>
-            <Title>업데이트</Title>
-            <Description>회원가입 기능 추가, 프로필 이미지 변경</Description>
+            <Title>🎉2023 PPGG🎉</Title>
+            <Description>HAPPY NEW YEAR!🐰</Description>
           </BannerContent>
         </BannerWrapper>
 
         <BannerWrapper backgroundColor="var(--blue700)">
           <BannerContent>
-            <Title>파파존스 1+1 이벤트</Title>
-            <Description>매주 금요일은 파파존스</Description>
+            <Title>📋미 회원가입 시</Title>
+            <Description>기본 비밀번호 q1q1q1q1</Description>
           </BannerContent>
         </BannerWrapper>
 

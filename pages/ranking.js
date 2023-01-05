@@ -91,7 +91,7 @@ Ranking.getLayout = function getLayout(page) {
 export async function getServerSideProps(context) {
   try {
     let userList = await axios
-      .get("https://ppgg.vercel.app/api/v1/allUser", {
+      .get("http://localhost:3000/api/v1/allUser", {
         params: {},
       })
       .then((res) => res.data);
@@ -99,7 +99,7 @@ export async function getServerSideProps(context) {
     await Promise.all(
       userList.map((user) =>
         axios
-          .get("https://ppgg.vercel.app/api/v1/tier", {
+          .get("http://localhost:3000/api/v1/tier", {
             params: { id: user.id },
           })
           .then((res) => {
@@ -109,7 +109,7 @@ export async function getServerSideProps(context) {
     );
 
     const history = await axios
-      .get("https://ppgg.vercel.app/api/v1/history", {
+      .get("http://localhost:3000/api/v1/history", {
         params: {},
       })
       .then((res) => res.data);

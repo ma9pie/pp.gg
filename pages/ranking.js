@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
@@ -8,6 +9,7 @@ import AxiosUtils from "@/utils/AxiosUtils";
 import Axios from "@/api/index";
 
 function Ranking(props) {
+  console.log(props);
   const [statisticsList, setStatisticsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -94,7 +96,7 @@ export async function getServerSideProps(context) {
 
     await Promise.all(
       userList.map((user) =>
-        Axios.get("/api/v1/tier", {
+        AxiosUtils.get("/api/v1/tier", {
           params: { id: user.id },
         }).then((res) => {
           user.tier = res.data.tier;
@@ -111,6 +113,30 @@ export async function getServerSideProps(context) {
     console.log(error);
     return { props: { history: [] } };
   }
+  // try {
+  //   let userList = await AxiosUtils.get("/api/v1/allUser", {
+  //     params: {},
+  //   }).then((res) => res.data);
+
+  //   await Promise.all(
+  //     userList.map((user) =>
+  //       Axios.get("/api/v1/tier", {
+  //         params: { id: user.id },
+  //       }).then((res) => {
+  //         user.tier = res.data.tier;
+  //       })
+  //     )
+  //   );
+
+  //   const history = await AxiosUtils.get("/api/v1/history", {
+  //     params: {},
+  //   }).then((res) => res.data);
+
+  //   return { props: { userList: userList, history: history } };
+  // } catch (error) {
+  //   console.log(error);
+  //   return { props: { history: [] } };
+  // }
 }
 
 const Wrapper = styled.div``;

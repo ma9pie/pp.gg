@@ -13,29 +13,29 @@ function delay(n) {
 function Test(props) {
   console.log(props);
 
-  useEffect(() => {
-    axios
-      .get("https://ppgg.vercel.app/api/v1/history", {
-        params: {},
-      })
-      .then((res) => {
-        console.log("ppgg", res.data);
-      });
-    axios
-      .get("http://localhost:3000/api/v1/history", {
-        params: {},
-      })
-      .then((res) => {
-        console.log("localhost", res.data);
-      });
-    axios
-      .get("/api/v1/history", {
-        params: {},
-      })
-      .then((res) => {
-        console.log("none", res.data);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("https://ppgg.vercel.app/api/v1/history", {
+  //       params: {},
+  //     })
+  //     .then((res) => {
+  //       console.log("ppgg", res.data);
+  //     });
+  //   axios
+  //     .get("http://localhost:3000/api/v1/history", {
+  //       params: {},
+  //     })
+  //     .then((res) => {
+  //       console.log("localhost", res.data);
+  //     });
+  //   axios
+  //     .get("/api/v1/history", {
+  //       params: {},
+  //     })
+  //     .then((res) => {
+  //       console.log("none", res.data);
+  //     });
+  // }, []);
 
   // const test = async () => {
   //   Axios.get("/api/v1/allUser");
@@ -132,18 +132,18 @@ export async function getServerSideProps(context) {
     //     return res.data;
     //   });
 
-    await axios
-      .get("http://ppgg.vercel.app/api/v1/history", {
-        params: {},
-      })
-      .then((res) => {
-        props.history = res.data;
-        return res.data;
-      });
-    // await axios.get("https://ppgg.vercel.app/api/test").then((res) => {
-    //   props.test = res.data;
-    //   return res.data;
-    // });
+    // await axios
+    //   .get("http://localhost:3000/api/v1/history", {
+    //     params: {},
+    //   })
+    //   .then((res) => {
+    //     props.history = res.data;
+    //     return res.data;
+    //   });
+    await axios.get("https://ppgg.vercel.app/api/test").then((res) => {
+      props.test = res.data;
+      return res.data;
+    });
 
     return { props: props };
   } catch (error) {

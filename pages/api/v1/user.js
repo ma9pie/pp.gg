@@ -14,7 +14,9 @@ export default async function handler(req, res) {
         const id = query?.id;
 
         if (id) {
-          const user = await User.findOne(query).lean();
+          const user = await User.findOne(query, {
+            password: 0,
+          }).lean();
           res.status(200).json(user);
           return;
         }
@@ -31,7 +33,10 @@ export default async function handler(req, res) {
         }
 
         const queryRegex = new RegExp(name, "i");
-        const user = await User.find({ name: { $regex: queryRegex } }).lean();
+        const user = await User.find(
+          { name: { $regex: queryRegex } },
+          { password: 0 }
+        ).lean();
         res.status(200).json(user);
       } catch (error) {
         res.status(400).json({ success: false });
@@ -72,7 +77,7 @@ export default async function handler(req, res) {
         });
 
         await user.save();
-        res.status(200).json(user);
+        res.status(200).json({ ...user, password: undefined });
       } catch (error) {
         res.status(400).json({ success: false });
       }

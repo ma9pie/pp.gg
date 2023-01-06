@@ -88,62 +88,62 @@ Ranking.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
 
-export async function getServerSideProps(context) {
-  try {
-    let userList = await axios
-      .get("http://localhost:3000/api/v1/allUser", {
-        params: {},
-      })
-      .then((res) => res.data);
+// export async function getServerSideProps(context) {
+//   try {
+//     let userList = await axios
+//       .get("http://localhost:3000/api/v1/allUser", {
+//         params: {},
+//       })
+//       .then((res) => res.data);
 
-    await Promise.all(
-      userList.map((user) =>
-        axios
-          .get("http://localhost:3000/api/v1/tier", {
-            params: { id: user.id },
-          })
-          .then((res) => {
-            user.tier = res.data.tier;
-          })
-      )
-    );
+//     await Promise.all(
+//       userList.map((user) =>
+//         axios
+//           .get("http://localhost:3000/api/v1/tier", {
+//             params: { id: user.id },
+//           })
+//           .then((res) => {
+//             user.tier = res.data.tier;
+//           })
+//       )
+//     );
 
-    const history = await axios
-      .get("http://localhost:3000/api/v1/history", {
-        params: {},
-      })
-      .then((res) => res.data);
+//     const history = await axios
+//       .get("http://localhost:3000/api/v1/history", {
+//         params: {},
+//       })
+//       .then((res) => res.data);
 
-    return { props: { userList: userList, history: history } };
-  } catch (error) {
-    console.log(error);
-    return { props: { message: "server error" } };
-  }
-  // try {
-  //   let userList = await AxiosUtils.get("/api/v1/allUser", {
-  //     params: {},
-  //   }).then((res) => res.data);
+//     return { props: { userList: userList, history: history } };
+//   } catch (error) {
+//     console.log(error);
+//     return { props: { message: "server error" } };
+//   }
+//   // try {
+//   //   let userList = await AxiosUtils.get("/api/v1/allUser", {
+//   //     params: {},
+//   //   }).then((res) => res.data);
 
-  //   await Promise.all(
-  //     userList.map((user) =>
-  //       Axios.get("/api/v1/tier", {
-  //         params: { id: user.id },
-  //       }).then((res) => {
-  //         user.tier = res.data.tier;
-  //       })
-  //     )
-  //   );
+//   //   await Promise.all(
+//   //     userList.map((user) =>
+//   //       Axios.get("/api/v1/tier", {
+//   //         params: { id: user.id },
+//   //       }).then((res) => {
+//   //         user.tier = res.data.tier;
+//   //       })
+//   //     )
+//   //   );
 
-  //   const history = await AxiosUtils.get("/api/v1/history", {
-  //     params: {},
-  //   }).then((res) => res.data);
+//   //   const history = await AxiosUtils.get("/api/v1/history", {
+//   //     params: {},
+//   //   }).then((res) => res.data);
 
-  //   return { props: { userList: userList, history: history } };
-  // } catch (error) {
-  //   console.log(error);
-  //   return { props: { history: [] } };
-  // }
-}
+//   //   return { props: { userList: userList, history: history } };
+//   // } catch (error) {
+//   //   console.log(error);
+//   //   return { props: { history: [] } };
+//   // }
+// }
 
 const Wrapper = styled.div``;
 const LoadingWrapper = styled.div`

@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import champions from "lol-champions";
 import React, { useEffect, useState } from "react";
+import AxiosUtils from "@/utils/AxiosUtils";
 import Axios from "@/api/index";
 
 function delay(n) {
@@ -141,7 +142,12 @@ export async function getServerSideProps(context) {
     //     return res.data;
     //   });
 
-    await axios.get("https://ppgg.vercel.app/api/v1/test").then((res) => {
+    // await axios.get("https://ppgg.vercel.app/api/history").then((res) => {
+    //   props.test = res.data;
+    //   return res.data;
+    // });
+
+    await AxiosUtils.get("api/v1/history").then((res) => {
       props.test = res.data;
       return res.data;
     });

@@ -19,105 +19,6 @@ function Test(props) {
       console.log(JSON.parse(props.error));
     }
   }, [props]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("https://ppgg.vercel.app/api/v1/history", {
-  //       params: {},
-  //     })
-  //     .then((res) => {
-  //       console.log("ppgg", res.data);
-  //     });
-  //   axios
-  //     .get("http://localhost:3000/api/v1/history", {
-  //       params: {},
-  //     })
-  //     .then((res) => {
-  //       console.log("localhost", res.data);
-  //     });
-  //   axios
-  //     .get("/api/v1/history", {
-  //       params: {},
-  //     })
-  //     .then((res) => {
-  //       console.log("none", res.data);
-  //     });
-  // }, []);
-
-  // const test = async () => {
-  //   Axios.get("/api/v1/allUser");
-  //   await delay(1000);
-  //   Axios.get("/api/v1/history");
-  //   await delay(1000);
-  //   Axios.get("/api/v1/emblem");
-  // };
-
-  const getDate = async () => {
-    // user 조회 API 호출
-    const tmpUserList = await Axios.get("/api/v1/user", {
-      params: {},
-    }).then((res) => {
-      return res.data;
-    });
-
-    // history 조회 API 호출
-    const tmpHistory = await Axios.get("/api/v1/history").then((res) => {
-      return res.data;
-    });
-
-    // 통계
-    tmpUserList.map((user) => {
-      let totalDeal = 0; // 적에게 가한 피해량
-      let winPoints = 0; // 승리 횟수
-      let losePoints = 0; // 패배 횟수
-      tmpHistory.map((history) => {
-        if (history.winnerId === user.id) {
-          totalDeal += history.winnerScore;
-          winPoints++;
-        } else if (history.loserId === user.id) {
-          totalDeal += history.loserScore;
-          losePoints++;
-        }
-      });
-      console.log({
-        id: user.id,
-        totalDeal: totalDeal,
-        winPoints: winPoints,
-        losePoints: losePoints,
-        winRate: (winPoints / (winPoints + losePoints)) * 100,
-      });
-    });
-
-    // 전적
-    tmpUserList.map((user) => {
-      let list = [];
-      let opponents = "";
-
-      tmpHistory.map((history) => {
-        let kill = 0;
-        let death = 0;
-        if (history.winnerId === user.id) {
-          kill = history.winnerScore;
-          death = history.loserScore;
-          opponents = history.loserId;
-        } else if (history.loserId === user.id) {
-          kill = history.loserScore;
-          death = history.winnerScore;
-          opponents = history.winnerId;
-        } else {
-          return false;
-        }
-
-        list.push({
-          kill: kill,
-          death: death,
-          opponents: opponents,
-        });
-      });
-      console.log(user.id, list);
-    });
-  };
-
   return (
     <Wrapper>
       {/* {url && <Image src={userList[0].imgUrl} alt="profile" width={30} height={30}></Image>} */}
@@ -130,29 +31,6 @@ export default Test;
 export async function getServerSideProps(context) {
   try {
     const props = {};
-    // await axios
-    //   .get("https://ppgg.vercel.app/api/v1/allUser", {
-    //     params: {},
-    //   })
-    //   .then((res) => {
-    //     props.userList = res.data;
-    //     return res.data;
-    //   });
-
-    // await axios
-    //   .get("https://ppgg.vercel.app/api/history", {
-    //     params: {},
-    //   })
-    //   .then((res) => {
-    //     props.history = res.data;
-    //     return res.data;
-    //   });
-
-    // await axios.get("https://ppgg.vercel.app/api/history").then((res) => {
-    //   props.test = res.data;
-    //   return res.data;
-    // });
-
     await AxiosUtils.get("api/v1/history").then((res) => {
       props.test = res.data;
       return res.data;

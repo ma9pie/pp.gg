@@ -65,18 +65,6 @@ function HallFame(props) {
 }
 export default HallFame;
 
-export async function getServerSideProps(context) {
-  try {
-    let props = {};
-    await AxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
-
 const Wrapper = styled.div`
   width: 100vw;
   min-width: 280px;

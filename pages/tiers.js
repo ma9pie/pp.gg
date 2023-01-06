@@ -3,29 +3,28 @@ import Image from "next/image";
 import React from "react";
 import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/CommonLayout";
-import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
+import AxiosUtils from "@/utils/AxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
-function Tiers(props) {
+function Tiers() {
   const emblemSize = 200;
   const emblemQueryKey = "/api/v1/emblem";
 
-  useQuery({
+  const emblem = useQuery({
+    placeholderData: [],
     queryKey: emblemQueryKey,
-    queryFn: () => {
-      return props.emblem;
-    },
-  });
+    queryFn: () => AxiosUtils.get(emblemQueryKey).then((res) => res.data),
+  }).data;
 
   return (
     <Wrapper>
-      {props.emblem.length === 0 ? (
+      {emblem.length === 0 ? (
         <LoadingWrapper>
           <Loading></Loading>
         </LoadingWrapper>
       ) : (
         <Grid>
-          {props.emblem.map((item, key) => (
+          {emblem.map((item, key) => (
             <ImageBox key={key}>
               <Image
                 src={item.imgUrl}
@@ -48,18 +47,6 @@ export default Tiers;
 Tiers.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
-
-export async function getServerSideProps(context) {
-  try {
-    const props = {};
-    await SsrAxiosUtils.get("/api/v1/emblem").then((res) => {
-      props.emblem = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
 
 const Wrapper = styled.div``;
 const Grid = styled.div`

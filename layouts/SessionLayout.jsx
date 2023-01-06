@@ -14,8 +14,6 @@ function SessionLayout(props) {
 
   const [isLogin, setIsLogin] = useState(false);
 
-  console.log(member);
-
   useEffect(() => {
     if (!member.id) {
       ModalUtils.openAlert({

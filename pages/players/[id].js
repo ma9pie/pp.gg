@@ -8,12 +8,12 @@ import Loading from "@/components/common/Loading";
 import HistoryList from "@/components/players/HistoryList";
 import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
+import AxiosUtils from "@/utils/AxiosUtils";
 import ModalUtils from "@/utils/ModalUtils";
-import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import TierUtils from "@/utils/TierUtils";
 import useQuery from "@/hooks/useQuery";
 
-function Players(props) {
+function Players() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -26,37 +26,28 @@ function Players(props) {
     tier: [],
   });
 
-  const userListQueryKey = "/api/v1/allUser";
+  const userListQueryKey = "/api/v1/userList";
   const historyQueryKey = "/api/v1/history";
-  const emblemQueryKey = "/api/v1/emblem";
 
-  useQuery({
+  const userList = useQuery({
+    placeholderData: [],
     queryKey: userListQueryKey,
-    queryFn: () => {
-      return props.userList;
-    },
-  });
-  useQuery({
+    queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
+  }).data;
+  const history = useQuery({
+    placeholderData: [],
     queryKey: historyQueryKey,
-    queryFn: () => {
-      return props.history;
-    },
-  });
-  useQuery({
-    queryKey: emblemQueryKey,
-    queryFn: () => {
-      return props.emblem;
-    },
-  });
+    queryFn: () => AxiosUtils.get(historyQueryKey).then((res) => res.data),
+  }).data;
 
   useEffect(() => {
     setId(router.query.id);
   }, [router]);
 
   useEffect(() => {
-    const user = props.userList.find((item) => item.id === id);
+    const user = userList.find((item) => item.id === id);
 
-    if (id && !user) {
+    if (id && !user && userList.length > 0) {
       return ModalUtils.openAlert({
         message: "존재하지 않는 사용자입니다.",
         onAfterClose: () => router.push("/"),
@@ -64,7 +55,7 @@ function Players(props) {
     } else if (user) {
       setUser(user);
 
-      const history = [].concat(props.history);
+      const tmpHistory = [].concat(history);
       let gameList = []; // 게임 리스트
       let opponents = ""; // 상대편
       let winPoints = 0; // 승리 횟수
@@ -76,7 +67,7 @@ function Players(props) {
       const tmpDate = [];
       const tmpTier = [];
 
-      history.reverse().map((item) => {
+      tmpHistory.reverse().map((item) => {
         if (item.winnerId !== id && item.loserId !== id) {
           return;
         }
@@ -131,7 +122,7 @@ function Players(props) {
       setGameList(gameList);
       setIsLoading(false);
     }
-  }, [id, props]);
+  }, [id, userList, history]);
 
   return (
     <Wrapper>
@@ -241,7 +232,7 @@ function Players(props) {
           ) : (
             gameList.map((data, key) => (
               <Content key={key} height="auto">
-                <HistoryList {...data} userList={props.userList}></HistoryList>
+                <HistoryList {...data} userList={userList}></HistoryList>
               </Content>
             ))
           )}
@@ -256,28 +247,6 @@ export default Players;
 Players.getLayout = function getLayout(page) {
   return <PlayerLayout>{page}</PlayerLayout>;
 };
-
-export async function getServerSideProps(context) {
-  try {
-    let props = {};
-    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => {
-      props.history = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/emblem", {
-      params: {},
-    }).then((res) => {
-      props.emblem = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
 
 const Wrapper = styled.div``;
 const Row = styled.div`

@@ -1,20 +1,20 @@
 import styled from "@emotion/styled";
 import moment from "moment";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import SmallButton from "@/components/common/Buttons/SmallButton";
 import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/SessionLayout";
+import AxiosUtils from "@/utils/AxiosUtils";
 import ModalUtils from "@/utils/ModalUtils";
-import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import Axios from "@/api/index";
 import useDebounce from "@/hooks/useDebounce";
 import useQuery from "@/hooks/useQuery";
 import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
-function History(props) {
+function History() {
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [inputs, setInputs] = useState({
@@ -24,14 +24,13 @@ function History(props) {
     score2: 11,
   });
 
-  const userListQueryKey = "/api/v1/allUser";
+  const userListQueryKey = "/api/v1/userList";
 
-  useQuery({
-    queryKey: userListQueryKey,
-    queryFn: () => {
-      return props.userList;
-    },
-  });
+  const userList =
+    useQuery({
+      queryKey: userListQueryKey,
+      queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
+    }).data || [];
 
   const onChangeInputs = (e) => {
     const { value, name } = e.target;
@@ -130,10 +129,10 @@ function History(props) {
   return (
     <Wrapper>
       <Container>
-        {props.userList ? (
+        {userList ? (
           <Row>
             <Column width="50%">
-              {props.userList.map((user) => (
+              {userList.map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player1: user.id })}
@@ -151,7 +150,7 @@ function History(props) {
               ))}
             </Column>
             <Column width="50%">
-              {props.userList.map((user) => (
+              {userList.map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player2: user.id })}
@@ -274,28 +273,6 @@ export default History;
 History.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
-
-export async function getServerSideProps(context) {
-  try {
-    const props = {};
-    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => {
-      props.history = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/emblem", {
-      params: {},
-    }).then((res) => {
-      props.emblem = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
 
 const Wrapper = styled.div`
   position: relative;

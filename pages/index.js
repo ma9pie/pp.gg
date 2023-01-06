@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect } from "react";
+import React from "react";
 import Banner from "@/components/home/Banner";
 import HallFame from "@/components/home/HallFame";
 import MobileBanner from "@/components/home/MobileBanner";
@@ -9,23 +9,26 @@ import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
 function Home(props) {
-  const userListQueryKey = "/api/v1/allUser";
+  const userListQueryKey = "/api/v1/userList";
   const historyQueryKey = "/api/v1/history";
   const emblemQueryKey = "/api/v1/emblem";
 
-  useQuery({
+  const userList = useQuery({
+    placeholderData: [],
     queryKey: userListQueryKey,
     queryFn: () => {
       return props.userList;
     },
-  });
+  }).data;
   useQuery({
+    placeholderData: [],
     queryKey: historyQueryKey,
     queryFn: () => {
       return props.history;
     },
   });
   useQuery({
+    placeholderData: [],
     queryKey: emblemQueryKey,
     queryFn: () => {
       return props.emblem;
@@ -38,9 +41,9 @@ function Home(props) {
         <Banner></Banner>
         <MobileBanner></MobileBanner>
       </BannerWrapper>
-      <SearchInput userList={props.userList}></SearchInput>
+      <SearchInput userList={userList}></SearchInput>
       <HallFameWrapper>
-        <HallFame userList={props.userList}></HallFame>
+        <HallFame userList={userList}></HallFame>
       </HallFameWrapper>
     </Wrapper>
   );

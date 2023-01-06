@@ -5,7 +5,15 @@
       "plugins": ["@babel/plugin-transform-runtime"]
     },
     "production": {
-      "plugins": ["@babel/plugin-transform-runtime"]
+      "plugins": [
+        "@babel/plugin-transform-runtime",
+        [
+          "transform-remove-console",
+          {
+            "exclude": ["error", "warn"]
+          }
+        ]
+      ]
     }
   }
 }

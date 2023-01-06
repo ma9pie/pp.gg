@@ -4,14 +4,23 @@ import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
 import Statistics from "@/components/ranking/Statistics";
 import CommonLayout from "@/layouts/CommonLayout";
-import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
+import AxiosUtils from "@/utils/AxiosUtils";
+import useQuery from "@/hooks/useQuery";
 
-function Ranking(props) {
+function Ranking() {
   const [statisticsList, setStatisticsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const userListQueryKey = "/api/v1/userList";
+
+  const userList = useQuery({
+    placeholderData: [],
+    queryKey: userListQueryKey,
+    queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
+  }).data;
+
   useEffect(() => {
-    const tmpList = props.userList.sort((a, b) => {
+    const tmpList = userList.sort((a, b) => {
       if (a.winRate === b.winRate) {
         if (a.totalDeal === b.totalDeal) {
           // 2. 생성일 오름차순
@@ -26,8 +35,8 @@ function Ranking(props) {
       }
     });
     setStatisticsList(tmpList);
-    setIsLoading(false);
-  }, [props]);
+    setIsLoading(userList.length === 0);
+  }, [userList]);
 
   if (isLoading) {
     return (
@@ -49,23 +58,6 @@ export default Ranking;
 Ranking.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
-
-export async function getServerSideProps(context) {
-  try {
-    let props = {};
-    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => {
-      props.history = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
 
 const Wrapper = styled.div``;
 const LoadingWrapper = styled.div`

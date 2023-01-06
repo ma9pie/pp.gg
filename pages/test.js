@@ -14,6 +14,12 @@ function delay(n) {
 function Test(props) {
   console.log(props);
 
+  useEffect(() => {
+    if (props.error) {
+      console.log(JSON.parse(props.error));
+    }
+  }, [props]);
+
   // useEffect(() => {
   //   axios
   //     .get("https://ppgg.vercel.app/api/v1/history", {
@@ -155,7 +161,7 @@ export async function getServerSideProps(context) {
     return { props: props };
   } catch (error) {
     console.log(error);
-    return { props: { message: "server error" } };
+    return { props: { error: JSON.stringify(error) } };
   }
 }
 

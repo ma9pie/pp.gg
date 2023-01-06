@@ -6,12 +6,9 @@ import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
-import Axios from "@/api/index";
 import useQuery from "@/hooks/useQuery";
 
 function Home(props) {
-  console.log(props);
-
   const userListQueryKey = "/api/v1/allUser";
   const historyQueryKey = "/api/v1/history";
   const emblemQueryKey = "/api/v1/emblem";
@@ -34,20 +31,6 @@ function Home(props) {
       return props.emblem;
     },
   });
-  // useQuery({
-  //   queryKey: historyQueryKey,
-  //   queryFn: () =>
-  //     Axios.get(historyQueryKey, {
-  //       params: {},
-  //     }).then((res) => res.data),
-  // });
-  // useQuery({
-  //   queryKey: emblemQueryKey,
-  //   queryFn: () =>
-  //     Axios.get(emblemQueryKey, {
-  //       params: {},
-  //     }).then((res) => res.data),
-  // });
 
   return (
     <Wrapper>
@@ -57,7 +40,7 @@ function Home(props) {
       </BannerWrapper>
       <SearchInput></SearchInput>
       <HallFameWrapper>
-        <HallFame></HallFame>
+        <HallFame userList={props.userList}></HallFame>
       </HallFameWrapper>
     </Wrapper>
   );
@@ -72,18 +55,7 @@ Home.getLayout = function getLayout(page) {
 export async function getServerSideProps(context) {
   try {
     let props = {};
-    await AxiosUtils.get("/api/v1/allUser", {
-      params: {},
-    }).then(async (res) => {
-      await Promise.all(
-        res.data.map((user) =>
-          AxiosUtils.get("/api/v1/tier", {
-            params: { id: user.id },
-          }).then((res) => {
-            user.tier = res.data.tier;
-          })
-        )
-      );
+    await AxiosUtils.get("/api/v1/userList").then((res) => {
       props.userList = res.data;
     });
     await AxiosUtils.get("/api/v1/history", {

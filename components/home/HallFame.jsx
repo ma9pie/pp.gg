@@ -3,83 +3,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
-import Axios from "@/api/index";
-import useQuery from "@/hooks/useQuery";
 
-function HallFame() {
-  const [statisticsList, setStatisticsList] = useState([]);
-
-  const userListQueryKey = "/api/v1/allUser";
-  const userList = useQuery({
-    queryKey: userListQueryKey,
-    queryFn: async () => {
-      let tmpUserList = await Axios.get(userListQueryKey, {
-        params: {},
-      }).then((res) => res.data);
-
-      await Promise.all(
-        tmpUserList.map((user) =>
-          Axios.get("/api/v1/tier", {
-            params: { id: user.id },
-          }).then((res) => {
-            user.tier = res.data.tier;
-          })
-        )
-      );
-      return tmpUserList;
-    },
-  });
-
-  const historyQueryKey = "/api/v1/history";
-  const history = useQuery({
-    queryKey: historyQueryKey,
-    queryFn: () =>
-      Axios.get(historyQueryKey, {
-        params: {},
-      }).then((res) => res.data),
-  });
+function HallFame(props) {
+  const [userList, setUserList] = useState([]);
 
   useEffect(() => {
-    if (userList.data && history.data) {
-      let tmpList = [];
-
-      userList.data.map((user) => {
-        let totalDeal = 0; // 적에게 가한 피해량
-        let totalDamageReceived = 0; // 적에게 받은 피해량
-        let winPoints = 0; // 승리 횟수
-        let losePoints = 0; // 패배 횟수
-        let winRate = 0;
-        history.data.map((history) => {
-          if (history.winnerId === user.id) {
-            totalDeal += history.winnerScore;
-            totalDamageReceived += history.loserScore;
-            winPoints++;
-          } else if (history.loserId === user.id) {
-            totalDeal += history.loserScore;
-            totalDamageReceived += history.winnerScore;
-            losePoints++;
-          }
-        });
-
-        if (winPoints === 0) {
-          winRate = 0;
-        } else {
-          winRate = (winPoints / (winPoints + losePoints)) * 100;
-        }
-
-        tmpList.push({
-          ...user,
-          totalDeal: totalDeal,
-          totalDamageReceived: totalDamageReceived,
-          winPoints: winPoints,
-          losePoints: losePoints,
-          winRate: winRate,
-        });
-      });
-      tmpList.sort((a, b) => b.winRate - a.winRate);
-      setStatisticsList(tmpList);
-    }
-  }, [userList.data, history.data]);
+    setUserList(props.userList.sort((a, b) => b.winRate - a.winRate));
+  }, [props]);
 
   const getMedal = (num) => {
     if (num === 1) return "🥇";
@@ -99,12 +29,12 @@ function HallFame() {
           <Column>티어</Column>
           <Column>승률</Column>
         </Row>
-        {statisticsList.length === 0 ? (
+        {userList.length === 0 ? (
           <LoadingWrapper>
             <Loading></Loading>
           </LoadingWrapper>
         ) : (
-          statisticsList.map((item, idx) => (
+          userList.map((item, idx) => (
             <Link key={item.id} href={`/players/${item.id}`}>
               <a>
                 <Row bg="var(--textBox)">
@@ -134,6 +64,19 @@ function HallFame() {
   );
 }
 export default HallFame;
+
+export async function getServerSideProps(context) {
+  try {
+    let props = {};
+    await AxiosUtils.get("/api/v1/userList").then((res) => {
+      props.userList = res.data;
+    });
+    return { props: props };
+  } catch (error) {
+    return { props: { error: JSON.stringify(error) } };
+  }
+}
+
 const Wrapper = styled.div`
   width: 100vw;
   min-width: 280px;

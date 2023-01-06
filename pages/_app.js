@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { RecoilRoot } from "recoil";
+import AxiosUtils from "@/utils/AxiosUtils";
 import GoogleAnalyticsUtils from "@/utils/GoogleAnalyticsUtils";
 import "@/styles/app.scss";
 
@@ -40,6 +41,39 @@ function App({ Component, pageProps }) {
 }
 
 export default App;
+
+export async function getServerSideProps(context) {
+  try {
+    let props = {};
+    await AxiosUtils.get("/api/v1/allUser", {
+      params: {},
+    }).then(async (res) => {
+      await Promise.all(
+        res.data.map((user) =>
+          AxiosUtils.get("/api/v1/tier", {
+            params: { id: user.id },
+          }).then((res) => {
+            user.tier = res.data.tier;
+          })
+        )
+      );
+      props.userList = res.data;
+    });
+    await AxiosUtils.get("/api/v1/history", {
+      params: {},
+    }).then((res) => {
+      props.history = res.data;
+    });
+    await AxiosUtils.get("/api/v1/emblem", {
+      params: {},
+    }).then((res) => {
+      props.emblem = res.data;
+    });
+    return { props: props };
+  } catch (error) {
+    return { props: { error: JSON.stringify(error) } };
+  }
+}
 
 const ReactQueryDevtoolsWrapper = styled.div`
   background-color: black !important;

@@ -11,9 +11,17 @@ import useQuery from "@/hooks/useQuery";
 
 function Home(props) {
   console.log(props);
+
+  const userListQueryKey = "/api/v1/allUser";
   const historyQueryKey = "/api/v1/history";
   const emblemQueryKey = "/api/v1/emblem";
 
+  useQuery({
+    queryKey: userListQueryKey,
+    queryFn: () => {
+      return props.userList;
+    },
+  });
   useQuery({
     queryKey: historyQueryKey,
     queryFn: () => {
@@ -63,21 +71,21 @@ Home.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context) {
   try {
-    // let userList = await AxiosUtils.get("/api/v1/allUser", {
-    //   params: {},
-    // }).then((res) => res.data);
-
-    // await Promise.all(
-    //   userList.map((user) =>
-    //     AxiosUtils.get("/api/v1/tier", {
-    //       params: { id: user.id },
-    //     }).then((res) => {
-    //       user.tier = res.data.tier;
-    //     })
-    //   )
-    // );
     let props = {};
-
+    await AxiosUtils.get("/api/v1/allUser", {
+      params: {},
+    }).then(async (res) => {
+      await Promise.all(
+        res.data.map((user) =>
+          AxiosUtils.get("/api/v1/tier", {
+            params: { id: user.id },
+          }).then((res) => {
+            user.tier = res.data.tier;
+          })
+        )
+      );
+      props.userList = res.data;
+    });
     await AxiosUtils.get("/api/v1/history", {
       params: {},
     }).then((res) => {
@@ -88,7 +96,6 @@ export async function getServerSideProps(context) {
     }).then((res) => {
       props.emblem = res.data;
     });
-
     return { props: props };
   } catch (error) {
     return { props: { error: JSON.stringify(error) } };

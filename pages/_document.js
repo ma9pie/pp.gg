@@ -137,7 +137,7 @@ export default function Document() {
         {/* 구글 애드센스 */}
         <script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3049167650878577"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4808054974810104"
           crossorigin="anonymous"
         ></script>
       </Head>

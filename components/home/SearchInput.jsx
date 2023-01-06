@@ -3,9 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import Loading from "@/components/common/Loading";
-import Axios from "@/api/index";
 import useClickOutside from "@/hooks/useClickOutside";
-import useQuery from "@/hooks/useQuery";
 
 function SearchInput(props) {
   const router = useRouter();
@@ -15,39 +13,20 @@ function SearchInput(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [resultList, setRsultList] = useState([]);
 
-  const userListQueryKey = "/api/v1/allUser";
-  const userList = useQuery({
-    queryKey: userListQueryKey,
-    queryFn: async () => {
-      setIsLoading(true);
-      let tmpUserList = await Axios.get(userListQueryKey, {
-        params: {},
-      }).then((res) => res.data);
-
-      await Promise.all(
-        tmpUserList.map((user) =>
-          Axios.get("/api/v1/tier", {
-            params: { id: user.id },
-          }).then((res) => {
-            user.tier = res.data.tier;
-          })
-        )
-      );
-      setIsLoading(false);
-      return tmpUserList;
-    },
-  });
-
   useClickOutside(ref, () => {
     setIsOpen(false);
   });
 
   useEffect(() => {
+    setIsLoading(props.userList.length === 0);
+  }, [props]);
+
+  useEffect(() => {
     if (!searchWord.trim()) return setRsultList([]);
     const tmpUserList = [];
-    userList.data?.map((user) => {
-      if (user.name.includes(searchWord)) {
-        tmpUserList.push(user);
+    props.userList.map((item) => {
+      if (item.name.includes(searchWord)) {
+        tmpUserList.push(item);
       }
     });
     setRsultList(tmpUserList);
@@ -127,6 +106,10 @@ function SearchInput(props) {
 }
 
 export default SearchInput;
+
+SearchInput.defaultProps = {
+  userList: [],
+};
 
 const Wrapper = styled.div`
   position: relative;

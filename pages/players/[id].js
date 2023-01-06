@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import Axios from "axios";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -9,19 +8,17 @@ import Loading from "@/components/common/Loading";
 import HistoryList from "@/components/players/HistoryList";
 import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
+import ModalUtils from "@/utils/ModalUtils";
+import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import TierUtils from "@/utils/TierUtils";
 import useQuery from "@/hooks/useQuery";
 
-function Players() {
+function Players(props) {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState("");
-  const [totalDeal, setTotalDeal] = useState(0);
-  const [totalDamageReceived, setTotalDamageReceived] = useState(0);
-  const [winPoints, setWinPoints] = useState(0);
-  const [losePoints, setLosePoints] = useState(0);
-  const [winRate, setWinRate] = useState(0);
+  const [user, setUser] = useState({});
   const [gameList, setGameList] = useState([]);
   const [rateHistory, setRateHistory] = useState({
     rate: [],
@@ -29,199 +26,165 @@ function Players() {
     tier: [],
   });
 
+  const userListQueryKey = "/api/v1/allUser";
+  const historyQueryKey = "/api/v1/history";
+  const emblemQueryKey = "/api/v1/emblem";
+
+  useQuery({
+    queryKey: userListQueryKey,
+    queryFn: () => {
+      return props.userList;
+    },
+  });
+  useQuery({
+    queryKey: historyQueryKey,
+    queryFn: () => {
+      return props.history;
+    },
+  });
+  useQuery({
+    queryKey: emblemQueryKey,
+    queryFn: () => {
+      return props.emblem;
+    },
+  });
+
   useEffect(() => {
     setId(router.query.id);
   }, [router]);
 
-  const userListQueryKey = "/api/v1/allUser";
-  const userList = useQuery({
-    queryKey: userListQueryKey,
-    queryFn: async () => {
-      let tmpUserList = await Axios.get(userListQueryKey, {
-        params: {},
-      }).then((res) => res.data);
-
-      await Promise.all(
-        tmpUserList.map((user) =>
-          Axios.get("/api/v1/tier", {
-            params: { id: user.id },
-          }).then((res) => {
-            user.tier = res.data.tier;
-          })
-        )
-      );
-      return tmpUserList;
-    },
-  });
-
-  const historyQueryKey = "/api/v1/history";
-  const history = useQuery({
-    queryKey: historyQueryKey,
-    queryFn: () =>
-      Axios.get(historyQueryKey, {
-        params: {},
-      }).then((res) => res.data),
-  });
-
   useEffect(() => {
-    if (id && userList.data && history.data) {
-      // 통계
-      let totalDeal = 0; // 적에게 가한 피해량
-      let totalDamageReceived = 0; // 적에게 받은 피해량
+    const user = props.userList.find((item) => item.id === id);
+
+    if (id && !user) {
+      return ModalUtils.openAlert({
+        message: "존재하지 않는 사용자입니다.",
+        onAfterClose: () => router.push("/"),
+      });
+    } else if (user) {
+      setUser(user);
+
+      const history = [].concat(props.history);
+      let gameList = []; // 게임 리스트
+      let opponents = ""; // 상대편
       let winPoints = 0; // 승리 횟수
       let losePoints = 0; // 패배 횟수
       let winRate = 0; // 승률
-      history.data.map((history) => {
-        if (history.winnerId === id) {
-          totalDeal += history.winnerScore;
-          totalDamageReceived += history.loserScore;
-          winPoints++;
-        } else if (history.loserId === id) {
-          totalDeal += history.loserScore;
-          totalDamageReceived += history.winnerScore;
-          losePoints++;
-        }
-      });
-
-      if (winPoints === 0) {
-        winRate = 0;
-      } else {
-        winRate = (winPoints / (winPoints + losePoints)) * 100;
-      }
-
-      setTotalDeal(totalDeal);
-      setTotalDamageReceived(totalDamageReceived);
-      setWinPoints(winPoints);
-      setLosePoints(losePoints);
-      setWinRate(winRate);
-
-      // 전적
-      let list = [];
-      let opponents = "";
-
-      history.data.map((history) => {
-        let kill = 0;
-        let death = 0;
-        if (history.winnerId === id) {
-          kill = history.winnerScore;
-          death = history.loserScore;
-          opponents = history.loserId;
-        } else if (history.loserId === id) {
-          kill = history.loserScore;
-          death = history.winnerScore;
-          opponents = history.winnerId;
-        } else {
-          return false;
-        }
-
-        list.push({
-          id: id,
-          kill: kill,
-          death: death,
-          opponents: opponents,
-          date: history.date,
-        });
-      });
-
-      setGameList(list);
-    }
-  }, [id, userList.data, history.data]);
-
-  useEffect(() => {
-    if (id && userList.data && history.data) {
-      // 승률 추이
-      let winPoints = 0; // 승리 횟수
-      let losePoints = 0; // 패배 횟수
-      let winRate = 0; // 승률
-      let date = "";
-      let tier = "";
+      let date = ""; // 날짜
+      let tier = ""; // 티어
       const tmpRate = [];
       const tmpDate = [];
       const tmpTier = [];
 
-      []
-        .concat(history.data)
-        .reverse()
-        .map((history) => {
-          if (history.winnerId !== id && history.loserId !== id) {
-            return;
-          }
+      history.reverse().map((item) => {
+        if (item.winnerId !== id && item.loserId !== id) {
+          return;
+        }
+        let kill = 0;
+        let death = 0;
 
-          if (history.winnerId === id) {
-            winPoints++;
-          } else if (history.loserId === id) {
-            losePoints++;
-          }
+        if (item.winnerId === id) {
+          winPoints++;
+          kill = item.winnerScore;
+          death = item.loserScore;
+          opponents = item.loserId;
+        } else if (item.loserId === id) {
+          losePoints++;
+          kill = item.loserScore;
+          death = item.winnerScore;
+          opponents = item.winnerId;
+        }
 
-          if (winPoints === 0) {
-            winRate = 0;
-          } else {
-            winRate = (winPoints / (winPoints + losePoints)) * 100;
-          }
+        if (winPoints === 0) {
+          winRate = 0;
+        } else {
+          winRate = (winPoints / (winPoints + losePoints)) * 100;
+        }
 
-          date = moment(history.date).format("YYYY-MM-DD");
-          tier = TierUtils.getTier(winRate);
+        date = moment(item.date).format("YYYY-MM-DD");
+        tier = TierUtils.getTier(winRate);
 
-          if (date === tmpDate[tmpDate.length - 1]) {
-            tmpRate[tmpRate.length - 1] = winRate;
-            tmpTier[tmpTier.length - 1] = tier;
-          } else {
+        if (date === tmpDate[tmpDate.length - 1]) {
+          tmpRate[tmpRate.length - 1] = winRate;
+          tmpTier[tmpTier.length - 1] = tier;
+        } else {
+          if (winPoints + losePoints > 10) {
             tmpRate.push(winRate);
             tmpDate.push(date);
             tmpTier.push(tier);
           }
+        }
+        gameList.unshift({
+          id: id,
+          kill: kill,
+          death: death,
+          opponents: opponents,
+          date: item.date,
         });
+      });
+
       setRateHistory({
         rate: tmpRate,
         date: tmpDate,
         tier: tmpTier,
       });
+      setGameList(gameList);
       setIsLoading(false);
     }
-  }, [id, userList.data, history.data]);
+  }, [id, props]);
 
   return (
     <Wrapper>
-      <Profile id={id}></Profile>
-
+      <Profile user={user}></Profile>
       <Row>
         <ChartContainer>
           <Content height="auto">
             <Box>
               <Title>승률 추이</Title>
-              {isLoading ? (
-                <LoadingWrapper>
-                  <Loading></Loading>
-                </LoadingWrapper>
-              ) : (
-                <>
-                  <LineChart
-                    labels={rateHistory.date}
-                    data={rateHistory.rate}
-                  ></LineChart>
 
-                  <TextBoxWrapper>
-                    <TextBox>
-                      <SubText>일자</SubText>
-                      {rateHistory.date.map((item, key) => (
-                        <SubText key={key}>{item}</SubText>
-                      ))}
-                    </TextBox>
-                    <TextBox>
-                      <Text>티어</Text>
-                      {rateHistory.tier.map((item, key) => (
-                        <Text key={key}>{item}</Text>
-                      ))}
-                    </TextBox>
-                    <TextBox>
-                      <Text>승률</Text>
-                      {rateHistory.rate.map((item, key) => (
-                        <Text key={key}>{item.toFixed(2)}%</Text>
-                      ))}
-                    </TextBox>
-                  </TextBoxWrapper>
-                </>
-              )}
+              {(() => {
+                if (isLoading) {
+                  return (
+                    <LoadingWrapper>
+                      <Loading></Loading>
+                    </LoadingWrapper>
+                  );
+                } else {
+                  if (rateHistory.date.length === 0) {
+                    return <EmptyResult>10 게임 이상 진행 시 집계</EmptyResult>;
+                  } else {
+                    return (
+                      <>
+                        <LineChart
+                          labels={rateHistory.date}
+                          data={rateHistory.rate}
+                        ></LineChart>
+
+                        <TextBoxWrapper>
+                          <TextBox>
+                            <SubText>일자</SubText>
+                            {rateHistory.date.map((item, key) => (
+                              <SubText key={key}>{item}</SubText>
+                            ))}
+                          </TextBox>
+                          <TextBox>
+                            <Text>티어</Text>
+                            {rateHistory.tier.map((item, key) => (
+                              <Text key={key}>{item}</Text>
+                            ))}
+                          </TextBox>
+                          <TextBox>
+                            <Text>승률</Text>
+                            {rateHistory.rate.map((item, key) => (
+                              <Text key={key}>{item.toFixed(2)}%</Text>
+                            ))}
+                          </TextBox>
+                        </TextBoxWrapper>
+                      </>
+                    );
+                  }
+                }
+              })()}
             </Box>
           </Content>
           <Content height="auto">
@@ -238,13 +201,13 @@ function Players() {
                     height="200px"
                     margin="20px auto"
                     labels={["승리", "패배"]}
-                    data={[winPoints, losePoints]}
+                    data={[user.winPoints, user.losePoints]}
                   ></DoughnutChart>
                   <Text textAlign="center">{`${
-                    winPoints + losePoints
-                  }전 ${winPoints}승 ${losePoints}패 (승률: ${winRate.toFixed(
-                    2
-                  )}%)`}</Text>
+                    user.winPoints + user.losePoints
+                  }전 ${user.winPoints}승 ${
+                    user.losePoints
+                  }패 (승률: ${user.winRate.toFixed(2)}%)`}</Text>
                 </>
               )}
             </Box>
@@ -262,10 +225,10 @@ function Players() {
                   height="200px"
                   margin="20px auto"
                   labels={[
-                    `적에게 가한 피해량 (${totalDeal})`,
-                    `적에게 받은 피해량 (${totalDamageReceived})`,
+                    `적에게 가한 피해량 (${user.totalDeal})`,
+                    `적에게 받은 피해량 (${user.totalDamageReceived})`,
                   ]}
-                  data={[totalDeal, totalDamageReceived]}
+                  data={[user.totalDeal, user.totalDamageReceived]}
                 ></DoughnutChart>
               )}
             </Box>
@@ -278,7 +241,7 @@ function Players() {
           ) : (
             gameList.map((data, key) => (
               <Content key={key} height="auto">
-                <HistoryList {...data} userList={userList.data}></HistoryList>
+                <HistoryList {...data} userList={props.userList}></HistoryList>
               </Content>
             ))
           )}
@@ -293,6 +256,28 @@ export default Players;
 Players.getLayout = function getLayout(page) {
   return <PlayerLayout>{page}</PlayerLayout>;
 };
+
+export async function getServerSideProps(context) {
+  try {
+    let props = {};
+    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
+      props.userList = res.data;
+    });
+    await SsrAxiosUtils.get("/api/v1/history", {
+      params: {},
+    }).then((res) => {
+      props.history = res.data;
+    });
+    await SsrAxiosUtils.get("/api/v1/emblem", {
+      params: {},
+    }).then((res) => {
+      props.emblem = res.data;
+    });
+    return { props: props };
+  } catch (error) {
+    return { props: { error: JSON.stringify(error) } };
+  }
+}
 
 const Wrapper = styled.div``;
 const Row = styled.div`

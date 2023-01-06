@@ -1,45 +1,16 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import ModalUtils from "@/utils/ModalUtils";
-import Axios from "@/api/index";
 
 function Profile(props) {
-  const router = useRouter();
-  const [user, setUser] = useState({});
-  const [tierData, setTierData] = useState({});
-
-  useEffect(() => {
-    if (props.id) {
-      Axios.get("/api/v1/user", {
-        params: { id: props.id },
-      }).then((res) => {
-        if (res.data) {
-          setUser(res.data);
-        } else {
-          ModalUtils.openAlert({
-            message: "존재하지 않는 사용자입니다.",
-            onAfterClose: () => router.push("/"),
-          });
-        }
-      });
-      Axios.get("/api/v1/tier", {
-        params: { id: props.id },
-      }).then((res) => {
-        setTierData(res.data);
-      });
-    }
-  }, [props.id]);
-
   return (
     <Wrapper>
       <Content>
         <Box>
           <ImageWrapper>
-            {user.imgUrl && (
+            {props.user.imgUrl && (
               <Image
-                src={user.imgUrl}
+                src={props.user.imgUrl}
                 width={100}
                 height={100}
                 alt="profileImg"
@@ -48,21 +19,21 @@ function Profile(props) {
           </ImageWrapper>
         </Box>
         <Box>
-          <NameText>{user.name}</NameText>
-          <IdText>{user.id}</IdText>
+          <NameText>{props.user.name}</NameText>
+          <IdText>{props.user.id}</IdText>
         </Box>
         <Box>
-          <TierWrapper>
-            {tierData.imgUrl && (
+          <EmblemWrapper>
+            {props.user.emblemImgUrl && (
               <Image
-                src={tierData.imgUrl}
+                src={props.user.emblemImgUrl}
                 width={100}
                 height={100}
                 alt="profileImg"
               ></Image>
             )}
-          </TierWrapper>
-          <TierText>{tierData.tier}</TierText>
+          </EmblemWrapper>
+          <TierText>{props.user.tier}</TierText>
         </Box>
       </Content>
     </Wrapper>
@@ -101,7 +72,7 @@ const IdText = styled.p`
   font: var(--body14);
   color: var(--sub);
 `;
-const TierWrapper = styled.div`
+const EmblemWrapper = styled.div`
   width: 100px;
   height: 100px;
 `;

@@ -5,7 +5,7 @@ import HallFame from "@/components/home/HallFame";
 import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
-import AxiosUtils from "@/utils/AxiosUtils";
+import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
 function Home(props) {
@@ -38,7 +38,7 @@ function Home(props) {
         <Banner></Banner>
         <MobileBanner></MobileBanner>
       </BannerWrapper>
-      <SearchInput></SearchInput>
+      <SearchInput userList={props.userList}></SearchInput>
       <HallFameWrapper>
         <HallFame userList={props.userList}></HallFame>
       </HallFameWrapper>
@@ -55,15 +55,15 @@ Home.getLayout = function getLayout(page) {
 export async function getServerSideProps(context) {
   try {
     let props = {};
-    await AxiosUtils.get("/api/v1/userList").then((res) => {
+    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
       props.userList = res.data;
     });
-    await AxiosUtils.get("/api/v1/history", {
+    await SsrAxiosUtils.get("/api/v1/history", {
       params: {},
     }).then((res) => {
       props.history = res.data;
     });
-    await AxiosUtils.get("/api/v1/emblem", {
+    await SsrAxiosUtils.get("/api/v1/emblem", {
       params: {},
     }).then((res) => {
       props.emblem = res.data;

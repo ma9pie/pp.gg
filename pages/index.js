@@ -54,7 +54,7 @@ Home.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context) {
   try {
-    let props = {};
+    const props = {};
     await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
       props.userList = res.data;
     });

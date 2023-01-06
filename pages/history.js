@@ -7,13 +7,14 @@ import SmallButton from "@/components/common/Buttons/SmallButton";
 import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/SessionLayout";
 import ModalUtils from "@/utils/ModalUtils";
+import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import Axios from "@/api/index";
 import useDebounce from "@/hooks/useDebounce";
 import useQuery from "@/hooks/useQuery";
 import MinusSvg from "@/svg/MinusSvg";
 import PlusSvg from "@/svg/PlusSvg";
 
-function History() {
+function History(props) {
   const [isLoadingSave, setIsLoadingSave] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
   const [inputs, setInputs] = useState({
@@ -24,23 +25,11 @@ function History() {
   });
 
   const userListQueryKey = "/api/v1/allUser";
-  const userList = useQuery({
-    queryKey: userListQueryKey,
-    queryFn: async () => {
-      let tmpUserList = await Axios.get(userListQueryKey, {
-        params: {},
-      }).then((res) => res.data);
 
-      await Promise.all(
-        tmpUserList.map((user) =>
-          Axios.get("/api/v1/tier", {
-            params: { id: user.id },
-          }).then((res) => {
-            user.tier = res.data.tier;
-          })
-        )
-      );
-      return tmpUserList;
+  useQuery({
+    queryKey: userListQueryKey,
+    queryFn: () => {
+      return props.userList;
     },
   });
 
@@ -141,10 +130,10 @@ function History() {
   return (
     <Wrapper>
       <Container>
-        {userList.data ? (
+        {props.userList ? (
           <Row>
             <Column width="50%">
-              {userList.data.map((user) => (
+              {props.userList.map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player1: user.id })}
@@ -162,7 +151,7 @@ function History() {
               ))}
             </Column>
             <Column width="50%">
-              {userList.data.map((user) => (
+              {props.userList.map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player2: user.id })}
@@ -285,6 +274,28 @@ export default History;
 History.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
+
+export async function getServerSideProps(context) {
+  try {
+    const props = {};
+    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
+      props.userList = res.data;
+    });
+    await SsrAxiosUtils.get("/api/v1/history", {
+      params: {},
+    }).then((res) => {
+      props.history = res.data;
+    });
+    await SsrAxiosUtils.get("/api/v1/emblem", {
+      params: {},
+    }).then((res) => {
+      props.emblem = res.data;
+    });
+    return { props: props };
+  } catch (error) {
+    return { props: { error: JSON.stringify(error) } };
+  }
+}
 
 const Wrapper = styled.div`
   position: relative;

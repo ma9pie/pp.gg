@@ -1,39 +1,31 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/CommonLayout";
-import Axios from "@/api/index";
+import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
-const emblemSize = 200;
-function Tiers() {
-  const [emblemList, setEmblemList] = useState([]);
-
+function Tiers(props) {
+  const emblemSize = 200;
   const emblemQueryKey = "/api/v1/emblem";
-  const query = useQuery({
-    queryKey: emblemQueryKey,
-    queryFn: () =>
-      Axios.get(emblemQueryKey, {
-        params: {},
-      }).then((res) => res.data),
-  });
 
-  useEffect(() => {
-    if (query.data) {
-      setEmblemList(query.data);
-    }
-  }, [query.data]);
+  useQuery({
+    queryKey: emblemQueryKey,
+    queryFn: () => {
+      return props.emblem;
+    },
+  });
 
   return (
     <Wrapper>
-      {emblemList.length === 0 ? (
+      {props.emblem.length === 0 ? (
         <LoadingWrapper>
           <Loading></Loading>
         </LoadingWrapper>
       ) : (
         <Grid>
-          {emblemList.map((item, key) => (
+          {props.emblem.map((item, key) => (
             <ImageBox key={key}>
               <Image
                 src={item.imgUrl}
@@ -56,6 +48,18 @@ export default Tiers;
 Tiers.getLayout = function getLayout(page) {
   return <CommonLayout>{page}</CommonLayout>;
 };
+
+export async function getServerSideProps(context) {
+  try {
+    const props = {};
+    await SsrAxiosUtils.get("/api/v1/emblem").then((res) => {
+      props.emblem = res.data;
+    });
+    return { props: props };
+  } catch (error) {
+    return { props: { error: JSON.stringify(error) } };
+  }
+}
 
 const Wrapper = styled.div``;
 const Grid = styled.div`

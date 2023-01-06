@@ -4,65 +4,30 @@ import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
 import Statistics from "@/components/ranking/Statistics";
 import CommonLayout from "@/layouts/CommonLayout";
-import AxiosUtils from "@/utils/AxiosUtils";
+import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 
 function Ranking(props) {
   const [statisticsList, setStatisticsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (props.userList && props.history) {
-      let tmpList = [];
-
-      props.userList.map((user) => {
-        let totalDeal = 0; // 적에게 가한 피해량
-        let totalDamageReceived = 0; // 적에게 받은 피해량
-        let winPoints = 0; // 승리 횟수
-        let losePoints = 0; // 패배 횟수
-        let winRate = 0;
-        props.history.map((item) => {
-          if (item.winnerId === user.id) {
-            totalDeal += item.winnerScore;
-            totalDamageReceived += item.loserScore;
-            winPoints++;
-          } else if (item.loserId === user.id) {
-            totalDeal += item.loserScore;
-            totalDamageReceived += item.winnerScore;
-            losePoints++;
-          }
-        });
-        if (winPoints === 0) {
-          winRate = 0;
+    const tmpList = props.userList.sort((a, b) => {
+      if (a.winRate === b.winRate) {
+        if (a.totalDeal === b.totalDeal) {
+          // 2. 생성일 오름차순
+          return moment(a.createdAt).unix() - moment(b.createdAt).unix();
         } else {
-          winRate = (winPoints / (winPoints + losePoints)) * 100;
+          // 2. 딜량 내림차순
+          return b.totalDeal - a.totalDeal;
         }
-        tmpList.push({
-          ...user,
-          totalDeal: totalDeal,
-          totalDamageReceived: totalDamageReceived,
-          winPoints: winPoints,
-          losePoints: losePoints,
-          winRate: winRate,
-        });
-      });
-      tmpList.sort((a, b) => {
-        if (a.winRate === b.winRate) {
-          if (a.totalDeal === b.totalDeal) {
-            // 2. 생성일 오름차순
-            return moment(a.createdAt).unix() - moment(b.createdAt).unix();
-          } else {
-            // 2. 딜량 내림차순
-            return b.totalDeal - a.totalDeal;
-          }
-        } else {
-          // 1. 승률 내림차순
-          return b.winRate - a.winRate;
-        }
-      });
-      setStatisticsList(tmpList);
-      setIsLoading(false);
-    }
-  }, [props.userList, props.history]);
+      } else {
+        // 1. 승률 내림차순
+        return b.winRate - a.winRate;
+      }
+    });
+    setStatisticsList(tmpList);
+    setIsLoading(false);
+  }, [props]);
 
   if (isLoading) {
     return (
@@ -87,25 +52,16 @@ Ranking.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context) {
   try {
-    let userList = await AxiosUtils.get("/api/v1/allUser", {
+    let props = {};
+    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
+      props.userList = res.data;
+    });
+    await SsrAxiosUtils.get("/api/v1/history", {
       params: {},
-    }).then((res) => res.data);
-
-    await Promise.all(
-      userList.map((user) =>
-        AxiosUtils.get("/api/v1/tier", {
-          params: { id: user.id },
-        }).then((res) => {
-          user.tier = res.data.tier;
-        })
-      )
-    );
-
-    const history = await AxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => res.data);
-
-    return { props: { userList: userList, history: history } };
+    }).then((res) => {
+      props.history = res.data;
+    });
+    return { props: props };
   } catch (error) {
     return { props: { error: JSON.stringify(error) } };
   }

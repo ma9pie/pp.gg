@@ -6,20 +6,7 @@ import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import TierUtils from "@/utils/TierUtils";
 import Axios from "@/api/index";
 
-function delay(n) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, n);
-  });
-}
-
 function Test(props) {
-  console.log(props);
-
-  useEffect(() => {
-    if (props.error) {
-      console.log(JSON.parse(props.error));
-    }
-  }, [props]);
   return (
     <Wrapper>
       {/* {url && <Image src={userList[0].imgUrl} alt="profile" width={30} height={30}></Image>} */}
@@ -29,26 +16,26 @@ function Test(props) {
 
 export default Test;
 
-export async function getServerSideProps(context) {
-  try {
-    let props = {};
-    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    await SsrAxiosUtils.get("api/v1/history").then((res) => {
-      props.history = res.data;
-      return res.data;
-    });
-    await SsrAxiosUtils.get("api/v1/emblem").then((res) => {
-      props.emblem = res.data;
-      return res.data;
-    });
+// export async function getServerSideProps(context) {
+//   try {
+//     let props = {};
+//     await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
+//       props.userList = res.data;
+//     });
+//     await SsrAxiosUtils.get("api/v1/history").then((res) => {
+//       props.history = res.data;
+//       return res.data;
+//     });
+//     await SsrAxiosUtils.get("api/v1/emblem").then((res) => {
+//       props.emblem = res.data;
+//       return res.data;
+//     });
 
-    return { props: props };
-  } catch (error) {
-    console.log(error);
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
+//     return { props: props };
+//   } catch (error) {
+//     console.log(error);
+//     return { props: { error: JSON.stringify(error) } };
+//   }
+// }
 
 const Wrapper = styled.div``;

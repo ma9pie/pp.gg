@@ -5,10 +5,10 @@ import HallFame from "@/components/home/HallFame";
 import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
-import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
+import AxiosUtils from "@/utils/AxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
-function Home(props) {
+function Home() {
   const userListQueryKey = "/api/v1/userList";
   const historyQueryKey = "/api/v1/history";
   const emblemQueryKey = "/api/v1/emblem";
@@ -16,24 +16,20 @@ function Home(props) {
   const userList = useQuery({
     placeholderData: [],
     queryKey: userListQueryKey,
-    queryFn: () => {
-      return props.userList;
-    },
+    queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
   }).data;
-  useQuery({
+
+  const history = useQuery({
     placeholderData: [],
     queryKey: historyQueryKey,
-    queryFn: () => {
-      return props.history;
-    },
-  });
-  useQuery({
+    queryFn: () => AxiosUtils.get(historyQueryKey).then((res) => res.data),
+  }).data;
+
+  const emblem = useQuery({
     placeholderData: [],
     queryKey: emblemQueryKey,
-    queryFn: () => {
-      return props.emblem;
-    },
-  });
+    queryFn: () => AxiosUtils.get(emblemQueryKey).then((res) => res.data),
+  }).data;
 
   return (
     <Wrapper>
@@ -54,28 +50,6 @@ export default Home;
 Home.getLayout = function getLayout(page) {
   return <HomeLayout>{page}</HomeLayout>;
 };
-
-export async function getServerSideProps(context) {
-  try {
-    const props = {};
-    await SsrAxiosUtils.get("/api/v1/userList").then((res) => {
-      props.userList = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/history", {
-      params: {},
-    }).then((res) => {
-      props.history = res.data;
-    });
-    await SsrAxiosUtils.get("/api/v1/emblem", {
-      params: {},
-    }).then((res) => {
-      props.emblem = res.data;
-    });
-    return { props: props };
-  } catch (error) {
-    return { props: { error: JSON.stringify(error) } };
-  }
-}
 
 const Wrapper = styled.div`
   display: flex;

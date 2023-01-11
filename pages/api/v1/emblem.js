@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const emblems = await Emblem.find(query).lean();
+        const emblems = await Emblem.find(query).sort({ rate: 1 }).lean();
         res.status(200).json(emblems);
       } catch (error) {
         res.status(400).json({ success: false });

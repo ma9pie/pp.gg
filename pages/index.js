@@ -39,7 +39,7 @@ function Home() {
       </BannerWrapper>
       <SearchInput userList={userList}></SearchInput>
       <HallFameWrapper>
-        <HallFame userList={userList}></HallFame>
+        <HallFame userList={userList} historyLength={history.length}></HallFame>
       </HallFameWrapper>
     </Wrapper>
   );

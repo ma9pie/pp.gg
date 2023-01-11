@@ -20,7 +20,12 @@ function HallFame(props) {
 
   return (
     <Wrapper>
-      <Title>🏆 명예의 전당</Title>
+      <TitleBox>
+        <Title>🏆 명예의 전당</Title>
+        {props.historyLength > 0 && (
+          <Description>{`(총 게임 수 : ${props.historyLength}게임)`}</Description>
+        )}
+      </TitleBox>
 
       <Table>
         <Row bg="var(--disabled)">
@@ -72,12 +77,22 @@ const Wrapper = styled.div`
   padding: 0px 32px;
   background-color: var(--homeBg);
 `;
+const TitleBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  margin-bottom: 16px;
+`;
 const Title = styled.div`
   font: var(--headline18);
   color: white;
   text-align: center;
-  margin-bottom: 16px;
   background-color: inherit;
+`;
+const Description = styled.p`
+  font: var(--caption12);
+  color: var(--sub);
 `;
 const Table = styled.div`
   display: flex;

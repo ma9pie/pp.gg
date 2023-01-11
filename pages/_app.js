@@ -13,6 +13,19 @@ function App({ Component, pageProps }) {
 
   const [queryClient] = useState(() => new QueryClient());
 
+  const [isAppLoading, setIsAppLoading] = useState(true);
+
+  const test = () => {
+    console.log(11111);
+  };
+
+  useEffect(() => {
+    window.addEventListener("DOMContentLoaded", test);
+    return () => {
+      window.removeEventListener("DOMContentLoaded", test);
+    };
+  });
+
   // 구글 애널리틱스 조회수 측정
   useEffect(() => {
     const handleRouteChange = (url) => {

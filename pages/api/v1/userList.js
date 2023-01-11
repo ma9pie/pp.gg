@@ -3,6 +3,7 @@ import Emblem from "@/db/schemas/Emblem";
 import History from "@/db/schemas/History";
 import User from "@/db/schemas/User";
 import EmblemUtils from "@/utils/EmblemUtils";
+import MmrUtils from "@/utils/MmrUtils";
 import TierUtils from "@/utils/TierUtils";
 
 export default async function handler(req, res) {
@@ -28,6 +29,8 @@ export default async function handler(req, res) {
 
           userList.map((item) => {
             scoreboard.set(item.id, {
+              mmr: 2000,
+              winRate: 0,
               winPoints: 0,
               losePoints: 0,
               totalDeal: 0,
@@ -38,12 +41,29 @@ export default async function handler(req, res) {
           history.map((item) => {
             const winner = scoreboard.get(item.winnerId);
             const loser = scoreboard.get(item.loserId);
+
             ++winner.winPoints;
             winner.totalDeal += item.winnerScore;
             winner.totalDamageReceived += item.loserScore;
+            winner.winRate =
+              winner.winPoints === 0
+                ? 0
+                : winner.winPoints / (winner.winPoints + winner.losePoints);
+
             ++loser.losePoints;
             loser.totalDeal += item.loserScore;
             loser.totalDamageReceived += item.winnerScore;
+            loser.winRate =
+              loser.winPoints === 0
+                ? 0
+                : loser.winPoints / (loser.winPoints + loser.losePoints);
+
+            if (MmrUtils.checkBatchTest(winner, loser)) {
+              winner.mmr += MmrUtils.getMmr(winner.winRate, "WIN");
+
+              loser.mmr += MmrUtils.getMmr(loser.winRate, "LOSE");
+            }
+
             scoreboard.set(item.winnerId, winner);
             scoreboard.set(item.loserId, loser);
           });
@@ -56,7 +76,8 @@ export default async function handler(req, res) {
                   ? 0
                   : (item.winPoints / (item.winPoints + item.losePoints)) * 100;
 
-              user.winRate = winRate;
+              user.mmr = item.mmr;
+              user.winRate = item.winRate * 100;
               user.winPoints = item.winPoints;
               user.losePoints = item.losePoints;
               user.totalDeal = item.totalDeal;

@@ -17,7 +17,7 @@ MmrUtils.expectedWinRate = (P_op, P_me) => {
  * @param {String} type : 승패 여부
  * @returns {Number} point :  포인트
  */
-MmrUtils.getMmr = (rate, type) => {
+MmrUtils.getMmrElo = (rate, type) => {
   const K = 24;
   switch (type) {
     case "WIN":
@@ -31,16 +31,15 @@ MmrUtils.getMmr = (rate, type) => {
   }
 };
 
-MmrUtils.getMmr2 = (rate) => {
-  // 실버 10점
-  // 둘 차이 10점
-  // 디폴트 20점
-  // 실버가 이겼을 때
-  // 실버 + (20-10)
-  // 언랭 - (20-10)
-  // 언랭이 이겼을 때
-  // 실버 - (20+10)
-  // 언랭 + (20+10)
+/**
+ * mmr 포인트 계산
+ * @param {Number} winnerRate : 승자 승률
+ * @param {Number} loserRate : 패자 승률
+ * @returns {Number} point :  포인트
+ */
+MmrUtils.getMmr = (winnerRate, loserRate) => {
+  const K = 12;
+  return Number((K * (1 + loserRate - winnerRate)).toFixed(0));
 };
 
 /**

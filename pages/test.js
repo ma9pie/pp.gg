@@ -70,16 +70,25 @@ function Test(props) {
           : loser.winPoints / (loser.winPoints + loser.losePoints);
 
       if (MmrUtils.checkBatchTest(winner, loser)) {
-        winner.mmr += MmrUtils.getMmr(winner.winRate, "WIN");
+        const points = MmrUtils.getMmr(winner.winRate, loser.winRate);
 
-        loser.mmr += MmrUtils.getMmr(loser.winRate, "LOSE");
-      }
+        winner.mmr += points;
+        loser.mmr -= points;
 
-      if (item.winnerId === "ymkin") {
-        console.log("승", winner.mmr, loser.mmr, item.loserId);
-      }
-      if (item.loserId === "ymkin") {
-        console.log("패", winner.mmr, loser.mmr, item.winnerId);
+        if (item.winnerId === "kjy1787") {
+          console.log("승", winner.mmr, loser.mmr, item.loserId, winner, loser);
+        }
+
+        if (item.loserId === "kjy1787") {
+          console.log(
+            "패",
+            winner.mmr,
+            loser.mmr,
+            item.winnerId,
+            winner,
+            loser
+          );
+        }
       }
 
       scoreboard.set(item.winnerId, winner);
@@ -103,6 +112,10 @@ function Test(props) {
         user.tier = TierUtils.getTier(winRate);
         user.emblemImgUrl = EmblemUtils.getImgUrl(winRate);
       }
+    });
+
+    userList.map((item) => {
+      console.log(item.id, item.mmr);
     });
   }, [userList, history]);
 

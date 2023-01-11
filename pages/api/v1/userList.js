@@ -58,11 +58,10 @@ export default async function handler(req, res) {
                 ? 0
                 : loser.winPoints / (loser.winPoints + loser.losePoints);
 
-            if (MmrUtils.checkBatchTest(winner, loser)) {
-              winner.mmr += MmrUtils.getMmr(winner.winRate, "WIN");
+            const points = MmrUtils.getMmr(winner.winRate, loser.winRate);
 
-              loser.mmr += MmrUtils.getMmr(loser.winRate, "LOSE");
-            }
+            winner.mmr += points;
+            loser.mmr -= points;
 
             scoreboard.set(item.winnerId, winner);
             scoreboard.set(item.loserId, loser);

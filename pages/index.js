@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import React from "react";
 import Banner from "@/components/home/Banner";
 import HallFame from "@/components/home/HallFame";
+import MmrRanking from "@/components/home/MmrRanking";
 import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
@@ -33,14 +34,21 @@ function Home() {
 
   return (
     <Wrapper>
+      {/* 배너 */}
       <BannerWrapper>
         <Banner></Banner>
         <MobileBanner></MobileBanner>
       </BannerWrapper>
+      {/* 검색창 */}
       <SearchInput userList={userList}></SearchInput>
-      <HallFameWrapper>
+      {/* 명예의 전당 */}
+      <ContentWrapper>
         <HallFame userList={userList} historyLength={history.length}></HallFame>
-      </HallFameWrapper>
+      </ContentWrapper>
+      {/* MMR 랭킹 */}
+      <ContentWrapper>
+        <MmrRanking userList={userList}></MmrRanking>
+      </ContentWrapper>
     </Wrapper>
   );
 }
@@ -63,6 +71,6 @@ const BannerWrapper = styled.div`
   max-width: 1080px;
   background-color: var(--homeBg);
 `;
-const HallFameWrapper = styled.div`
+const ContentWrapper = styled.div`
   margin: 30px 0px;
 `;

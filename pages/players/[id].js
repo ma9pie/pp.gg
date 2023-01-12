@@ -9,7 +9,10 @@ import HistoryList from "@/components/players/HistoryList";
 import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
+import FilterUtils from "@/utils/FilterUtils";
+import MmrUtils from "@/utils/MmrUtils";
 import ModalUtils from "@/utils/ModalUtils";
+import StatisticsUtils from "@/utils/StatisticsUtils";
 import TierUtils from "@/utils/TierUtils";
 import useQuery from "@/hooks/useQuery";
 
@@ -55,11 +58,20 @@ function Players() {
     } else if (user) {
       setUser(user);
 
+      const scoreboard = new Map();
+
+      userList.map((item) => {
+        scoreboard.set(item.id, {
+          mmr: 2000,
+          winRate: 0,
+          winPoints: 0,
+          losePoints: 0,
+        });
+      });
+
       const tmpHistory = [].concat(history);
       let gameList = []; // 게임 리스트
       let opponents = ""; // 상대편
-      let winPoints = 0; // 승리 횟수
-      let losePoints = 0; // 패배 횟수
       let winRate = 0; // 승률
       let date = ""; // 날짜
       let tier = ""; // 티어
@@ -67,30 +79,51 @@ function Players() {
       const tmpDate = [];
       const tmpTier = [];
 
+      let points = 0;
+      let mmr = 0;
+
       tmpHistory.reverse().map((item) => {
+        const player = scoreboard.get(id);
+        const winner = scoreboard.get(item.winnerId);
+        const loser = scoreboard.get(item.loserId);
+
+        winner.winRate = StatisticsUtils.getWinRate(
+          winner.winPoints,
+          winner.losePoints
+        );
+        loser.winRate = StatisticsUtils.getWinRate(
+          loser.winPoints,
+          loser.losePoints
+        );
+
+        points = MmrUtils.getMmrElo(winner, loser);
+
+        winner.mmr += points;
+        loser.mmr -= points;
+        ++winner.winPoints;
+        ++loser.losePoints;
+
         if (item.winnerId !== id && item.loserId !== id) {
           return;
         }
+
         let kill = 0;
         let death = 0;
 
         if (item.winnerId === id) {
-          winPoints++;
           kill = item.winnerScore;
           death = item.loserScore;
           opponents = item.loserId;
         } else if (item.loserId === id) {
-          losePoints++;
           kill = item.loserScore;
           death = item.winnerScore;
           opponents = item.winnerId;
         }
 
-        if (winPoints === 0) {
-          winRate = 0;
-        } else {
-          winRate = (winPoints / (winPoints + losePoints)) * 100;
-        }
+        winRate = StatisticsUtils.getWinRate(
+          player.winPoints,
+          player.losePoints
+        );
 
         date = moment(item.date).format("YYYY-MM-DD");
         tier = TierUtils.getTier(winRate);
@@ -99,7 +132,7 @@ function Players() {
           tmpRate[tmpRate.length - 1] = winRate;
           tmpTier[tmpTier.length - 1] = tier;
         } else {
-          if (winPoints + losePoints > 10) {
+          if (player.winPoints + player.losePoints > 10) {
             tmpRate.push(winRate);
             tmpDate.push(date);
             tmpTier.push(tier);
@@ -111,7 +144,16 @@ function Players() {
           death: death,
           opponents: opponents,
           date: item.date,
+          points: points,
         });
+
+        if (kill > death) {
+          mmr += points;
+        } else if (kill < death) {
+          mmr -= points;
+        } else {
+          mmr += 0;
+        }
       });
 
       setRateHistory({
@@ -148,7 +190,7 @@ function Players() {
                       <>
                         <LineChart
                           labels={rateHistory.date}
-                          data={rateHistory.rate}
+                          data={rateHistory.rate.map((item) => item * 100)}
                         ></LineChart>
 
                         <TextBoxWrapper>
@@ -167,7 +209,9 @@ function Players() {
                           <TextBox>
                             <Text>승률</Text>
                             {rateHistory.rate.map((item, key) => (
-                              <Text key={key}>{item.toFixed(2)}%</Text>
+                              <Text key={key}>
+                                {FilterUtils.formatPercent(item)}
+                              </Text>
                             ))}
                           </TextBox>
                         </TextBoxWrapper>
@@ -198,7 +242,9 @@ function Players() {
                     user.winPoints + user.losePoints
                   }전 ${user.winPoints}승 ${
                     user.losePoints
-                  }패 (승률: ${user.winRate.toFixed(2)}%)`}</Text>
+                  }패 (승률: ${FilterUtils.formatPercent(
+                    user.winRate
+                  )})`}</Text>
                 </>
               )}
             </Box>

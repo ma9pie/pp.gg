@@ -19,8 +19,8 @@ function MobileBanner() {
       >
         <BannerWrapper backgroundColor="var(--blue600)">
           <BannerContent>
-            <Title>📢업데이트 v1.0.1</Title>
-            <Description>전적기록 페이지 레이아웃 이슈 수정</Description>
+            <Title>📢업데이트 v1.0.2</Title>
+            <Description>MMR 랭킹 시스템 도입</Description>
           </BannerContent>
         </BannerWrapper>
 

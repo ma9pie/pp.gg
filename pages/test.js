@@ -6,6 +6,7 @@ import AxiosUtils from "@/utils/AxiosUtils";
 import EmblemUtils from "@/utils/EmblemUtils";
 import MmrUtils from "@/utils/MmrUtils";
 import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
+import StatisticsUtils from "@/utils/StatisticsUtils";
 import TierUtils from "@/utils/TierUtils";
 import Axios from "@/api/index";
 import useQuery from "@/hooks/useQuery";
@@ -36,88 +37,17 @@ function Test(props) {
   useEffect(() => {
     if (history.length === 0 || userList.length === 0) return;
 
-    const scoreboard = new Map();
+    const tmpHistory = history.sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
 
-    userList.map((item) => {
-      scoreboard.set(item.id, {
-        mmr: 2000,
-        winRate: 0,
-        winPoints: 0,
-        losePoints: 0,
-        totalDeal: 0,
-        totalDamageReceived: 0,
-      });
-    });
-
-    history.map((item) => {
-      const winner = scoreboard.get(item.winnerId);
-      const loser = scoreboard.get(item.loserId);
-
-      ++winner.winPoints;
-      winner.totalDeal += item.winnerScore;
-      winner.totalDamageReceived += item.loserScore;
-      winner.winRate =
-        winner.winPoints === 0
-          ? 0
-          : winner.winPoints / (winner.winPoints + winner.losePoints);
-
-      ++loser.losePoints;
-      loser.totalDeal += item.loserScore;
-      loser.totalDamageReceived += item.winnerScore;
-      loser.winRate =
-        loser.winPoints === 0
-          ? 0
-          : loser.winPoints / (loser.winPoints + loser.losePoints);
-
-      if (MmrUtils.checkBatchTest(winner, loser)) {
-        const points = MmrUtils.getMmr(winner.winRate, loser.winRate);
-
-        winner.mmr += points;
-        loser.mmr -= points;
-
-        if (item.winnerId === "kjy1787") {
-          console.log("승", winner.mmr, loser.mmr, item.loserId, winner, loser);
-        }
-
-        if (item.loserId === "kjy1787") {
-          console.log(
-            "패",
-            winner.mmr,
-            loser.mmr,
-            item.winnerId,
-            winner,
-            loser
-          );
-        }
-      }
-
-      scoreboard.set(item.winnerId, winner);
-      scoreboard.set(item.loserId, loser);
-    });
-
-    scoreboard.forEach((item, key) => {
-      const user = userList.find((user) => user.id === key);
-      if (user) {
-        const winRate =
-          item.winPoints === 0
-            ? 0
-            : (item.winPoints / (item.winPoints + item.losePoints)) * 100;
-
-        user.mmr = item.mmr;
-        user.winRate = item.winRate * 100;
-        user.winPoints = item.winPoints;
-        user.losePoints = item.losePoints;
-        user.totalDeal = item.totalDeal;
-        user.totalDamageReceived = item.totalDamageReceived;
-        user.tier = TierUtils.getTier(winRate);
-        user.emblemImgUrl = EmblemUtils.getImgUrl(winRate);
-      }
-    });
-
-    userList.map((item) => {
-      console.log(item.id, item.mmr);
-    });
+    StatisticsUtils.calculate(userList, tmpHistory);
   }, [userList, history]);
+
+  useEffect(() => {
+    // console.log(MmrUtils.expectedWinRate(2400, 2000));
+    // console.log(MmrUtils.expectedWinRate(2000, 2400));
+  }, []);
 
   return (
     <Wrapper>

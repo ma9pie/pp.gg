@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import React, { useEffect, useState } from "react";
 import ProfileImage from "@/components/common/ProfileImage";
+import FilterUtils from "@/utils/FilterUtils";
 
 function Statistics(props) {
   const [maxDamage, setMaxDamage] = useState(0);
@@ -34,7 +35,7 @@ function Statistics(props) {
               </Column>
               <Column>
                 <Text>승률</Text>
-                <SubText>{user.winRate.toFixed(2)}%</SubText>
+                <SubText>{FilterUtils.formatPercent(item.winRate)}</SubText>
               </Column>
               <Column>
                 <Text>{user.name}</Text>

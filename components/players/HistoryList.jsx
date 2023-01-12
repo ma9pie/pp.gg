@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import TimeUtils from "@/utils/TimeUtils";
 
 function HistoryList(props) {
@@ -11,6 +11,15 @@ function HistoryList(props) {
       return "패배";
     } else {
       return "무승부";
+    }
+  };
+  const getPointsText = (data) => {
+    if (data.kill > data.death) {
+      return `+${data.points}p`;
+    } else if (data.kill < data.death) {
+      return `-${data.points}p`;
+    } else {
+      return `${data.points}p`;
     }
   };
   const getColor = (data) => {
@@ -50,6 +59,7 @@ function HistoryList(props) {
       <Container>
         <Box>
           <Text>솔랭</Text>
+          {props.points > 0 && <PointsText>{getPointsText(props)}</PointsText>}
           <SubText>{getText(props)}</SubText>
           <SubText>{TimeUtils.getBeforeHours(props.date)}</SubText>
         </Box>
@@ -133,7 +143,7 @@ const Box = styled.div`
   padding: auto 0px;
   gap: 4px;
   &:nth-of-type(1) {
-    flex: 5;
+    flex: 7;
   }
   &:nth-of-type(2) {
     flex: 10;
@@ -152,6 +162,15 @@ const Text = styled.p`
 const SubText = styled.p`
   font: var(--caption12);
   color: var(--sub);
+`;
+const PointsText = styled.p`
+  font: var(--caption12);
+  color: var(--yellow500);
+  width: 40px;
+  height: 17px;
+  border: 1px solid var(--yellow500);
+  border-radius: 5px;
+  text-align: center;
 `;
 const ScoreText = styled.div`
   font: var(--headline16);

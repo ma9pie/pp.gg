@@ -13,33 +13,30 @@ MmrUtils.expectedWinRate = (P_op, P_me) => {
 
 /**
  * mmr 포인트 계산
- * @param {Number} rate : 승률
- * @param {String} type : 승패 여부
+ * @param {Object} winner : 승자 객체
+ * @param {Object} loser : 패자 객체
  * @returns {Number} point :  포인트
  */
-MmrUtils.getMmrElo = (rate, type) => {
-  const K = 24;
-  switch (type) {
-    case "WIN":
-      return Number((K * (1 - rate)).toFixed(0));
-    case "DRAW":
-      return Number((K * (0.5 - rate)).toFixed(0));
-    case "LOSE":
-      return Number((K * (0 - rate)).toFixed(0));
-    default:
-      return 0;
-  }
+MmrUtils.getMmrElo = (winner, loser) => {
+  if (!MmrUtils.checkBatchTest(winner, loser)) return 0;
+  const winnerExpectedWinRate = MmrUtils.expectedWinRate(winner.mmr, loser.mmr);
+  const loserExpectedWinRate = MmrUtils.expectedWinRate(loser.mmr, winner.mmr);
+  const K = 12;
+  return Number(
+    (K * (1 + winnerExpectedWinRate - loserExpectedWinRate)).toFixed(0)
+  );
 };
 
 /**
  * mmr 포인트 계산
- * @param {Number} winnerRate : 승자 승률
- * @param {Number} loserRate : 패자 승률
+ * @param {Object} winner : 승자 객체
+ * @param {Object} loser : 패자 객체
  * @returns {Number} point :  포인트
  */
-MmrUtils.getMmr = (winnerRate, loserRate) => {
+MmrUtils.getMmr = (winner, loser) => {
+  if (!MmrUtils.checkBatchTest(winner, loser)) return 0;
   const K = 12;
-  return Number((K * (1 + loserRate - winnerRate)).toFixed(0));
+  return Number((K * (1 + winner.winRate - loser.winRate)).toFixed(0));
 };
 
 /**
@@ -50,7 +47,9 @@ MmrUtils.getMmr = (winnerRate, loserRate) => {
 MmrUtils.checkBatchTest = (...args) => {
   let result = true;
   args.map((user) => {
-    result = result && Number(user.winPoints) + Number(user.losePoints) >= 10;
+    if (Number(user.winPoints) + Number(user.losePoints) < 10) {
+      result = false;
+    }
   });
   return result;
 };

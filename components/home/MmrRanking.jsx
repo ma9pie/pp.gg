@@ -16,13 +16,6 @@ function MmrRanking(props) {
     );
   }, [props]);
 
-  const getMedal = (num) => {
-    if (num === 1) return "🥇";
-    if (num === 2) return "🥈";
-    if (num === 3) return "🥉";
-    return num;
-  };
-
   return (
     <Wrapper>
       <TitleBox>

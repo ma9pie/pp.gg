@@ -1,6 +1,7 @@
 import dbConnect from "@/db/dbConnect";
 import Emblem from "@/db/schemas/Emblem";
 import History from "@/db/schemas/History";
+import StatisticsUtils from "@/utils/StatisticsUtils";
 import TierUtils from "@/utils/TierUtils";
 
 export default async function handler(req, res) {
@@ -16,10 +17,12 @@ export default async function handler(req, res) {
 
         let winPoints = winHistory.length;
         let losePoints = loseHistory.length;
-        let winRate =
-          winPoints === 0 ? 0 : (winPoints / (winPoints + losePoints)) * 100;
+        let winRate = StatisticsUtils.getWinRate(winPoints, losePoints);
 
-        const emblem = await Emblem.find({}).where("rate").lte(winRate).lean();
+        const emblem = await Emblem.find({})
+          .where("rate")
+          .lte(winRate * 100)
+          .lean();
 
         res.status(200).json({
           tier: TierUtils.getTier(winRate),

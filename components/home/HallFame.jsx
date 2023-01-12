@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
+import FilterUtils from "@/utils/FilterUtils";
 
 function HallFame(props) {
   const [userList, setUserList] = useState([]);
@@ -58,7 +59,7 @@ function HallFame(props) {
                     </FlexBox>
                   </Column>
                   <Column>{item.tier}</Column>
-                  <Column>{item.winRate.toFixed(2)}%</Column>
+                  <Column>{FilterUtils.formatPercent(item.winRate)}</Column>
                 </Row>
               </a>
             </Link>

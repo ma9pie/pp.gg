@@ -36,7 +36,7 @@ function Home() {
     <Wrapper>
       {/* 배너 */}
       <BannerWrapper>
-        <Banner></Banner>
+        {/* <Banner></Banner> */}
         <MobileBanner></MobileBanner>
       </BannerWrapper>
       {/* 검색창 */}

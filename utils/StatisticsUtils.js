@@ -27,6 +27,9 @@ StatisticsUtils.calculate = (userList, history) => {
     const winner = scoreboard.get(item.winnerId);
     const loser = scoreboard.get(item.loserId);
 
+    ++winner.winPoints;
+    ++loser.losePoints;
+
     winner.totalDeal += item.winnerScore;
     winner.totalDamageReceived += item.loserScore;
     winner.winRate = StatisticsUtils.getWinRate(
@@ -45,8 +48,6 @@ StatisticsUtils.calculate = (userList, history) => {
 
     winner.mmr += points;
     loser.mmr -= points;
-    ++winner.winPoints;
-    ++loser.losePoints;
   });
 
   scoreboard.forEach((item, key) => {

@@ -67,9 +67,9 @@ const Wrapper = styled.div`
   border-radius: 10px;
   margin: 32px 0px;
   overflow: hidden;
-  @media (min-width: 1080px) {
+  /* @media (min-width: 1080px) {
     display: none;
-  }
+  } */
 `;
 const BannerWrapper = styled.div`
   position: relative;

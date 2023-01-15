@@ -1,0 +1,23 @@
+[
+  {
+    "title": "📢업데이트 v1.0.3",
+    "description": "API docs OPEN",
+    "link": "/apiDocs",
+    "backgroundColor": "#2272eb",
+    "imgUrl": ""
+  },
+  {
+    "title": "🎉2023 PPGG🎉",
+    "description": "HAPPY NEW YEAR!🐰",
+    "link": "/",
+    "backgroundColor": "#64a8ff",
+    "imgUrl": ""
+  },
+  {
+    "title": "🔥MMR 랭킹 시스템 도입",
+    "description": "최상위 플레이어에 대한 지표",
+    "link": "/ranking",
+    "backgroundColor": "#1b64da",
+    "imgUrl": ""
+  }
+]

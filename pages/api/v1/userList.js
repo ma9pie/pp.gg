@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const userListQuery = User.find({}, { password: 0 }).lean();
+        const userListQuery = User.find({}, { _id: 0, password: 0 }).lean();
         const historyQuery = await History.find(query).sort({ date: 1 }).lean();
 
         const result = await Promise.all([userListQuery, historyQuery]).then(

@@ -19,7 +19,7 @@ export const getStaticProps = async () => {
     definition: {
       openapi: "3.0.0",
       info: {
-        title: "PP.GG API Docs",
+        title: "Open API Docs",
         version: "1.0",
       },
     },
@@ -39,13 +39,38 @@ ApiDocs.getLayout = function getLayout(page) {
 };
 
 const Wrapper = styled.div`
-  .info {
-    margin: 0px;
-    padding: 24px 0px;
-  }
+  padding-bottom: 100px;
   & * {
     font-family: none;
     background-color: unset;
     color: unset;
+    .title {
+      font-size: 32px !important;
+    }
+    h2,
+    h4,
+    h5,
+    td {
+      color: var(--main) !important;
+    }
+  }
+  .info {
+    margin: 0px;
+    padding: 24px 0px;
+  }
+  .nostyle span {
+    color: var(--main);
+  }
+  .try-out button {
+    color: var(--main);
+  }
+  .opblock-section-header {
+    background: var(--textBox) !important;
+  }
+  .renderedMarkdown,
+  .opblock-description-wrapper {
+    p {
+      color: var(--main);
+    }
   }
 `;

@@ -3,7 +3,6 @@ import React from "react";
 import Banner from "@/components/home/Banner";
 import HallFame from "@/components/home/HallFame";
 import MmrRanking from "@/components/home/MmrRanking";
-import MobileBanner from "@/components/home/MobileBanner";
 import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
@@ -12,7 +11,7 @@ import useQuery from "@/hooks/useQuery";
 function Home() {
   const userListQueryKey = "/api/v1/userList";
   const historyQueryKey = "/api/v1/history";
-  const emblemQueryKey = "/api/v1/emblem";
+  const bannerQueryKey = "/api/v1/banner";
 
   const userList = useQuery({
     placeholderData: [],
@@ -26,18 +25,17 @@ function Home() {
     queryFn: () => AxiosUtils.get(historyQueryKey).then((res) => res.data),
   }).data;
 
-  const emblem = useQuery({
+  const banner = useQuery({
     placeholderData: [],
-    queryKey: emblemQueryKey,
-    queryFn: () => AxiosUtils.get(emblemQueryKey).then((res) => res.data),
+    queryKey: bannerQueryKey,
+    queryFn: () => AxiosUtils.get(bannerQueryKey).then((res) => res.data),
   }).data;
 
   return (
     <Wrapper>
       {/* 배너 */}
       <BannerWrapper>
-        {/* <Banner></Banner> */}
-        <MobileBanner></MobileBanner>
+        <Banner list={banner}></Banner>
       </BannerWrapper>
       {/* 검색창 */}
       <SearchInput userList={userList}></SearchInput>
@@ -68,7 +66,6 @@ const Wrapper = styled.div`
 `;
 
 const BannerWrapper = styled.div`
-  max-width: 1080px;
   background-color: var(--homeBg);
 `;
 const ContentWrapper = styled.div`

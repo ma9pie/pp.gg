@@ -1,15 +1,15 @@
 import dbConnect from "@/db/dbConnect";
-import Terms from "@/db/schemas/Terms";
+import Banner from "@/db/schemas/Banner";
 
 /**
  * @swagger
- * /api/v1/terms:
+ * /api/v1/banner:
  *   get:
- *     tags: [SignUp]
- *     description: 개인정보 약관동의 내용 조회 API
+ *     tags: [Banner]
+ *     description: 배너 조회 API
  *     responses:
  *       200:
- *         description: 개인정보 약관동의 내용을 조회하는 API 입니다.
+ *         description: 배너를 조회하는 API 입니다.
  */
 
 export default async function handler(req, res) {
@@ -20,8 +20,10 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       try {
-        const terms = await Terms.find({}, { _id: 0 }).lean();
-        res.status(200).json(terms);
+        const banner = await Banner.find({}, { _id: 0 })
+          .sort({ order: 1 })
+          .lean();
+        res.status(200).json(banner);
       } catch (error) {
         res.status(400).json({ success: false });
       }

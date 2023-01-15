@@ -16,6 +16,11 @@ function MmrRanking(props) {
     );
   }, [props]);
 
+  const getMedal = (num) => {
+    if (num === 1) return "🎖️";
+    return num;
+  };
+
   return (
     <Wrapper>
       <TitleBox>
@@ -38,7 +43,7 @@ function MmrRanking(props) {
             <Link key={item.id} href={`/players/${item.id}`}>
               <a>
                 <Row bg="var(--textBox)">
-                  <Column>{idx + 1}</Column>
+                  <Column>{getMedal(idx + 1)}</Column>
                   <Column>
                     <FlexBox>
                       <ImageWrapper>

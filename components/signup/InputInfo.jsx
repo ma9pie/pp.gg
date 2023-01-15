@@ -7,7 +7,7 @@ import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import LineInput from "@/components/common/Inputs/LineInput";
 import Loading from "@/components/common/Loading";
-import Axios from "@/api/index";
+import AxiosUtils from "@/utils/AxiosUtils";
 import useQuery from "@/hooks/useQuery";
 
 function InputInfo(props) {
@@ -19,13 +19,12 @@ function InputInfo(props) {
   const [passwordErrMsg, setPasswordErrMsg] = useState("");
   const [name, setName] = useState("");
   const [nameErrMsg, setNameErrMsg] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const userListQueryKey = "/api/v1/allUser";
+  const userListQueryKey = "/api/v1/userList";
   const userList = useQuery({
     queryKey: userListQueryKey,
     queryFn: async () => {
-      return Axios.get(userListQueryKey, {
+      return AxiosUtils.get(userListQueryKey, {
         params: {},
       }).then((res) => res.data);
     },

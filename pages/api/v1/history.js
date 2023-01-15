@@ -2,6 +2,17 @@ import dbConnect from "@/db/dbConnect";
 import History from "@/db/schemas/History";
 import User from "@/db/schemas/User";
 
+/**
+ * @swagger
+ * /api/v1/history:
+ *   get:
+ *     tags: [History]
+ *     description: 전체 전적 조회 API
+ *     responses:
+ *       200:
+ *         description: 전체 전적을 조회하는 API 입니다.
+ */
+
 export default async function handler(req, res) {
   const { method, query, body } = req;
 

@@ -3,6 +3,17 @@ import History from "@/db/schemas/History";
 import User from "@/db/schemas/User";
 import StatisticsUtils from "@/utils/StatisticsUtils";
 
+/**
+ * @swagger
+ * /api/v1/userList:
+ *   get:
+ *     tags: [User]
+ *     description: 전체 유저 리스트 조회 API
+ *     responses:
+ *       200:
+ *         description: 전체 유저 리스트를 조회하는 API 입니다.
+ */
+
 export default async function handler(req, res) {
   const { method, query, body } = req;
 

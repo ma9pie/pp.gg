@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import Loading from "@/components/common/Loading";
+import AxiosUtils from "@/utils/AxiosUtils";
 import ModalUtils from "@/utils/ModalUtils";
-import Axios from "@/api/index";
 
 function ProfileImg(props) {
   const [signup, setSignup] = useRecoilState(signupState);
@@ -37,7 +37,7 @@ function ProfileImg(props) {
   const register = () => {
     const req = { ...signup };
     setIsLoading(true);
-    Axios.post("/api/v1/user", req).then((res) => {
+    AxiosUtils.post("/api/v1/user", req).then((res) => {
       setIsLoading(false);
       if (res.data.message) {
         ModalUtils.openAlert({ message: res.data.message });

@@ -34,6 +34,13 @@ function Menu() {
             </LinkBox>
           </a>
         </Link>
+        <Link href="/apiDocs" passHref>
+          <a>
+            <LinkBox>
+              <LinkText>ApiDocs</LinkText>
+            </LinkBox>
+          </a>
+        </Link>
       </MenuContainer>
     </Wrapper>
   );

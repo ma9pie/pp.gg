@@ -84,6 +84,10 @@ const TitleBox = styled.div`
   align-items: flex-end;
   gap: 4px;
   margin-bottom: 16px;
+  background-color: var(--homeBg);
+  & * {
+    background-color: inherit;
+  }
 `;
 const Title = styled.div`
   font: var(--headline18);
@@ -93,7 +97,7 @@ const Title = styled.div`
 `;
 const Description = styled.p`
   font: var(--caption12);
-  color: var(--sub);
+  color: var(--icon1);
 `;
 const Table = styled.div`
   display: flex;

@@ -8,7 +8,6 @@ import MmrUtils from "@/utils/MmrUtils";
 import SsrAxiosUtils from "@/utils/SsrAxiosUtils";
 import StatisticsUtils from "@/utils/StatisticsUtils";
 import TierUtils from "@/utils/TierUtils";
-import Axios from "@/api/index";
 import useQuery from "@/hooks/useQuery";
 
 function Test(props) {

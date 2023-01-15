@@ -77,6 +77,13 @@ function Header(props) {
             </LinkBox>
           </a>
         </Link>
+        <Link href="/apiDocs" passHref>
+          <a>
+            <LinkBox>
+              <LinkText>ApiDocs</LinkText>
+            </LinkBox>
+          </a>
+        </Link>
       </MenuContainer>
       <ButtonWrapper>
         {isLogin ? (

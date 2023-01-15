@@ -8,7 +8,6 @@ import Loading from "@/components/common/Loading";
 import CommonLayout from "@/layouts/SessionLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
 import ModalUtils from "@/utils/ModalUtils";
-import Axios from "@/api/index";
 import useDebounce from "@/hooks/useDebounce";
 import useQuery from "@/hooks/useQuery";
 import MinusSvg from "@/svg/MinusSvg";
@@ -89,7 +88,7 @@ function History() {
     };
 
     setIsLoadingSave(true);
-    Axios.post("/api/v1/history", req).then((res) => {
+    AxiosUtils.post("/api/v1/history", req).then((res) => {
       setIsLoadingSave(false);
       if (res.data.message) {
         ModalUtils.openAlert({ message: res.data.message });
@@ -108,7 +107,7 @@ function History() {
   // 기록 삭제
   const deleteLastData = useDebounce(() => {
     setIsLoadingDelete(true);
-    Axios.delete("/api/v1/lastHistory").then((res) => {
+    AxiosUtils.delete("/api/v1/lastHistory").then((res) => {
       setIsLoadingDelete(false);
       ModalUtils.openAlert({ message: JSON.stringify(res.data) });
       ModalUtils.openAlert({

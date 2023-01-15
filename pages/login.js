@@ -8,8 +8,8 @@ import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import LineInput from "@/components/common/Inputs/LineInput";
 import Loading from "@/components/common/Loading";
+import AxiosUtils from "@/utils/AxiosUtils";
 import ModalUtils from "@/utils/ModalUtils";
-import Axios from "@/api/index";
 
 function Login() {
   const router = useRouter();
@@ -41,7 +41,7 @@ function Login() {
       password: password,
     };
     setIsLoading(true);
-    Axios.post("/api/v1/login", req).then((res) => {
+    AxiosUtils.post("/api/v1/login", req).then((res) => {
       setIsLoading(false);
       if (res.data) {
         setMember(res.data);

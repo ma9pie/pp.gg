@@ -3,6 +3,26 @@ import dbConnect from "@/db/dbConnect";
 import User from "@/db/schemas/User";
 import moment from "moment";
 
+/**
+ * @swagger
+ * /api/v1/user:
+ *   get:
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         type: string
+ *         description: 유저 아이디
+ *       - in: query
+ *         name: name
+ *         type: string
+ *         description: 유저 닉네임
+ *     description: 유저 정보 조회 API
+ *     responses:
+ *       200:
+ *         description: 유저 정보를 조회하는 API 입니다.
+ */
+
 export default async function handler(req, res) {
   const { method, query, body } = req;
 

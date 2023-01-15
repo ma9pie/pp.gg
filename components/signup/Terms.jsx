@@ -5,7 +5,7 @@ import { useRecoilState } from "recoil";
 import LargeButton from "@/components/common/Buttons/LargeButton";
 import CheckBox from "@/components/common/CheckBox";
 import Loading from "@/components/common/Loading";
-import Axios from "@/api/index";
+import AxiosUtils from "@/utils/AxiosUtils";
 
 function Terms(props) {
   const [signup, setSignup] = useRecoilState(signupState);
@@ -23,7 +23,7 @@ function Terms(props) {
 
   // 약관 동의 API 호출
   useEffect(() => {
-    Axios.get("/api/v1/terms").then((res) => {
+    AxiosUtils.get("/api/v1/terms").then((res) => {
       setTerms(res.data);
     });
   }, []);

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ProfileImage from "@/components/common/ProfileImage";
 import FilterUtils from "@/utils/FilterUtils";
@@ -9,7 +10,12 @@ function Statistics(props) {
   useEffect(() => {
     let tmpMax = 0;
     props.statisticsList.map((user) => {
-      tmpMax = Math.max(tmpMax, user.totalDeal, user.totalDamageReceived);
+      tmpMax = Math.max(
+        tmpMax,
+        user.mmr,
+        user.totalDeal,
+        user.totalDamageReceived
+      );
     });
     setMaxDamage(tmpMax);
   }, [props.statisticsList]);
@@ -20,43 +26,69 @@ function Statistics(props) {
 
   return (
     <Wrapper>
-      <Title>{props.title}</Title>
+      <TitleBox>
+        <Title>{props.title}</Title>
+        <LegendContainer>
+          <Legend>
+            <Bar width="50px" backgroundColor="var(--green700)"></Bar> mmr
+          </Legend>
+          <Legend>
+            <Bar width="50px" backgroundColor="var(--winColor)"></Bar>
+            적에게 가한 피해량
+          </Legend>
+          <Legend>
+            <Bar width="50px" backgroundColor="var(--loseColor)"></Bar> 적에게
+            받은 피해량
+          </Legend>
+        </LegendContainer>
+      </TitleBox>
+
       <TableContainer>
         {props.statisticsList.map((user, key) => (
-          <ListBox key={key}>
-            <Row>
-              <Column>
-                <ProfileImage
-                  width="36px"
-                  height="36px"
-                  src={user.imgUrl}
-                  border="3px solid #af8830"
-                ></ProfileImage>
-              </Column>
-              <Column>
-                <Text>승률</Text>
-                <SubText>{FilterUtils.formatPercent(item.winRate)}</SubText>
-              </Column>
-              <Column>
-                <Text>{user.name}</Text>
-                <SubText>{user.tier}</SubText>
-              </Column>
-              <Column>
-                <Bar
-                  width={getWidthPercent(user.totalDeal)}
-                  backgroundColor="var(--winColor)"
-                >
-                  {user.totalDeal}
-                </Bar>
-                <Bar
-                  width={getWidthPercent(user.totalDamageReceived)}
-                  backgroundColor="var(--loseColor)"
-                >
-                  {user.totalDamageReceived}
-                </Bar>
-              </Column>
-            </Row>
-          </ListBox>
+          <Link key={user.id} href={`/players/${user.id}`}>
+            <a>
+              <ListBox>
+                <Row>
+                  <Column>
+                    <ProfileImage
+                      width="36px"
+                      height="36px"
+                      src={user.imgUrl}
+                      border="3px solid #af8830"
+                    ></ProfileImage>
+                  </Column>
+                  <Column>
+                    <Text>승률</Text>
+                    <SubText>{FilterUtils.formatPercent(user.winRate)}</SubText>
+                  </Column>
+                  <Column>
+                    <Text>{user.name}</Text>
+                    <SubText>{user.tier}</SubText>
+                  </Column>
+                  <Column>
+                    <Bar
+                      width={getWidthPercent(user.mmr)}
+                      backgroundColor="var(--green700)"
+                    >
+                      {user.mmr}
+                    </Bar>
+                    <Bar
+                      width={getWidthPercent(user.totalDeal)}
+                      backgroundColor="var(--winColor)"
+                    >
+                      {user.totalDeal}
+                    </Bar>
+                    <Bar
+                      width={getWidthPercent(user.totalDamageReceived)}
+                      backgroundColor="var(--loseColor)"
+                    >
+                      {user.totalDamageReceived}
+                    </Bar>
+                  </Column>
+                </Row>
+              </ListBox>
+            </a>
+          </Link>
         ))}
       </TableContainer>
     </Wrapper>
@@ -93,12 +125,25 @@ const Column = styled.div`
 `;
 const TableContainer = styled.div``;
 const ListBox = styled.div`
-  height: 60px;
+  margin-bottom: 16px;
+`;
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+`;
+const LegendContainer = styled.div`
+  display: grid;
+  gap: 4px;
+`;
+const Legend = styled.div`
+  display: flex;
+  gap: 8px;
 `;
 const Title = styled.p`
   font-size: 36px;
   font-weight: 700;
-  margin-bottom: 24px;
 `;
 const Text = styled.p`
   font: var(--body14);
@@ -111,7 +156,6 @@ const Bar = styled.div`
   width: ${(props) => props.width};
   height: 20px;
   line-height: 20px;
-  margin: 1px 0px;
   padding-right: 10px;
   background-color: ${(props) => props.backgroundColor};
   text-align: right;

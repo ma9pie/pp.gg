@@ -80,7 +80,6 @@ function Players() {
       const tmpTier = [];
 
       let points = 0;
-      let mmr = 0;
 
       tmpHistory.reverse().map((item) => {
         const player = scoreboard.get(id);
@@ -146,14 +145,6 @@ function Players() {
           date: item.date,
           points: points,
         });
-
-        if (kill > death) {
-          mmr += points;
-        } else if (kill < death) {
-          mmr -= points;
-        } else {
-          mmr += 0;
-        }
       });
 
       setRateHistory({
@@ -302,12 +293,6 @@ const Row = styled.div`
   @media (min-width: 1080px) {
     display: flex;
   }
-`;
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: ${(props) => props.width};
 `;
 const ChartContainer = styled.div`
   display: flex;

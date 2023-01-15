@@ -125,13 +125,21 @@ function History() {
     });
   }, 100);
 
+  const sortList = (list) => {
+    return []
+      .concat(list)
+      .sort(
+        (a, b) => a.winPoints + a.losePoints - (b.winPoints + b.losePoints)
+      );
+  };
+
   return (
     <Wrapper>
       <Container>
         {userList ? (
           <Row>
             <Column width="50%">
-              {userList.map((user) => (
+              {sortList(userList).map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player1: user.id })}
@@ -149,7 +157,7 @@ function History() {
               ))}
             </Column>
             <Column width="50%">
-              {userList.map((user) => (
+              {sortList(userList).map((user) => (
                 <UserBox
                   key={user.id}
                   onClick={() => setInputs({ ...inputs, player2: user.id })}

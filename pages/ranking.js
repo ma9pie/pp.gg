@@ -21,18 +21,21 @@ function Ranking() {
 
   useEffect(() => {
     const tmpList = userList.sort((a, b) => {
-      if (a.winRate === b.winRate) {
-        if (a.totalDeal === b.totalDeal) {
-          // 2. 생성일 오름차순
-          return moment(a.createdAt).unix() - moment(b.createdAt).unix();
-        } else {
-          // 2. 딜량 내림차순
-          return b.totalDeal - a.totalDeal;
-        }
-      } else {
-        // 1. 승률 내림차순
+      // 1. mmr 내림차순
+      if (a.mmr !== b.mmr) {
+        return b.mmr - a.mmr;
+      }
+      // 2. 승률 내림차순
+      if (a.winRate !== b.winRate) {
         return b.winRate - a.winRate;
       }
+      // 3. 딜량 내림차순
+      if (a.totalDeal !== b.totalDeal) {
+        return b.totalDeal - a.totalDeal;
+      }
+
+      // 4. 생성일 오름차순
+      return moment(a.createdAt).unix() - moment(b.createdAt).unix();
     });
     setStatisticsList(tmpList);
     setIsLoading(userList.length === 0);
@@ -48,7 +51,7 @@ function Ranking() {
 
   return (
     <Wrapper>
-      <Statistics title="피해량" statisticsList={statisticsList}></Statistics>
+      <Statistics title="랭킹" statisticsList={statisticsList}></Statistics>
     </Wrapper>
   );
 }

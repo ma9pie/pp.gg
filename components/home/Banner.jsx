@@ -5,8 +5,6 @@ import React from "react";
 import Carousel from "@/components/common/Carousel";
 
 function Banner({ list }) {
-  console.log(list);
-
   return (
     <Wrapper>
       <Carousel

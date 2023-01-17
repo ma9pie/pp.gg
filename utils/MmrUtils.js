@@ -7,7 +7,7 @@ const MmrUtils = () => {};
  * @returns {Number} W_e : 예상 승률
  */
 MmrUtils.expectedWinRate = (P_op, P_me) => {
-  const W_e = 1 / (10 ** ((P_op - P_me) / 400) + 1);
+  const W_e = 1 / (10 ** ((P_op - P_me) / 1200) + 1);
   return W_e;
 };
 
@@ -21,10 +21,9 @@ MmrUtils.getMmrElo = (winner, loser) => {
   if (!MmrUtils.checkBatchTest(winner, loser)) return 0;
   const winnerExpectedWinRate = MmrUtils.expectedWinRate(winner.mmr, loser.mmr);
   const loserExpectedWinRate = MmrUtils.expectedWinRate(loser.mmr, winner.mmr);
-  const K = 12;
-  return Number(
-    (K * (1 + winnerExpectedWinRate - loserExpectedWinRate)).toFixed(0)
-  );
+  const diff = winnerExpectedWinRate - loserExpectedWinRate;
+  const K = 24;
+  return Number((K * (1 + diff * 0.8)).toFixed(0));
 };
 
 /**

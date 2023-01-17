@@ -3,7 +3,7 @@
 🔗 https://ppgg.vercel.app/
 
 pp.gg는 LoL 전적검색 사이트 <a href="https://www.op.gg/" target="_blank">OP.GG</a>를 벤치마킹 하였으며,
-친구들과 탁구 전적을 기록하기 위해 만든 사이트 입니다.
+지인들과의 탁구 전적을 기록하기 위해 만든 사이트 입니다.
 
 pp는 Ping Pong, gg는 Good Game이라는 의미를 가집니다.
 
@@ -42,6 +42,7 @@ pp는 Ping Pong, gg는 Good Game이라는 의미를 가집니다.
     <div style="margin-top:8px;">
         <ul>
             <li>로그인 페이지 입니다.</li>
+            <li>OP.GG의 로그인 페이지를 참고하여 만들었습니다.</li>
         </ul>
     </div>
 </div>
@@ -81,7 +82,7 @@ pp는 Ping Pong, gg는 Good Game이라는 의미를 가집니다.
         <ul>
             <li>전적을 기록할 수 있는 페이지입니다.</li>
             <li>점수 입력 후 기록을 저장할 수 있습니다.</li>
-            <li>실수로 기록을 저장했을 시, 가장 최신 기록을 삭제할 수 있는 기능도 추가하였습니다.</li>
+            <li>실수로 잘못된 기록을 저장했을 시, 가장 최신 기록을 삭제할 수 있는 기능도 추가하였습니다.</li>
         </ul>
     </div>
 </div>
@@ -124,7 +125,7 @@ pp는 Ping Pong, gg는 Good Game이라는 의미를 가집니다.
 
 <ul>
     <li>Next.js는 SSR, Static page generation, bundling, route pre-fetching 등등 여러가지 기능을 제공하는 웹 개발 프레임워크입니다.</li>
-    <li>SSR을 통해 SEO 부분에서 이점을 가져갈 수 있으며, file system routing, hot reloading, image optimization와 같은 좋은 기능들이 많아 프레임워크를 도입하였습니다.</li>
+    <li>SSR을 통해 SEO 부분에서 이점을 가져갈 수 있으며, file system routing, hot reloading, image optimization와 같이 개발적으로 좋은 기능들이 많아 해당 프레임워크를 도입하였습니다.</li>
     <li>또한 vercel로 무료 호스팅이 가능하며, main branch에 git push시 자동 배포가 가능합니다.</li>
 </ul>
 
@@ -171,7 +172,7 @@ const banner = useQuery({
 
 <ul>
     <li><a href="https://www.npmjs.com/package/recoil" target="_blank">recoil</a>은 리액트 전역 상태관리 라이브러리입니다.</li>
-    <li>비슷한 전역 상태관리 라이브러리인 redux와 비교해봤을때, 보일러플레이트 코드가 적고, 사용이 간편하며, 작은 프로젝트에 적합하다고 생각되서 전역 상태관리 라이브러리로 recoil을 도입하였습니다.</li>
+    <li>비슷한 전역 상태관리 라이브러리인 redux와 비교해봤을때, 보일러플레이트 코드가 적고, 사용이 간편하며, 작은 프로젝트에 적합하다고 판단되어 전역 상태관리 라이브러리로 recoil을 도입하였습니다.</li>
     <li>components나 pages depth가 깊지 않아 member, signup, theme와 같은 state들만 전역으로 관리하고 있습니다.</li>
 </ul>
 

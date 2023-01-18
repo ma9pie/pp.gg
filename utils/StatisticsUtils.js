@@ -44,7 +44,7 @@ StatisticsUtils.calculate = (userList, history) => {
       loser.losePoints
     );
 
-    const points = MmrUtils.getMmrElo(winner, loser);
+    const points = MmrUtils.getPoints(winner, loser);
 
     winner.mmr += points;
     loser.mmr -= points;

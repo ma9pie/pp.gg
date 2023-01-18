@@ -15,33 +15,27 @@ function Test(props) {
   const historyQueryKey = "/api/v1/history";
   const emblemQueryKey = "/api/v1/emblem";
 
-  const userList = useQuery({
-    placeholderData: [],
-    queryKey: userListQueryKey,
-    queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
-  }).data;
+  // const userList = useQuery({
+  //   placeholderData: [],
+  //   queryKey: userListQueryKey,
+  //   queryFn: () => AxiosUtils.get(userListQueryKey).then((res) => res.data),
+  // }).data;
 
-  const history = useQuery({
-    placeholderData: [],
-    queryKey: historyQueryKey,
-    queryFn: () => AxiosUtils.get(historyQueryKey).then((res) => res.data),
-  }).data;
+  // const history = useQuery({
+  //   placeholderData: [],
+  //   queryKey: historyQueryKey,
+  //   queryFn: () => AxiosUtils.get(historyQueryKey).then((res) => res.data),
+  // }).data;
 
-  const emblem = useQuery({
-    placeholderData: [],
-    queryKey: emblemQueryKey,
-    queryFn: () => AxiosUtils.get(emblemQueryKey).then((res) => res.data),
-  }).data;
+  // const emblem = useQuery({
+  //   placeholderData: [],
+  //   queryKey: emblemQueryKey,
+  //   queryFn: () => AxiosUtils.get(emblemQueryKey).then((res) => res.data),
+  // }).data;
 
   useEffect(() => {
-    if (history.length === 0 || userList.length === 0) return;
-
-    const tmpHistory = history.sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    );
-
-    StatisticsUtils.calculate(userList, tmpHistory);
-  }, [userList, history]);
+    console.log(MmrUtils.getPoints({ mmr: 2000 }, { mmr: 2100 }));
+  }, []);
 
   useEffect(() => {
     // console.log(MmrUtils.expectedWinRate(2400, 2000));

@@ -79,8 +79,6 @@ function Players() {
       const tmpDate = [];
       const tmpTier = [];
 
-      let points = 0;
-
       tmpHistory.reverse().map((item) => {
         const player = scoreboard.get(id);
         const winner = scoreboard.get(item.winnerId);
@@ -95,7 +93,7 @@ function Players() {
           loser.losePoints
         );
 
-        points = MmrUtils.getMmrElo(winner, loser);
+        const points = MmrUtils.getPoints(winner, loser);
 
         winner.mmr += points;
         loser.mmr -= points;

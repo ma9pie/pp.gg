@@ -164,7 +164,7 @@ const banner = useQuery({
 ```
 
 <ul>
-    <li>localhost에서 프로젝트 실행 시 홈에서 50ms ~ 100ms 내로 API 응답이 오지만, 웹 서버 배포 후 모바일 환경에서 접속 시 API 응답 시간이 최대 10초~15초 정도 걸립니다.</li>
+    <li>localhost에서 프로젝트 실행 시 홈에서 500ms ~ 1000ms 내로 API 응답이 오지만, 웹 서버 배포 후 모바일 환경에서 접속 시 API 응답 시간이 최대 5초~10초 정도 걸립니다.</li>
     <li>따라서 페이지 이동마다 API 호출 시 웹 반응성이 늦어져 UX적으로 좋지 않다고 판단되었고, API 호출 수를 줄이기 위하여 <a href="https://www.npmjs.com/package/react-query" target="_blank">react-query</a>를 도입하여 API 캐싱 전략을 세웠습니다.</li>
 </ul>
 

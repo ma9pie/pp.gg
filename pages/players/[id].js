@@ -1,12 +1,9 @@
 import styled from "@emotion/styled";
 import moment from "moment";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import DoughnutChart from "@/components/common/Chart/DoughnutChart";
-import LineChart from "@/components/common/Chart/LineChart";
 import Loading from "@/components/common/Loading";
-import HistoryList from "@/components/players/HistoryList";
-import Profile from "@/components/players/Profile";
 import PlayerLayout from "@/layouts/PlayerLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
 import FilterUtils from "@/utils/FilterUtils";
@@ -15,6 +12,13 @@ import ModalUtils from "@/utils/ModalUtils";
 import StatisticsUtils from "@/utils/StatisticsUtils";
 import TierUtils from "@/utils/TierUtils";
 import useQuery from "@/hooks/useQuery";
+
+const DoughnutChart = dynamic(() =>
+  import("@/components/common/Chart/DoughnutChart")
+);
+const LineChart = dynamic(() => import("@/components/common/Chart/LineChart"));
+const HistoryList = dynamic(() => import("@/components/players/HistoryList"));
+const Profile = dynamic(() => import("@/components/players/Profile"));
 
 function Players() {
   const router = useRouter();

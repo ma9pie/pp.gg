@@ -1,11 +1,13 @@
 import styled from "@emotion/styled";
 import moment from "moment";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import Loading from "@/components/common/Loading";
-import Statistics from "@/components/ranking/Statistics";
 import CommonLayout from "@/layouts/CommonLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
 import useQuery from "@/hooks/useQuery";
+
+const Statistics = dynamic(() => import("@/components/ranking/Statistics"));
 
 function Ranking() {
   const [statisticsList, setStatisticsList] = useState([]);

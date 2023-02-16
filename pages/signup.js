@@ -1,13 +1,15 @@
 import { signupState } from "@/recoil/atom";
 import styled from "@emotion/styled";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useResetRecoilState } from "recoil";
-import Completion from "@/components/signup/Completion";
-import InputInfo from "@/components/signup/InputInfo";
-import ProcessDot from "@/components/signup/ProcessDot";
-import ProfileImg from "@/components/signup/ProfileImg";
 import Terms from "@/components/signup/Terms";
+
+const Completion = dynamic(() => import("@/components/signup/Completion"));
+const InputInfo = dynamic(() => import("@/components/signup/InputInfo"));
+const ProcessDot = dynamic(() => import("@/components/signup/ProcessDot"));
+const ProfileImg = dynamic(() => import("@/components/signup/ProfileImg"));
 
 function Signup() {
   const resetSignupState = useResetRecoilState(signupState);

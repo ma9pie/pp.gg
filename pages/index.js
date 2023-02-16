@@ -1,12 +1,14 @@
 import styled from "@emotion/styled";
+import dynamic from "next/dynamic";
 import React from "react";
-import Banner from "@/components/home/Banner";
-import HallFame from "@/components/home/HallFame";
-import MmrRanking from "@/components/home/MmrRanking";
-import SearchInput from "@/components/home/SearchInput";
 import HomeLayout from "@/layouts/HomeLayout";
 import AxiosUtils from "@/utils/AxiosUtils";
 import useQuery from "@/hooks/useQuery";
+
+const Banner = dynamic(() => import("@/components/home/Banner"));
+const HallFame = dynamic(() => import("@/components/home/HallFame"));
+const MmrRanking = dynamic(() => import("@/components/home/MmrRanking"));
+const SearchInput = dynamic(() => import("@/components/home/SearchInput"));
 
 function Home() {
   const userListQueryKey = "/api/v1/userList";

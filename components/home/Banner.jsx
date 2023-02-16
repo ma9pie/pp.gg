@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
-import Carousel from "@/components/common/Carousel";
+
+const Carousel = dynamic(() => import("@/components/common/Carousel"));
 
 function Banner({ list }) {
   return (

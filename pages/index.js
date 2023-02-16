@@ -37,15 +37,18 @@ function Home() {
       <BannerWrapper>
         <Banner list={banner}></Banner>
       </BannerWrapper>
+
       {/* 검색창 */}
       <SearchInput userList={userList}></SearchInput>
-      {/* 명예의 전당 */}
-      <ContentWrapper>
-        <HallFame userList={userList} historyLength={history.length}></HallFame>
-      </ContentWrapper>
+
       {/* MMR 랭킹 */}
       <ContentWrapper>
         <MmrRanking userList={userList}></MmrRanking>
+      </ContentWrapper>
+
+      {/* 명예의 전당 */}
+      <ContentWrapper>
+        <HallFame userList={userList} historyLength={history.length}></HallFame>
       </ContentWrapper>
     </Wrapper>
   );

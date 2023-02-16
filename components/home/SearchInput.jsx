@@ -150,6 +150,7 @@ const ListContainer = styled.div`
   max-width: 800px;
   width: calc(100% - 64px);
   background-color: var(--textBox);
+  z-index: 1;
 `;
 const ListBox = styled.div`
   display: flex;

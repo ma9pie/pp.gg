@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Carousel from "@/components/common/Carousel";
@@ -40,26 +39,6 @@ function Banner({ list }) {
             );
           }
         })}
-        {/* <BannerWrapper backgroundColor="var(--blue600)">
-          <BannerContent>
-            <Title>📢업데이트 v1.0.2</Title>
-            <Description>MMR 랭킹 시스템 도입</Description>
-          </BannerContent>
-        </BannerWrapper>
-
-        <BannerWrapper backgroundColor="var(--blue300)">
-          <BannerContent>
-            <Title>🎉2023 PPGG🎉</Title>
-            <Description>HAPPY NEW YEAR!🐰</Description>
-          </BannerContent>
-        </BannerWrapper>
-
-        <BannerWrapper backgroundColor="var(--blue700)">
-          <BannerContent>
-            <Title>📋미 회원가입 시</Title>
-            <Description>기본 비밀번호 q1q1q1q1</Description>
-          </BannerContent>
-        </BannerWrapper> */}
       </Carousel>
     </Wrapper>
   );

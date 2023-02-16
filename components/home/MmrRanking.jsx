@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import ExtraSmallButton from "@/components/common/Buttons/ExtraSmallButton";
 import Loading from "@/components/common/Loading";
 import MmrUtils from "@/utils/MmrUtils";
 
@@ -25,6 +26,12 @@ function MmrRanking(props) {
     <Wrapper>
       <TitleBox>
         <Title>🔥 MMR 랭킹</Title>
+        <ExtraSmallButton
+          onClick={() => location.reload()}
+          margin="16px 0px 0px 0px"
+        >
+          전적 갱신
+        </ExtraSmallButton>
       </TitleBox>
 
       <Table>
@@ -81,7 +88,7 @@ const TitleBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 4px;
+  gap: 16px;
   margin-bottom: 16px;
   background-color: var(--homeBg);
   & * {
